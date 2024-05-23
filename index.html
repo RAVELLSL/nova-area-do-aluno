@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área do Aluno</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 20px;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 40px 20px;
+            width: 280px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            color: inherit;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .icon img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+        }
+
+        .icon.material-aula img,
+        .icon.caderno-digital img {
+            mask-image: radial-gradient(circle, black 60%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle, black 60%, transparent 100%);
+        }
+
+        h2 {
+            font-size: 22px;
+            margin: 0;
+        }
+
+        @media screen and (max-width: 600px) {
+            .card {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="https://ravellsl.github.io/quadro-de-avisos/" target="_blank" class="card">
+            <div class="icon">
+                <img src="https://static.vecteezy.com/ti/vetor-gratis/p1/4557765-papel-de-boletim-informativo-e-memorando-vetor.jpg" alt="Quadro de Avisos">
+            </div>
+            <h2>Quadro de Avisos</h2>
+        </a>
+        
+        <a href="https://ravellsl.github.io/rstech-aluno/" target="_blank" class="card">
+            <div class="icon material-aula">
+                <img src="https://img.freepik.com/vetores-gratis/interior-do-laboratorio-de-informatica-com-copyspace_1308-28026.jpg" alt="Material de Aula">
+            </div>
+            <h2>Material de Aula</h2>
+        </a>
+        
+        <a href="https://ravellsl.github.io/caderno-virtual/" target="_blank" class="card">
+            <div class="icon caderno-digital">
+                <img src="https://img.freepik.com/fotos-premium/um-caderno-em-branco-aberto-com-lapis-e-caneta-na-mesa-de-madeiramodelo-de-negocios-simulado_33900-4394.jpg" alt="Caderno Digital">
+            </div>
+            <h2>Caderno Digital</h2>
+        </a>
+        
+        <a href="https://ravellsl.github.io/caderno-exercicios/" target="_blank" class="card">
+            <div class="icon">
+                <img src="https://static.vecteezy.com/ti/vetor-gratis/p3/1233746-aluno-fazendo-exercicio-on-line-no-computador-desktop-vetor.jpg" alt="Caderno de Exercícios">
+            </div>
+            <h2>Caderno de Exercícios</h2>
+        </a>
+        
+        <a href="https://ravellsl.github.io/rstech-material/" target="_blank" class="card">
+            <div class="icon">
+                <img src="https://images.ctfassets.net/ucp6tw9r5u7d/6TxDYxPZWDp8T8Z257g7wV/9f0fbbf24eaa97d14b8c0717f3bb2213/Aprendizado_constante_-_a_habilidade_mais_importante_de_um_profissional.jpg" alt="Material Complementar">
+            </div>
+            <h2>Material Complementar</h2>
+        </a>
+        
+        <a href="https://ravellsl.github.io/rstech-biblioteca/" target="_blank" class="card">
+            <div class="icon">
+                <img src="https://www.justicaeleitoral.jus.br/imagens/fotos/biblioteca-digital-em-21-12-2018/@@streaming/image/Biblioteca%20Digital.jpg" alt="Biblioteca Digital">
+            </div>
+            <h2>Biblioteca Digital</h2>
+        </a>     
+    </div>
+</body>
+</html>
