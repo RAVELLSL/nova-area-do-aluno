@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -6,194 +7,202 @@
     <title>Área do Aluno</title>
     <style>
         * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #ADD8E6, #FFFFFF, #ADD8E6); 
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-        }
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #ADD8E6, #FFFFFF, #ADD8E6); 
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
 
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 15px;
-        }
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 15px;
+}
 
-        /* Estilo do Acordeão */
-        .accordion {
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            overflow: hidden;
-            background-color: #fff;
-        }
+/* Estilo do Acordeão */
+.accordion {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    background-color: #fff;
+}
 
-        .accordion-header {
-            background-color: #f0f0f0;
-            padding: 15px;
-            cursor: pointer;
-            font-size: 18px;
-            transition: background-color 0.3s;
-            border-bottom: 1px solid #ccc;
-        }
+.accordion-header {
+    background-color: #f0f0f0;
+    padding: 15px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s;
+    border-bottom: 1px solid #ccc;
+    text-align: center; /* Centralizando o texto */
+}
 
-        .accordion-header:hover,
-        .accordion-header:focus {
-            background-color: #dcdcdc;
-            outline: none;
-        }
+.accordion-header:hover,
+.accordion-header:focus {
+    background-color: #dcdcdc;
+    outline: none;
+}
 
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out;
-        }
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+}
 
-        .accordion.active .accordion-content {
-            max-height: 1000px;
-            padding: 15px;
-        }
+.accordion.active .accordion-content {
+    max-height: 1000px;
+    padding: 15px;
+}
 
-        /* Estilos dos Cards */
-        .card-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            justify-items: center;
-        }
+/* Estilos dos Cards */
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    justify-items: center;
+}
 
-        .card {
-            background-color: #fff;
-            border-radius: 15px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            padding: 40px 20px;
-            width: 100%;
-            max-width: 280px;
-            transition: transform 0.3s, box-shadow 0.3s;
-            text-decoration: none;
-            color: inherit;
-            overflow: hidden;
-        }
+.card {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 40px 20px;
+    width: 100%;
+    max-width: 280px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+}
 
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-        }
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
 
-        .icon {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-            width: 100%;
-            height: 200px;
-            overflow: hidden;
-        }
+.icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
 
-        .icon img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: cover;
-            border-radius: 10px;
-        }
+.icon img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
 
-        h2, h3 {
-            font-size: 22px;
-            margin: 0;
-        }
+h2, h3 {
+    font-size: 22px;
+    margin: 0;
+}
 
-        /* Estilo da Seção Boletim Tecnológico */
-        .boletim-container {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 15px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        }
+/* Estilo da Seção Boletim Tecnológico */
+.boletim-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
 
-        .boletim-container img {
-            max-width: 200px;
-            max-height: 200px;
-            object-fit: cover;
-            margin-right: 20px;
-            border-radius: 10px;
-        }
+.boletim-container img {
+    max-width: 200px;
+    max-height: 200px;
+    object-fit: cover;
+    margin-right: 20px;
+    border-radius: 10px;
+}
 
-        .boletim-info {
-            text-align: left;
-        }
+.boletim-info {
+    text-align: left;
+}
 
-        .boletim-title {
-            font-size: 24px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-        }
+.boletim-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centralizando o texto */
+}
 
-        .boletim-seta {
-            font-size: 18px;
-            cursor: pointer;
-            margin-left: 10px;
-        }
+.boletim-seta {
+    font-size: 18px;
+    cursor: pointer;
+    margin-left: 10px;
+}
 
-        .boletim-dates {
-            display: none;
-            margin-top: 10px;
-        }
+.boletim-dates {
+    display: none;
+    margin-top: 10px;
+}
 
-        .boletim-dates a {
-            text-decoration: none;
-            color: #007BFF;
-            font-size: 18px;
-            margin-bottom: 5px;
-            display: inline-block;
-            width: 50%;
-            box-sizing: border-box;
-        }
+.boletim-dates a {
+    text-decoration: none;
+    color: #007BFF;
+    font-size: 18px;
+    margin-bottom: 5px;
+    display: inline-block;
+    width: 50%;
+    box-sizing: border-box;
+}
 
-        .boletim-dates a:hover {
-            text-decoration: underline;
-        }
+.boletim-dates a:hover {
+    text-decoration: underline;
+}
 
-        /* Ajuste para remover os detalhes brancos */
-        .accordion-header, .accordion-content {
-            border-radius: 0;
-            background-color: #fff;
-        }
+/* Ajuste para remover os detalhes brancos */
+.accordion-header, .accordion-content {
+    border-radius: 0;
+    background-color: #fff;
+}
 
-        /* Responsividade */
-        @media (max-width: 600px) {
-            .boletim-container {
-                flex-direction: column;
-                align-items: center;
-            }
+/* Responsividade */
+@media (max-width: 600px) {
+    .boletim-container {
+        flex-direction: column;
+        align-items: center;
+    }
 
-            .boletim-container img {
-                margin-right: 0;
-                margin-bottom: 10px;
-            }
+    .boletim-container img {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
 
-            .boletim-info {
-                text-align: center;
-            }
+    .boletim-info {
+        text-align: center;
+    }
 
-            .boletim-dates a {
-                width: 100%;
-            }
-        }
+    .boletim-dates a {
+        width: 100%;
+    }
+
+    .accordion-header {
+        margin-bottom: 20px; /* Aumenta o espaço entre os títulos */
+        padding: 20px; /* Aumenta a área de toque */
+    }
+}
+
     </style>
 </head>
 <body>
