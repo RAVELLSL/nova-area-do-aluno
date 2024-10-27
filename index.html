@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -6,23 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Área do Aluno</title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #ADD8E6, #FFFFFF, #ADD8E6); 
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             min-height: 100vh;
             margin: 0;
-            background: linear-gradient(to right, #ADD8E6, #FFFFFF, #ADD8E6); 
+            padding: 0;
         }
 
         .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
+            width: 100%;
             max-width: 1200px;
-            margin: 20px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        /* Estilo do Acordeão */
+        .accordion {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            background-color: #fff;
+        }
+
+        .accordion-header {
+            background-color: #f0f0f0;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .accordion-header:hover,
+        .accordion-header:focus {
+            background-color: #dcdcdc;
+            outline: none;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+
+        .accordion.active .accordion-content {
+            max-height: 1000px;
+            padding: 15px;
+        }
+
+        /* Estilos dos Cards */
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            justify-items: center;
         }
 
         .card {
@@ -31,7 +78,8 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
             text-align: center;
             padding: 40px 20px;
-            width: 280px;
+            width: 100%;
+            max-width: 280px;
             transition: transform 0.3s, box-shadow 0.3s;
             text-decoration: none;
             color: inherit;
@@ -57,83 +105,202 @@
             max-width: 100%;
             max-height: 100%;
             object-fit: cover;
+            border-radius: 10px;
         }
 
-        .icon.material-aula img,
-        .icon.caderno-digital img {
-            mask-image: radial-gradient(circle, black 60%, transparent 100%);
-            -webkit-mask-image: radial-gradient(circle, black 60%, transparent 100%);
-        }
-
-        h2 {
+        h2, h3 {
             font-size: 22px;
             margin: 0;
         }
 
-        @media screen and (max-width: 600px) {
-            .card {
+        /* Estilo da Seção Boletim Tecnológico */
+        .boletim-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .boletim-container img {
+            max-width: 200px;
+            max-height: 200px;
+            object-fit: cover;
+            margin-right: 20px;
+            border-radius: 10px;
+        }
+
+        .boletim-info {
+            text-align: left;
+        }
+
+        .boletim-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .boletim-seta {
+            font-size: 18px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .boletim-dates {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .boletim-dates a {
+            text-decoration: none;
+            color: #007BFF;
+            font-size: 18px;
+            margin-bottom: 5px;
+            display: inline-block;
+            width: 50%;
+            box-sizing: border-box;
+        }
+
+        .boletim-dates a:hover {
+            text-decoration: underline;
+        }
+
+        /* Ajuste para remover os detalhes brancos */
+        .accordion-header, .accordion-content {
+            border-radius: 0;
+            background-color: #fff;
+        }
+
+        /* Responsividade */
+        @media (max-width: 600px) {
+            .boletim-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .boletim-container img {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+
+            .boletim-info {
+                text-align: center;
+            }
+
+            .boletim-dates a {
                 width: 100%;
-                margin-bottom: 20px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="https://ravellsl.github.io/quadro-de-avisos/" target="_blank" class="card">
-            <div class="icon">
-                <img src="https://media.licdn.com/dms/image/v2/D4E22AQG0SBdanRZRIA/feedshare-shrink_800/feedshare-shrink_800/0/1728852161036?e=1731542400&v=beta&t=s0bob0E8tCE326UhJYU2NKTKAPTdryVTUSE8K9D3OwU" alt="Quadro de Avisos">
-            </div>
-            <h2>Quadro de Avisos</h2>
-        </a>
-        
-        <a href="https://ravellsl.github.io/rstech-aluno/" target="_blank" class="card">
-            <div class="icon material-aula">
-                <img src="https://media.licdn.com/dms/image/v2/D4E22AQF5pH8tpEwiQA/feedshare-shrink_800/feedshare-shrink_800/0/1728852180035?e=1731542400&v=beta&t=kXXEOYzKxcVgIniSEF8jS2SK3POBeWbNf-704kMyBbY" alt="Material de Aula">
-            </div>
-            <h2>Material de Aula</h2>
-        </a>
 
-        <a href="https://ravellsl.github.io/apostilas/" target="_blank" class="card">
-            <div class="icon material-aula">
-                <img src="https://media.licdn.com/dms/image/v2/D4E22AQF-kfv8GkjTWw/feedshare-shrink_800/feedshare-shrink_800/0/1728852195939?e=1731542400&v=beta&t=s4rOuYTAwP4hXVrvqAaGIPrAnxzvVl8FwuI5Y-O8qOQ" alt="Apostilas">
-            </div>
-            <h2>Apostilas</h2>
-        </a>
-        
-        <a href="https://ravellsl.github.io/palestra-IA-plataforma/" target="_blank" class="card">
-            <div class="icon caderno-digital">
-                <img src="https://media.licdn.com/dms/image/v2/D4D22AQGdhxy4eX-DLA/feedshare-shrink_1280/feedshare-shrink_1280/0/1729725474346?e=1732752000&v=beta&t=6_vFaOFqhmbU_QdA9a3zY2mwrKxpYrpGDA_m6Bun1uc" alt="Palestras">
-            </div>
-            <h2>Palestras</h2>
+        <!-- Accordion for Materiais -->
+        <section>
+            <h2 class="accordion-header" tabindex="0" onclick="toggleAccordion(this)">Materiais</h2>
+            <div class="accordion-content card-container">
+                <a href="https://ravellsl.github.io/rstech-aluno/" target="_blank" class="card" aria-label="Aula Online">
+                    <div class="icon material-aula">
+                        <img src="https://media.licdn.com/dms/image/v2/D4E22AQF5pH8tpEwiQA/feedshare-shrink_800/feedshare-shrink_800/0/1728852180035?e=1731542400&v=beta&t=kXXEOYzKxcVgIniSEF8jS2SK3POBeWbNf-704kMyBbY" alt="Aula Online">
+                    </div>
+                    <h3>Aula Online</h3>
+                </a>
 
-        <a href="https://ravellsl.github.io/caderno-virtual/" target="_blank" class="card">
-            <div class="icon caderno-digital">
-                <img src="https://media.licdn.com/dms/image/v2/D4E22AQGmZXWMM2uRiA/feedshare-shrink_800/feedshare-shrink_800/0/1728852209897?e=1731542400&v=beta&t=6qTKyIoXopt3XBnUztDnh512NRpAXHBqItKdwHLv8jA" alt="Caderno Digital">
+                <a href="https://ravellsl.github.io/apostilas/" target="_blank" class="card" aria-label="Apostilas">
+                    <div class="icon material-aula">
+                        <img src="https://media.licdn.com/dms/image/v2/D4E22AQF-kfv8GkjTWw/feedshare-shrink_800/feedshare-shrink_800/0/1728852195939?e=1731542400&v=beta&t=s4rOuYTAwP4hXVrvqAaGIPrAnxzvVl8FwuI5Y-O8qOQ" alt="Apostilas">
+                    </div>
+                    <h3>Apostilas</h3>
+                </a>
+
+                <a href="https://ravellsl.github.io/rstech-biblioteca/" target="_blank" class="card" aria-label="Biblioteca Digital">
+                    <div class="icon">
+                        <img src="https://media.licdn.com/dms/image/v2/D4E22AQHnikUquwoWJA/feedshare-shrink_800/feedshare-shrink_800/0/1728852577252?e=1731542400&v=beta&t=FdKDwCUf2I17UyP_yz332I0_NZesb-h73J-v5BlT6J0" alt="Biblioteca Digital">
+                    </div>
+                    <h3>Biblioteca Digital</h3>
+                </a>
+
+                <a href="https://ravellsl.github.io/caderno-exercicios/" target="_blank" class="card" aria-label="Caderno de Exercícios">
+                    <div class="icon">
+                        <img src="https://media.licdn.com/dms/image/v2/D4E22AQH6yrrAkM7qjw/feedshare-shrink_800/feedshare-shrink_800/0/1728852224257?e=1731542400&v=beta&t=bt1ohNTTWmidSYuxQuruBjuxbXVQLYYBKIDyVIF_qZ4" alt="Caderno de Exercícios">
+                    </div>
+                    <h3>Caderno de Exercícios</h3>
+                </a>
+
+                <a href="https://ravellsl.github.io/caderno-virtual/" target="_blank" class="card" aria-label="Caderno Digital">
+                    <div class="icon caderno-digital">
+                        <img src="https://media.licdn.com/dms/image/v2/D4E22AQGmZXWMM2uRiA/feedshare-shrink_800/feedshare-shrink_800/0/1728852209897?e=1731542400&v=beta&t=6qTKyIoXopt3XBnUztDnh512NRpAXHBqItKdwHLv8jA" alt="Caderno Digital">
+                    </div>
+                    <h3>Caderno Digital</h3>
+                </a>
+
+                <a href="https://ravellsl.github.io/rstech-material/" target="_blank" class="card" aria-label="Material Complementar">
+                    <div class="icon">
+                        <img src="https://media.licdn.com/dms/image/v2/D4E22AQHy4Llbzu2CEA/feedshare-shrink_800/feedshare-shrink_800/0/1728852237798?e=1731542400&v=beta&t=QnxEs2bAsZozQMQZPbijcZ88Mz5y-iq_Od38di_803g" alt="Material Complementar">
+                    </div>
+                    <h3>Material Complementar</h3>
+                </a>
             </div>
-            <h2>Caderno Digital</h2>
-        </a>
-        
-        <a href="https://ravellsl.github.io/caderno-exercicios/" target="_blank" class="card">
-            <div class="icon">
-                <img src="https://media.licdn.com/dms/image/v2/D4E22AQH6yrrAkM7qjw/feedshare-shrink_800/feedshare-shrink_800/0/1728852224257?e=1731542400&v=beta&t=bt1ohNTTWmidSYuxQuruBjuxbXVQLYYBKIDyVIF_qZ4" alt="Caderno de Exercícios">
+        </section>
+
+        <!-- Accordion for Boletim Tecnológico -->
+        <section>
+            <h2 class="accordion-header" tabindex="0" onclick="toggleAccordion(this)">Boletim Tecnológico</h2>
+            <div class="accordion-content">
+                <div class="boletim-container">
+                    <img src="https://media.licdn.com/dms/image/v2/D4E22AQHH5F0SuB05AQ/feedshare-shrink_800/feedshare-shrink_800/0/1730062044590?e=1732752000&v=beta&t=UuC_n4ldOFloGdXA36pKMjDA2H498T8QItpzcUA04Yc" alt="Boletim Tecnológico">
+                    <div class="boletim-info">
+                        <div class="boletim-title">Escolha a Edição
+                            <span class="boletim-seta" onclick="toggleDates()">&#9660;</span>
+                        </div>
+                        <div class="boletim-dates" id="boletim-dates">
+                            <a href="https://ravellsl.github.io/boletim-tecnologico-26-10-2024/" target="_blank">26/10/2024</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <h2>Caderno de Exercícios</h2>
-        </a>
-        
-        <a href="https://ravellsl.github.io/rstech-material/" target="_blank" class="card">
-            <div class="icon">
-                <img src="https://media.licdn.com/dms/image/v2/D4E22AQHy4Llbzu2CEA/feedshare-shrink_800/feedshare-shrink_800/0/1728852237798?e=1731542400&v=beta&t=QnxEs2bAsZozQMQZPbijcZ88Mz5y-iq_Od38di_803g" alt="Material Complementar">
+        </section>
+
+        <!-- Accordion for Palestras -->
+        <section>
+            <h2 class="accordion-header" tabindex="0" onclick="toggleAccordion(this)">Palestras</h2>
+            <div class="accordion-content">
+                <a href="https://ravellsl.github.io/palestra-IA-plataforma/" target="_blank" class="card" aria-label="Explorando a IA - o futuro em nossas mãos">
+                    <div class="icon caderno-digital">
+                        <img src="https://media.licdn.com/dms/image/v2/D4E22AQG_vOVzj87Xvg/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1729557542999?e=1732752000&v=beta&t=jOn--0sbAZU1WeGvol0ii0psDXwz8U6y9CAWa9OpZL4" alt="Explorando a IA - o futuro em nossas mãos!">
+                    </div>
+                    <h3>Explorando a IA - o futuro em nossas mãos!</h3>
+                </a>
             </div>
-            <h2>Material Complementar</h2>
-        </a>
-        
-        <a href="https://ravellsl.github.io/rstech-biblioteca/" target="_blank" class="card">
-             <div class="icon">
-                <img src="https://media.licdn.com/dms/image/v2/D4E22AQHnikUquwoWJA/feedshare-shrink_800/feedshare-shrink_800/0/1728852577252?e=1731542400&v=beta&t=FdKDwCUf2I17UyP_yz332I0_NZesb-h73J-v5BlT6J0" alt="Biblioteca Digital">
-            </div>
-            <h2>Biblioteca Digital</h2>
-        </a>     
+        </section>
+
     </div>
+
+    <script>
+        function toggleAccordion(element) {
+            const accordion = element.parentElement;
+            const content = accordion.querySelector('.accordion-content');
+            accordion.classList.toggle('active');
+
+            if (accordion.classList.contains('active')) {
+                content.style.maxHeight = content.scrollHeight + 'px';
+            } else {
+                content.style.maxHeight = '0';
+            }
+        }
+
+        function toggleDates() {
+            const dates = document.getElementById('boletim-dates');
+            if (dates.style.display === "none" || dates.style.display === "") {
+                dates.style.display = "block";
+            } else {
+                dates.style.display = "none";
+            }
+        }
+    </script>
 </body>
 </html>
