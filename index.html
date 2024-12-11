@@ -33,7 +33,7 @@ body {
 .accordion {
     border: 1px solid #ccc;
     border-radius: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 30px; /* Adicionado para replicar o espaçamento */
     overflow: hidden;
     background-color: #fff;
 }
@@ -179,7 +179,7 @@ h2, h3 {
 /* Responsividade */
 @media (max-width: 600px) {
     .accordion {
-        margin-bottom: 30px; /* Aumenta o espaço entre o final do acordeão e a próxima seção */
+        margin-bottom: 30px; /* Espaço entre os acordeões */
     }
 
     .boletim-container {
@@ -259,6 +259,25 @@ h2, h3 {
             </div>
         </section>
 
+        <!-- Accordion for Dicionário Tech -->
+<section>
+    <h2 class="accordion-header" tabindex="0" onclick="toggleAccordion(this)">Dicionário Tech</h2>
+    <div class="accordion-content">
+        <div class="boletim-container">
+            <img src="https://i.ibb.co/W2cszsn/DALL-E-2024-12-10-22-08-25-Um-dicion-rio-de-tecnologia-ultra-realista-com-capa-dura-met-lica-pratead.webp" alt="Dicionário Tech">
+            <div class="boletim-info">
+                <div class="boletim-title">                    
+                </div>
+                <a href="https://ravellsl.github.io/dicionario-tech/" target="_blank" class="card" aria-label="Acessar o Dicionário Tech">
+                    <button style="padding: 10px 20px; background-color: #007BFF; color: #fff; border: none; border-radius: 5px; cursor: pointer;">
+                        Acessar
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+        
         <!-- Accordion for Boletim Tecnológico -->
         <section>
             <h2 class="accordion-header" tabindex="0" onclick="toggleAccordion(this)">Boletim Tecnológico</h2>
