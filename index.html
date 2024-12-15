@@ -417,35 +417,43 @@
         font-size: 0.95rem; /* Fonte menor para leitura confortável */
     }
 
-    /* Card container - Cards empilhados */
+    /* Card container - Empilhar os cards */
     .card-container {
-        display: flex; /* Troca o layout para flexbox */
+        display: flex; /* Altera para flexbox */
         flex-direction: column; /* Empilha os cards verticalmente */
         align-items: center; /* Centraliza os cards horizontalmente */
         gap: 1rem; /* Espaçamento entre os cards */
     }
 
-    /* Cards - Ajuste de largura */
+    /* Cards - Ajustar para serem quadrados */
     .card {
         width: 90%; /* Largura ajustada para ocupar 90% da tela */
-        max-width: 400px; /* Define uma largura máxima */
+        max-width: 300px; /* Define uma largura máxima */
+        aspect-ratio: 1; /* Faz o card ser quadrado (largura = altura) */
         margin: 0 auto; /* Centraliza horizontalmente */
-        height: auto; /* Altura adaptável */
+        display: flex; /* Flexbox para centralizar conteúdo */
+        flex-direction: column; /* Conteúdo organizado verticalmente */
+        align-items: center; /* Centraliza conteúdo horizontalmente */
+        justify-content: space-between; /* Espaço entre imagem e texto */
         box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1); /* Sombra mais suave */
+        border-radius: 10px; /* Bordas arredondadas */
     }
 
+    /* Imagens dentro dos cards */
     .card img {
         width: 100%; /* Largura total do card */
-        height: 150px; /* Altura fixa para formar um quadrado menor */
+        height: auto; /* Altura ajustada automaticamente */
+        max-height: 70%; /* Imagem ocupa até 70% do card */
         object-fit: cover; /* Garante que a imagem não fique distorcida */
         object-position: center; /* Centraliza o corte da imagem */
-        border-radius: 10px; /* Bordas arredondadas para estética */
+        border-radius: 10px 10px 0 0; /* Bordas arredondadas no topo */
     }
-}
 
+    /* Texto dentro dos cards */
     .card h4 {
-        font-size: 1rem; /* Ajuste do tamanho da fonte */
+        font-size: 1rem; /* Tamanho ajustado do texto */
         padding: 0.5rem; /* Espaçamento interno do título */
+        text-align: center; /* Centralização do texto */
     }
 
     /* Modal */
@@ -466,52 +474,36 @@
         font-size: 0.8rem; /* Fonte menor */
         padding: 0.75rem; /* Reduz padding */
     }
-
+}
 
 @media only screen and (max-width: 480px) {
-    /* Ajustes adicionais para telas muito pequenas */
-    body {
-        font-size: 0.85rem; /* Reduz tamanho global do texto */
-    }
-
-    header.header {
-        font-size: 1rem; /* Menor tamanho do título */
-        padding: 0.5rem;
-    }
-
-    nav.sidebar a {
-        font-size: 0.85rem; /* Texto menor nos links */
-        padding: 0.4rem 0.8rem;
-    }
-
-    main.main-content {
-        padding: 2.5rem 0.5rem; /* Menor espaçamento interno */
-    }
-
-    .card-container {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Cards mais compactos */
-        gap: 0.5rem;
+    /* Cards ainda menores para telas muito pequenas */
+    .card {
+        max-width: 250px; /* Menor largura para dispositivos muito pequenos */
+        aspect-ratio: 1; /* Continua quadrado */
     }
 
     .card img {
-        width: 100%; /* Largura total do card */
-        height: 120px; /* Quadrado menor em telas muito pequenas */
-        object-fit: cover; /* Evita distorção */
-        object-position: center; /* Centraliza o corte */
-        border-radius: 8px; /* Bordas levemente arredondadas */
+        max-height: 65%; /* Imagem ocupa até 65% do card */
     }
-}
 
     .card h4 {
-        font-size: 0.8rem; /* Texto menor */
-        padding: 0.4rem;
+        font-size: 0.9rem; /* Texto menor */
+        padding: 0.4rem; /* Menor espaçamento interno */
     }
 
+    /* Botão do menu */
+    #menu-button {
+        font-size: 0.9rem; /* Botão mais compacto */
+        padding: 0.3rem 0.6rem; /* Reduz padding */
+    }
+
+    /* Rodapé */
     footer.footer {
         font-size: 0.75rem; /* Fonte menor */
-        padding: 0.5rem;
+        padding: 0.5rem; /* Reduz padding */
     }
-
+}
     </style>
 </head>
 <body>
