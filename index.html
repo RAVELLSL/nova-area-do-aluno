@@ -435,9 +435,13 @@
     }
 
     .card img {
-        height: auto; /* Ajuste automático para imagens proporcionais */
-        max-height: 200px; /* Define uma altura máxima para imagens */
+        width: 100%; /* Largura total do card */
+        height: 150px; /* Altura fixa para formar um quadrado menor */
+        object-fit: cover; /* Garante que a imagem não fique distorcida */
+        object-position: center; /* Centraliza o corte da imagem */
+        border-radius: 10px; /* Bordas arredondadas para estética */
     }
+}
 
     .card h4 {
         font-size: 1rem; /* Ajuste do tamanho da fonte */
@@ -462,7 +466,7 @@
         font-size: 0.8rem; /* Fonte menor */
         padding: 0.75rem; /* Reduz padding */
     }
-}
+
 
 @media only screen and (max-width: 480px) {
     /* Ajustes adicionais para telas muito pequenas */
@@ -490,8 +494,13 @@
     }
 
     .card img {
-        height: 5rem; /* Imagem mais compacta */
+        width: 100%; /* Largura total do card */
+        height: 120px; /* Quadrado menor em telas muito pequenas */
+        object-fit: cover; /* Evita distorção */
+        object-position: center; /* Centraliza o corte */
+        border-radius: 8px; /* Bordas levemente arredondadas */
     }
+}
 
     .card h4 {
         font-size: 0.8rem; /* Texto menor */
@@ -502,7 +511,7 @@
         font-size: 0.75rem; /* Fonte menor */
         padding: 0.5rem;
     }
-}
+
     </style>
 </head>
 <body>
