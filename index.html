@@ -386,10 +386,22 @@
         aspect-ratio: 1 / 1; /* Garante o formato quadrado */
     }
 
-    .card img {
-        height: auto; /* Ajuste automático para evitar distorções */
-        object-fit: cover; /* Garante que a imagem preencha o card sem distorções */
+    .card h4 {
+        font-size: 1rem; /* Ajuste para um tamanho legível */
+        padding: 0.625rem; /* Espaçamento interno */
+        color: var(--text-color); /* Certifique-se de usar uma cor visível */
+        text-align: center; /* Centraliza o texto */
+        white-space: normal; /* Permite quebra de linha, se necessário */
+        overflow: visible; /* Garante que o texto não seja cortado */
     }
+}
+
+.card img {
+        width: 80%; /* Reduz a largura para 80% do card */
+        height: auto; /* Mantém a proporção da imagem */
+        margin: 0 auto; /* Centraliza a imagem dentro do card */
+    }
+}
 
     .boletim-container img {
         width: 7.5rem; /* 120px */
@@ -425,10 +437,22 @@
         aspect-ratio: 1 / 1; /* Garante o formato quadrado */
     }
 
-    .card img {
-        height: auto; /* Ajuste automático para evitar distorções */
-        object-fit: cover; /* Garante que a imagem preencha o card sem distorções */
+    .card h4 {
+        font-size: 0.875rem; /* Ajuste para tamanhos menores */
+        padding: 0.5rem; /* Espaçamento interno */
+        color: var(--text-color); /* Certifique-se de usar uma cor visível */
+        text-align: center; /* Centraliza o texto */
+        white-space: normal; /* Permite quebra de linha, se necessário */
+        overflow: visible; /* Garante que o texto não seja cortado */
     }
+}
+
+.card img {
+        width: 70%; /* Reduz ainda mais a largura para telas menores */
+        height: auto; /* Mantém a proporção da imagem */
+        margin: 0 auto; /* Centraliza a imagem dentro do card */
+    }
+}
 
     .boletim-container img {
         width: 6.25rem; /* 100px */
