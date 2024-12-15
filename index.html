@@ -375,99 +375,134 @@
         @media only screen and (max-width: 768px) {
     /* Barra lateral */
     nav.sidebar {
-        width: var(--sidebar-width-mobile);
+        width: var(--sidebar-width-mobile); /* Barra ocupa a largura total */
         left: -100%; /* Escondida por padrão */
         transition: left var(--transition-speed);
+        font-size: 1rem; /* Reduz tamanho do texto */
     }
     nav.sidebar.active {
-        left: 0; /* Exibida quando ativa */
+        left: 0; /* Exibida ao clicar no botão */
+    }
+
+    /* Links da barra lateral */
+    nav.sidebar a {
+        padding: 0.5rem 1rem; /* Menor espaçamento interno */
+        font-size: 1rem; /* Texto menor */
     }
 
     /* Botão do menu */
     #menu-button {
-        display: block; /* Visível em telas menores */
-        font-size: 1.2rem;
-        padding: 0.5rem 1rem; /* Ajuste para conforto */
+        display: block; /* Visível apenas em telas menores */
+        font-size: 1rem; /* Botão ajustado */
+        padding: 0.4rem 0.8rem; /* Reduz tamanho do botão */
+        top: 0.5rem; /* Posiciona mais próximo do topo */
+        left: 0.5rem; /* Ajusta alinhamento */
     }
 
     /* Cabeçalho */
     header.header {
-        text-align: center;
-        font-size: 1.25rem;
+        font-size: 1.2rem; /* Fonte menor para o título */
+        padding: 0.75rem; /* Reduz o padding */
     }
 
     /* Conteúdo principal */
     main.main-content {
-        margin-left: 0; /* Remover espaçamento da barra lateral fixa */
-        padding: 3rem 1rem; /* Espaçamento interno ajustado */
+        margin-left: 0; /* Remove margem lateral */
+        padding: 3rem 1rem; /* Ajuste no espaçamento interno */
     }
 
     /* Seções */
     .section {
-        padding: 1rem;
-        width: 100%; /* Para ocupar todo o espaço disponível */
+        padding: 1rem; /* Reduz o espaçamento interno */
+        font-size: 0.95rem; /* Fonte menor para leitura confortável */
     }
 
-    /* Card container */
+    /* Card container - Cards empilhados */
     .card-container {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Reduz tamanho mínimo */
-        gap: 1rem; /* Espaçamento ajustado */
+        display: flex; /* Troca o layout para flexbox */
+        flex-direction: column; /* Empilha os cards verticalmente */
+        align-items: center; /* Centraliza os cards horizontalmente */
+        gap: 1rem; /* Espaçamento entre os cards */
     }
 
-    /* Cards */
+    /* Cards - Ajuste de largura */
     .card {
+        width: 90%; /* Largura ajustada para ocupar 90% da tela */
+        max-width: 400px; /* Define uma largura máxima */
+        margin: 0 auto; /* Centraliza horizontalmente */
         height: auto; /* Altura adaptável */
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1); /* Sombra mais suave */
     }
 
     .card img {
-        height: 7rem; /* Tamanho ajustado para telas menores */
+        height: auto; /* Ajuste automático para imagens proporcionais */
+        max-height: 200px; /* Define uma altura máxima para imagens */
     }
 
-    /* Botão do modal */
-    .boletim-button {
-        font-size: 0.9rem; /* Fonte menor */
-        padding: 0.5rem 1rem;
+    .card h4 {
+        font-size: 1rem; /* Ajuste do tamanho da fonte */
+        padding: 0.5rem; /* Espaçamento interno do título */
     }
 
     /* Modal */
     .modal-content {
-        padding: 1rem;
+        padding: 1rem; /* Reduz padding do modal */
         max-width: 90%; /* Ocupa até 90% da largura */
+        font-size: 0.9rem; /* Fonte ajustada */
+    }
+
+    /* Botão do modal */
+    .boletim-button {
+        font-size: 0.85rem; /* Reduz tamanho do texto */
+        padding: 0.4rem 0.8rem; /* Botão mais compacto */
     }
 
     /* Rodapé */
     footer.footer {
-        font-size: 0.8rem; /* Tamanho menor para telas pequenas */
+        font-size: 0.8rem; /* Fonte menor */
+        padding: 0.75rem; /* Reduz padding */
     }
 }
 
 @media only screen and (max-width: 480px) {
-    /* Fontes ainda menores para dispositivos muito pequenos */
+    /* Ajustes adicionais para telas muito pequenas */
     body {
-        font-size: 0.9rem;
+        font-size: 0.85rem; /* Reduz tamanho global do texto */
     }
 
-    /* Cabeçalho */
     header.header {
         font-size: 1rem; /* Menor tamanho do título */
+        padding: 0.5rem;
     }
 
-    /* Cards */
+    nav.sidebar a {
+        font-size: 0.85rem; /* Texto menor nos links */
+        padding: 0.4rem 0.8rem;
+    }
+
+    main.main-content {
+        padding: 2.5rem 0.5rem; /* Menor espaçamento interno */
+    }
+
+    .card-container {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Cards mais compactos */
+        gap: 0.5rem;
+    }
+
     .card img {
-        height: 5.5rem; /* Ajuste proporcional */
+        height: 5rem; /* Imagem mais compacta */
     }
 
     .card h4 {
-        font-size: 0.85rem; /* Reduzindo o texto */
+        font-size: 0.8rem; /* Texto menor */
+        padding: 0.4rem;
     }
 
-    /* Botão do menu */
-    #menu-button {
-        font-size: 1rem; /* Botão mais compacto */
-        padding: 0.4rem 0.8rem;
+    footer.footer {
+        font-size: 0.75rem; /* Fonte menor */
+        padding: 0.5rem;
     }
 }
-
     </style>
 </head>
 <body>
