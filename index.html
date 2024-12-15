@@ -371,77 +371,100 @@
             height: var(--footer-height);
             flex-shrink: 0;
         }
-
-        /* Responsividade */
-        @media (max-width: 768px) {
+        
+        @media only screen and (max-width: 768px) {
+    /* Barra lateral */
     nav.sidebar {
-        width: 12.5rem; /* 200px */
+        width: var(--sidebar-width-mobile);
+        left: -100%; /* Escondida por padrão */
+        transition: left var(--transition-speed);
+    }
+    nav.sidebar.active {
+        left: 0; /* Exibida quando ativa */
     }
 
+    /* Botão do menu */
+    #menu-button {
+        display: block; /* Visível em telas menores */
+        font-size: 1.2rem;
+        padding: 0.5rem 1rem; /* Ajuste para conforto */
+    }
+
+    /* Cabeçalho */
+    header.header {
+        text-align: center;
+        font-size: 1.25rem;
+    }
+
+    /* Conteúdo principal */
     main.main-content {
-        margin-left: 12.5rem; /* 200px */
+        margin-left: 0; /* Remover espaçamento da barra lateral fixa */
+        padding: 3rem 1rem; /* Espaçamento interno ajustado */
     }
 
+    /* Seções */
+    .section {
+        padding: 1rem;
+        width: 100%; /* Para ocupar todo o espaço disponível */
+    }
+
+    /* Card container */
+    .card-container {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Reduz tamanho mínimo */
+        gap: 1rem; /* Espaçamento ajustado */
+    }
+
+    /* Cards */
     .card {
-        aspect-ratio: 1 / 1; /* Garante o formato quadrado */
+        height: auto; /* Altura adaptável */
     }
 
     .card img {
-        height: auto; /* Ajuste automático para evitar distorções */
-        object-fit: cover; /* Garante que a imagem preencha o card sem distorções */
+        height: 7rem; /* Tamanho ajustado para telas menores */
     }
 
-    .boletim-container img {
-        width: 7.5rem; /* 120px */
-        height: 7.5rem; /* 120px */
+    /* Botão do modal */
+    .boletim-button {
+        font-size: 0.9rem; /* Fonte menor */
+        padding: 0.5rem 1rem;
+    }
+
+    /* Modal */
+    .modal-content {
+        padding: 1rem;
+        max-width: 90%; /* Ocupa até 90% da largura */
+    }
+
+    /* Rodapé */
+    footer.footer {
+        font-size: 0.8rem; /* Tamanho menor para telas pequenas */
     }
 }
 
-@media (max-width: 576px) {
-    #menu-button {
-        display: block;
+@media only screen and (max-width: 480px) {
+    /* Fontes ainda menores para dispositivos muito pequenos */
+    body {
+        font-size: 0.9rem;
     }
 
-    nav.sidebar {
-        position: fixed;
-        width: var(--sidebar-width-mobile);
-        height: 100%;
-        top: var(--header-height);
-        left: -100%;
-        transition: left var(--transition-speed);
-        z-index: 1000;
+    /* Cabeçalho */
+    header.header {
+        font-size: 1rem; /* Menor tamanho do título */
     }
 
-    nav.sidebar.active {
-        left: 0;
-    }
-
-    main.main-content {
-        margin-left: 0;
-        padding: 4rem 1rem 2rem 1rem; /* Ajuste padding para header */
-    }
-
-    .card {
-        aspect-ratio: 1 / 1; /* Garante o formato quadrado */
-    }
-
+    /* Cards */
     .card img {
-        height: auto; /* Ajuste automático para evitar distorções */
-        object-fit: cover; /* Garante que a imagem preencha o card sem distorções */
-    }
-
-    .boletim-container img {
-        width: 6.25rem; /* 100px */
-        height: 6.25rem; /* 100px */
-    }
-
-    .section h3 {
-        font-size: 1.2rem;
+        height: 5.5rem; /* Ajuste proporcional */
     }
 
     .card h4 {
-        font-size: 1rem;
-        padding: 0.625rem; /* 10px */
+        font-size: 0.85rem; /* Reduzindo o texto */
+    }
+
+    /* Botão do menu */
+    #menu-button {
+        font-size: 1rem; /* Botão mais compacto */
+        padding: 0.4rem 0.8rem;
     }
 }
 
