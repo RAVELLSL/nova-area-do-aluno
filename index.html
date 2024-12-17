@@ -36,14 +36,14 @@
             --footer-height: 3rem;
             --header-height: 3rem;
         }
-
+    
         /* Reset */
         *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-
+    
         body {
             font-family: var(--font-family);
             display: flex;
@@ -52,16 +52,16 @@
             background-color: var(--background-color);
             color: var(--text-color);
         }
-
+    
         /* Remover sublinhado de todos os links */
         a, a:visited {
             text-decoration: none;
-            color: inherit; /* opcional, mantém a cor herdada */
+            color: inherit;
         }
         a:hover, a:focus {
-            text-decoration: none; /* mantém sem sublinhado no hover/focus */
+            text-decoration: none;
         }
-
+    
         /* Cabeçalho */
         header.header {
             background-color: var(--primary-color);
@@ -75,11 +75,10 @@
             z-index: 1100;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-
         header.header h1 {
             font-size: 1.5rem;
         }
-
+    
         /* Botão de Menu para Mobile */
         #menu-button {
             display: none;
@@ -94,7 +93,7 @@
             cursor: pointer;
             z-index: 1200;
         }
-
+    
         /* Barra Lateral */
         nav.sidebar {
             width: var(--sidebar-width);
@@ -109,13 +108,13 @@
             transition: width var(--transition-speed), left var(--transition-speed);
             z-index: 1000;
         }
-
+    
         nav.sidebar h2 {
             margin-bottom: 1.25rem; /* 20px */
             text-align: center;
             font-size: 1.5rem;
         }
-
+    
         nav.sidebar a {
             display: block;
             padding: 0.625rem 0.9375rem; /* 10px 15px */
@@ -124,7 +123,6 @@
             transition: background-color var(--transition-speed);
             margin-bottom: 0.625rem; /* 10px */
         }
-
         nav.sidebar a:hover,
         nav.sidebar a:focus,
         nav.sidebar a.active {
@@ -132,7 +130,7 @@
             color: var(--hover-text);
             outline: none;
         }
-
+    
         /* Conteúdo Principal */
         main.main-content {
             margin-left: var(--sidebar-width);
@@ -147,7 +145,7 @@
             flex-direction: column;
             align-items: center; /* Centraliza horizontalmente */
         }
-
+    
         .section {
             margin-bottom: 1.875rem; /* 30px */
             display: none; /* Ocultas por padrão */
@@ -156,11 +154,9 @@
             flex-direction: column;
             align-items: center; /* Centraliza horizontalmente */
         }
-
         .section.active {
             display: flex; /* Exibida quando ativa */
         }
-
         .section h3 {
             margin-bottom: 0.9375rem; /* 15px */
             color: var(--primary-color);
@@ -170,7 +166,7 @@
             font-size: 1.25rem;
             text-align: center;
         }
-
+    
         .card-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -179,7 +175,8 @@
             max-width: 800px;
             margin: 0 auto; /* Centraliza horizontalmente */
         }
-
+    
+        /* Cada card com imagem + texto abaixo sem forçar quadrado total */
         .card {
             background-color: var(--card-background);
             border-radius: var(--border-radius);
@@ -189,34 +186,37 @@
             text-align: center;
             display: flex;
             flex-direction: column;
-            height: 100%;
+            width: 100%;
+            max-width: 220px; 
         }
-
         .card:hover,
         .card:focus-within {
             transform: translateY(-0.3125rem); /* -5px */
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2); /* 8px 16px */
         }
-
-        .card img {
+    
+        /* Envolver a imagem em um contêiner que fica quadrado */
+        .card .image-wrapper {
             width: 100%;
-            height: 8.75rem; /* 140px */
-            object-fit: cover;
+            aspect-ratio: 1 / 1;   /* torna apenas a imagem quadrada */
+            overflow: hidden;
         }
-
+        .card .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;  
+            object-position: center;
+            display: block;
+        }
+    
         .card h4 {
-            padding: 0.9375rem; /* 15px */
-            font-size: 1.1rem;
             background-color: #f8f8f8;
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-size: 1.1rem;
+            padding: 0.9375rem; /* 15px */
         }
-
+    
         /* Boletim Tech */
         .boletim-container {
-            /* Mesma aparência e alinhamento que as outras .card */
             background-color: var(--card-background);
             border-radius: var(--border-radius);
             box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
@@ -228,43 +228,38 @@
             align-items: center;
             width: 100%;
         }
-
         .boletim-container:hover,
         .boletim-container:focus-within {
             transform: translateY(-0.3125rem);
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
         }
-
         .boletim-container img {
-            width: 9.375rem; /* 150px */
-            height: 9.375rem; /* 150px */
-            object-fit: cover;
-            border-radius: 50%;
-            margin-bottom: 0.9375rem; /* 15px */
-        }
-
+    width: 9.375rem; /* 150px */
+    height: 9.375rem; /* 150px */
+    object-fit: cover;
+    border-radius: 0; /* Remove a borda arredondada */
+    margin-bottom: 0.9375rem; /* 15px */
+}
         .boletim-button {
-    padding: 0.625rem 1.25rem; /* Espaçamento interno */
-    background-color: #000; /* Cor de fundo preta */
-    color: #fff; /* Cor do texto branca */
-    border: none; /* Sem bordas */
-    border-radius: 50px; /* Bordas arredondadas */
-    cursor: pointer; /* Cursor de mão ao passar */
-    font-size: 1rem; /* Tamanho da fonte */
-    font-weight: bold; /* Fonte em negrito */
-    text-align: center; /* Centralização do texto */
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3); /* Sombra sutil */
-    transition: background-color 0.3s, transform 0.2s; /* Transição suave */
-}
-
-.boletim-button:hover,
-.boletim-button:focus {
-    background-color: #333; /* Cor preta mais clara no hover */
-    transform: scale(1.05); /* Leve aumento ao passar o mouse */
-    outline: none; /* Remove borda de foco */
-}
-
-
+            padding: 0.625rem 1.25rem; /* Espaçamento interno */
+            background-color: #000;   /* Cor de fundo preta */
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .boletim-button:hover,
+        .boletim-button:focus {
+            background-color: #333;
+            transform: scale(1.05);
+            outline: none;
+        }
+    
         /* Modal */
         .modal {
             display: none; /* Oculto por padrão */
@@ -280,44 +275,37 @@
             justify-content: center;
             padding: 1rem;
         }
-
         .modal-content {
-    background-color: var(--card-background);
-    padding: 2rem;
-    border-radius: var(--border-radius);
-    width: 80%; /* Ajuste para telas maiores */
-    max-width: 600px; /* Pode ajustar para outra largura máxima */
-    max-height: 80vh; /* Define a altura máxima */
-    position: relative;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
-    animation: fadeIn 0.3s;
-    overflow-y: auto;
-    overflow-x: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--secondary-color) var(--background-color);
-}
-
-/* Personalização da barra de rolagem (aplicável para navegadores Webkit como Chrome, Edge e Safari) */
-.modal-content::-webkit-scrollbar {
-    width: 10px; /* Largura da barra de rolagem */
-    height: 10px; /* Altura da barra de rolagem horizontal */
-}
-
-.modal-content::-webkit-scrollbar-thumb {
-    background-color: var(--secondary-color); /* Cor do "polegar" da barra */
-    border-radius: 5px; /* Bordas arredondadas do "polegar" */
-}
-
-.modal-content::-webkit-scrollbar-track {
-    background-color: var(--background-color); /* Cor do trilho */
-}
-
-
+            background-color: var(--card-background);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            width: 80%; /* Ajuste para telas maiores */
+            max-width: 600px;
+            max-height: 80vh;
+            position: relative;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.3s;
+            overflow-y: auto;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--secondary-color) var(--background-color);
+        }
+        /* Personalização da barra de rolagem (Chrome, Edge, Safari) */
+        .modal-content::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        .modal-content::-webkit-scrollbar-thumb {
+            background-color: var(--secondary-color);
+            border-radius: 5px;
+        }
+        .modal-content::-webkit-scrollbar-track {
+            background-color: var(--background-color);
+        }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-50px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         .close-modal {
             position: absolute;
             top: 1rem;
@@ -328,37 +316,32 @@
             cursor: pointer;
             color: var(--text-color);
         }
-
         .modal-content h4 {
             margin-bottom: 1rem;
             color: var(--primary-color);
             text-align: center;
         }
-
         .modal-content p {
             margin-bottom: 1.5rem;
             color: var(--text-color);
             text-align: center;
         }
-
         .modal-content a {
             display: block;
             margin-bottom: 0.5rem;
             color: var(--secondary-color);
-            /* text-decoration: none;  (já removido globalmente) */
             padding: 0.5rem;
             border-radius: var(--border-radius);
             transition: background-color var(--transition-speed);
             text-align: center;
         }
-
         .modal-content a:hover,
         .modal-content a:focus {
             background-color: var(--secondary-color);
             color: var(--light-text);
             outline: none;
         }
-
+    
         /* Rodapé */
         footer.footer {
             background-color: var(--primary-color);
@@ -371,157 +354,138 @@
             height: var(--footer-height);
             flex-shrink: 0;
         }
-        
-
+    
         /* Ajustes para telas maiores */
-@media only screen and (min-width: 1024px) {
-    .modal-content {
-        width: 50%; /* Reduz o modal para ocupar metade da tela */
-        max-width: 600px; /* Permanece com uma largura máxima */
-    }
-}
- /* Ajustes para telas menores */
+        @media only screen and (min-width: 1024px) {
+            .modal-content {
+                width: 50%; /* Reduz o modal para ocupar metade da tela */
+                max-width: 600px;
+            }
+        }
+    
+        /* Ajustes para telas menores */
         @media only screen and (max-width: 768px) {
-    /* Barra lateral */
-    nav.sidebar {
-        width: var(--sidebar-width-mobile); /* Barra ocupa a largura total */
-        left: -100%; /* Escondida por padrão */
-        transition: left var(--transition-speed);
-        font-size: 1rem; /* Reduz tamanho do texto */
-    }
-    nav.sidebar.active {
-        left: 0; /* Exibida ao clicar no botão */
-    }
-
-    /* Links da barra lateral */
-    nav.sidebar a {
-        padding: 0.5rem 1rem; /* Menor espaçamento interno */
-        font-size: 1rem; /* Texto menor */
-    }
-
-    /* Botão do menu */
-    #menu-button {
-        display: block; /* Visível apenas em telas menores */
-        font-size: 1rem; /* Botão ajustado */
-        padding: 0.4rem 0.8rem; /* Reduz tamanho do botão */
-        top: 0.5rem; /* Posiciona mais próximo do topo */
-        left: 0.5rem; /* Ajusta alinhamento */
-    }
-
-    /* Cabeçalho */
-    header.header {
-        font-size: 1.2rem; /* Fonte menor para o título */
-        padding: 0.75rem; /* Reduz o padding */
-    }
-
-    /* Conteúdo principal */
-    main.main-content {
-        margin-left: 0; /* Remove margem lateral */
-        padding: 3rem 1rem; /* Ajuste no espaçamento interno */
-    }
-
-    /* Seções */
-    .section {
-        padding: 1rem; /* Reduz o espaçamento interno */
-        font-size: 0.95rem; /* Fonte menor para leitura confortável */
-    }
-
-    /* Card container - Cards empilhados */
-    .card-container {
-        display: flex; /* Troca o layout para flexbox */
-        flex-direction: column; /* Empilha os cards verticalmente */
-        align-items: center; /* Centraliza os cards horizontalmente */
-        gap: 1rem; /* Espaçamento entre os cards */
-    }
-
-    /* Cards - Ajuste de largura */
-    .card {
-        width: 90%; /* Largura ajustada para ocupar 90% da tela */
-        max-width: 400px; /* Define uma largura máxima */
-        margin: 0 auto; /* Centraliza horizontalmente */
-        height: auto; /* Altura adaptável */
-        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1); /* Sombra mais suave */
-    }
-
-    .card img {
-        width: 100%; /* Largura total do card */
-        height: 150px; /* Altura fixa para formar um quadrado menor */
-        object-fit: cover; /* Garante que a imagem não fique distorcida */
-        object-position: center; /* Centraliza o corte da imagem */
-        border-radius: 10px; /* Bordas arredondadas para estética */
-    }
-}
-
-    .card h4 {
-        font-size: 1rem; /* Ajuste do tamanho da fonte */
-        padding: 0.5rem; /* Espaçamento interno do título */
-    }
-
-    /* Modal */
-    .modal-content {
-        padding: 1rem; /* Reduz padding do modal */
-        max-width: 90%; /* Ocupa até 90% da largura */
-        font-size: 0.9rem; /* Fonte ajustada */
-    }
-
-    /* Botão do modal */
-    .boletim-button {
-        font-size: 0.85rem; /* Reduz tamanho do texto */
-        padding: 0.4rem 0.8rem; /* Botão mais compacto */
-    }
-
-    /* Rodapé */
-    footer.footer {
-        font-size: 0.8rem; /* Fonte menor */
-        padding: 0.75rem; /* Reduz padding */
-    }
-
-
-@media only screen and (max-width: 480px) {
-    /* Ajustes adicionais para telas muito pequenas */
-    body {
-        font-size: 0.85rem; /* Reduz tamanho global do texto */
-    }
-
-    header.header {
-        font-size: 1rem; /* Menor tamanho do título */
-        padding: 0.5rem;
-    }
-
-    nav.sidebar a {
-        font-size: 0.85rem; /* Texto menor nos links */
-        padding: 0.4rem 0.8rem;
-    }
-
-    main.main-content {
-        padding: 2.5rem 0.5rem; /* Menor espaçamento interno */
-    }
-
-    .card-container {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Cards mais compactos */
-        gap: 0.5rem;
-    }
-
-    .card img {
-        width: 100%; /* Largura total do card */
-        height: 120px; /* Quadrado menor em telas muito pequenas */
-        object-fit: cover; /* Evita distorção */
-        object-position: center; /* Centraliza o corte */
-        border-radius: 8px; /* Bordas levemente arredondadas */
-    }
-}
-
-    .card h4 {
-        font-size: 0.8rem; /* Texto menor */
-        padding: 0.4rem;
-    }
-
-    footer.footer {
-        font-size: 0.75rem; /* Fonte menor */
-        padding: 0.5rem;
-    }
-
+            nav.sidebar {
+                width: var(--sidebar-width-mobile);
+                left: -100%;
+                transition: left var(--transition-speed);
+                font-size: 1rem;
+            }
+            nav.sidebar.active {
+                left: 0;
+            }
+            nav.sidebar a {
+                padding: 0.5rem 1rem;
+                font-size: 1rem;
+            }
+            #menu-button {
+                display: block;
+                font-size: 1rem;
+                padding: 0.4rem 0.8rem;
+                top: 0.5rem;
+                left: 0.5rem;
+            }
+            header.header {
+                font-size: 1.2rem;
+                padding: 0.75rem;
+            }
+            main.main-content {
+                margin-left: 0;
+                padding: 3rem 1rem;
+            }
+            .section {
+                padding: 1rem;
+                font-size: 0.95rem;
+            }
+    
+            .card-container {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 1rem;
+                width: 100%;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+            .card {
+                width: 100%;
+                max-width: 220px;
+                margin: 0 auto;
+            }
+            .card .image-wrapper {
+                width: 100%;
+                aspect-ratio: 1 / 1;
+                overflow: hidden;
+            }
+            .card .image-wrapper img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .card h4 {
+                font-size: 1rem;
+                padding: 0.5rem;
+                background-color: #f8f8f8;
+            }
+            .modal-content {
+                padding: 1rem;
+                max-width: 90%;
+                font-size: 0.9rem;
+            }
+            .boletim-button {
+                font-size: 0.85rem;
+                padding: 0.4rem 0.8rem;
+            }
+            footer.footer {
+                font-size: 0.8rem;
+                padding: 0.75rem;
+            }
+        }
+    
+        @media only screen and (max-width: 480px) {
+            body {
+                font-size: 0.85rem;
+            }
+            header.header {
+                font-size: 1rem;
+                padding: 0.5rem;
+            }
+            nav.sidebar a {
+                font-size: 0.85rem;
+                padding: 0.4rem 0.8rem;
+            }
+            main.main-content {
+                padding: 2.5rem 0.5rem;
+            }
+    
+            .card-container {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 0.5rem;
+            }
+            .card {
+                max-width: 180px;
+            }
+            .card .image-wrapper {
+                aspect-ratio: 1 / 1;
+                overflow: hidden;
+            }
+            .card .image-wrapper img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .card h4 {
+                font-size: 0.8rem;
+                padding: 0.4rem;
+                background-color: #f8f8f8;
+            }
+            footer.footer {
+                font-size: 0.75rem;
+                padding: 0.5rem;
+            }
+        }
     </style>
+    
 </head>
 <body>
     <!-- Cabeçalho -->
@@ -599,7 +563,7 @@
             <h3>Ferramentas Digitais</h3>
             <div class="card-container">
                 <a href="https://ravellsl.github.io/rstechaluno-agentes-IA/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Agentes de IA">
-                    <img src="https://i.ibb.co/TcPQsYf/Inteligencia-artificial-governanca.webp" alt="Agentes de IA" loading="lazy">
+                    <img src="https://i.ibb.co/H45XwsG/Agentes-de-IA.webp" alt="Agentes de IA" loading="lazy">
                     <h4>Agentes de IA</h4>
                 </a>
 
@@ -608,9 +572,9 @@
                     <h4>Dicionário Tech</h4>
                 </a>
 
-                <a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Dicionário Tech">
-                    <img src="https://i.ibb.co/bmzXCdj/imagem-destacada-A-2-png.webp" alt="Dicionário Tech" loading="lazy">
-                    <h4>chatGPT</h4>
+                <a href="https://ravellsl.github.io/bloco-de-notas/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Dicionário Tech">
+                    <img src="https://i.ibb.co/QD9V36s/Bloco-de-Notas.webp" alt="Dicionário Tech" loading="lazy">
+                    <h4>Bloco de Notas</h4>
                 </a>
             </div>
         </section>
@@ -630,13 +594,13 @@
 
                 <!-- Curiosidades -->
                 <a href="https://ravellsl.github.io/curiosidades-tech/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Curiosidades">
-                    <img src="https://s2-techtudo.glbimg.com/DO7CkqwoBmCepQJFTCgaoZXQ72M=/0x0:695x479/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2021/F/N/8llPQBRNyoLAsaNoGknw/2014-06-16-inteligencia-artificial.jpg" alt="Curiosidades" loading="lazy">
+                    <img src="https://i.ibb.co/8sLRz15/curiosidades.webp" alt="Curiosidades" loading="lazy">
                     <h4>Curiosidades</h4>
                 </a>
 
                 <!-- Palestras -->
                 <a href="https://ravellsl.github.io/palestra-IA-plataforma/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Palestras">
-                    <img src="https://i.ibb.co/nrXXb9r/1729557542999.jpg" alt="Palestras" loading="lazy">
+                    <img src="https://i.ibb.co/kQFVGGV/palestras.webp" alt="Palestras" loading="lazy">
                     <h4>Palestras</h4>
                 </a>
             </div>
