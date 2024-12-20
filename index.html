@@ -74,8 +74,8 @@ header.header h1 {
 }
 
 @media (min-width: 1024px) {
-    /* Mantém o body como flex para garantir o rodapé fixo */
-    
+    /* Mantém o body como flex container para garantir o rodapé fixo */
+
     /* Garantir que a barra lateral esteja sempre visível e fixa */
     nav.sidebar {
         position: fixed;
@@ -218,6 +218,13 @@ main.main-content {
     text-align: center;
 }
 
+/* Adicionado: Título "Bem-Vindo" na Seção Início */
+.section#mensagem-padrao .welcome-title {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
 /* Avisos */
 .avisos-container {
     margin-top: 1rem;
@@ -353,7 +360,7 @@ footer.footer {
 </head>
 <body>
 <header class="header">
-    <h1>Bem‑Vindo!</h1>
+    <h1>Área do Aluno</h1> <!-- Alterado de "Bem‑Vindo!" para "Área do Aluno" -->
     <button id="menu-button" aria-label="Abrir Menu" aria-expanded="false" aria-controls="sidebar">☰</button>
 </header>
 
@@ -367,6 +374,7 @@ footer.footer {
 
 <main class="main-content" role="main">
     <section id="mensagem-padrao" class="section active">
+        <h2 class="welcome-title">Bem-Vindo</h2> <!-- Adicionado título "Bem-Vindo" -->
         <p>Escolha no menu sua área de interesse.</p>
         <div class="avisos-container">
             <h4>Atualizações Recentes:</h4>
