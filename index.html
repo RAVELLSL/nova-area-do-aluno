@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Área do Aluno</title>
-    <meta name="description" content="Plataforma de acesso para alunos com materiais de estudo, ferramentas digitais e suplementos tecnológicos.">
-    <meta name="keywords" content="Área do Aluno, Materiais de Estudo, Ferramentas Digitais, Suplemento Tech, IA, Caderno Digital, Biblioteca Digital">
-    <meta name="author" content="Seu Nome ou Instituição">
-    <meta name="robots" content="index, follow">
+    <meta name="description" content="Plataforma de acesso para alunos com materiais de estudo, ferramentas digitais e suplementos tecnológicos."/>
+    <meta name="keywords" content="Área do Aluno, Materiais de Estudo, Ferramentas Digitais, Suplemento Tech, IA, Caderno Digital, Biblioteca Digital"/>
+    <meta name="author" content="Seu Nome ou Instituição"/>
+    <meta name="robots" content="index, follow"/>
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Área do Aluno">
-    <meta property="og:description" content="Plataforma de acesso para alunos com materiais de estudo, ferramentas digitais e suplementos tecnológicos.">
-    <meta property="og:image" content="URL_da_sua_imagem_de_compartilhamento">
-    <meta property="og:url" content="URL_da_sua_página">
-    <meta property="og:type" content="website">
+    <meta property="og:title" content="Área do Aluno"/>
+    <meta property="og:description" content="Plataforma de acesso para alunos com materiais de estudo, ferramentas digitais e suplementos tecnológicos."/>
+    <meta property="og:image" content="URL_da_sua_imagem_de_compartilhamento"/>
+    <meta property="og:url" content="URL_da_sua_página"/>
+    <meta property="og:type" content="website"/>
 
     <style>
         :root {
-            --sidebar-width: 15rem; /* 240px */
+            --sidebar-width: 15rem;
             --sidebar-width-mobile: 100%;
             --primary-color: #2c3e50;
             --secondary-color: #3498db;
@@ -26,7 +26,7 @@
             --text-color: #2c3e50;
             --light-text: #ffffff;
             --transition-speed: 0.3s;
-            --border-radius: 0.3125rem; /* 5px */
+            --border-radius: 0.3125rem;
             --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             --card-background: #ffffff;
             --button-background: var(--secondary-color);
@@ -36,13 +36,13 @@
             --footer-height: 3rem;
             --header-height: 3rem;
         }
-    
+
         *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-    
+
         body {
             font-family: var(--font-family);
             display: flex;
@@ -59,7 +59,7 @@
         a:hover, a:focus {
             text-decoration: none;
         }
-    
+
         header.header {
             background-color: var(--primary-color);
             color: var(--light-text);
@@ -75,7 +75,7 @@
         header.header h1 {
             font-size: 1.5rem;
         }
-    
+
         #menu-button {
             display: none;
             position: fixed;
@@ -89,7 +89,7 @@
             cursor: pointer;
             z-index: 1200;
         }
-    
+
         nav.sidebar {
             width: var(--sidebar-width);
             background-color: var(--primary-color);
@@ -103,13 +103,13 @@
             transition: width var(--transition-speed), left var(--transition-speed);
             z-index: 1000;
         }
-    
+
         nav.sidebar h2 {
             margin-bottom: 1.25rem;
             text-align: center;
             font-size: 1.5rem;
         }
-    
+
         nav.sidebar a {
             display: block;
             padding: 0.625rem 0.9375rem;
@@ -138,14 +138,18 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: flex-start;
+            text-align: center; /* Ajuda na centralização do conteúdo textual */
         }
-    
+
         .section {
             margin-bottom: 1.875rem;
             display: none;
             width: 100%;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            text-align: center;
         }
         .section.active {
             display: flex;
@@ -157,9 +161,8 @@
             display: inline-block;
             padding-bottom: 0.3125rem;
             font-size: 1.25rem;
-            text-align: center;
         }
-    
+
         .card-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, auto));
@@ -168,6 +171,7 @@
             margin: 0 auto;
             justify-content: center;
             justify-items: center;
+            text-align: center;
         }
 
         .card {
@@ -181,6 +185,7 @@
             flex-direction: column;
             width: 100%;
             max-width: 220px;
+            margin: 0 auto;
         }
         .card:hover,
         .card:focus-within {
@@ -214,6 +219,7 @@
             align-items: center;
             width: 100%;
             max-width: 220px;
+            margin: 0 auto;
         }
         .boletim-container:hover,
         .boletim-container:focus-within {
@@ -221,10 +227,12 @@
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
         }
         .boletim-container img {
-            width: 9.375rem; /* 150px */
-            height: 9.375rem; /* 150px */
+            width: 9.375rem;
+            height: 9.375rem;
             object-fit: cover;
             margin-bottom: 0.9375rem;
+            display:block;
+            margin:0 auto;
         }
         .boletim-button {
             padding: 0.625rem 1.25rem;
@@ -373,15 +381,19 @@
             main.main-content {
                 margin-left: 0;
                 padding: 3rem 1rem;
+                max-width: 100%;
+                width:100%;
             }
             .section {
                 padding: 1rem;
                 font-size: 0.95rem;
+                max-width: 100%;
+                margin:0 auto;
             }
             .card-container {
                 grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
                 gap: 1rem;
-                max-width: 800px;
+                max-width: 100%;
                 margin: 0 auto;
                 justify-content: center;
             }
@@ -418,19 +430,23 @@
             }
             main.main-content {
                 padding: 2.5rem 0.5rem;
+                max-width:100%;
+                width:100%;
             }
-
             .card-container {
-                grid-template-columns: 1fr; 
+                grid-template-columns: 1fr;
                 gap: 1.5rem;
+                max-width:100%;
             }
             .card {
                 max-width: 100%;
                 margin: 0 auto;
             }
+            /* Ajuste da imagem do card: manter width:100% e centralizar via display:block; margin:0 auto; */
             .card img {
-                width: 60%;
+                width: 100%;
                 height: auto;
+                display:block;
                 margin: 0 auto;
             }
             .card h4 {
@@ -450,7 +466,7 @@
             }
         }
     </style>
-    
+
 </head>
 <body>
     <header class="header">
@@ -473,11 +489,9 @@
             <p>Escolha ao lado sua área de interesse.</p>
             <div class="avisos-container" style="margin-top: 1rem; width: 100%;">
                 <h4 style="color: var(--secondary-color); margin-bottom: 0.5rem;">Atualizações Recentes:</h4>
-                <ul style="list-style: inside; line-height: 1.5;">
-                    <li>Nova "Área do Aluno" com melhor distribuição de conteúdo e melhorias no design.</li>
-                    <li>"Agentes de IA", "Dicionário Tech" e "Bloco de Notas" adicionados na nova seção Ferramentas Digitais</li>
-                    <li>Adição de "Curiosidades" e "Boletim Tech - 14/12/2024" na nova seção Suplemento Tech.</li>
-                </ul>
+                <p>Nova "Área do Aluno" com melhor distribuição de conteúdo e melhorias no design.</p>
+                <p>"Agentes de IA", "Dicionário Tech" e "Bloco de Notas" adicionados na nova seção Ferramentas Digitais</p>
+                <p>Adição de "Curiosidades" e "Boletim Tech - 14/12/2024" na nova seção Suplemento Tech.</p>                
             </div>
         </section>
 
@@ -488,27 +502,22 @@
                     <img src="https://i.ibb.co/z4xY0CD/1728852180021.jpg" alt="Material de Aula" loading="lazy">
                     <h4>Material de Aula</h4>
                 </a>
-
                 <a href="https://ravellsl.github.io/apostilas/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Apostilas">
                     <img src="https://i.ibb.co/wrKQT02/1728852195955.jpg" alt="Apostilas" loading="lazy">
                     <h4>Apostilas</h4>
                 </a>
-
                 <a href="https://ravellsl.github.io/rstech-material/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Material Complementar">
                     <img src="https://i.ibb.co/jWwR0Nm/1728852237811.jpg" alt="Material Complementar" loading="lazy">
                     <h4>Material Complementar</h4>
                 </a>
-
                 <a href="https://ravellsl.github.io/caderno-exercicios/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Caderno de Exercícios">
                     <img src="https://i.ibb.co/3y3wjnX/1728852224266.jpg" alt="Caderno de Exercícios" loading="lazy">
                     <h4>Caderno de Exercícios</h4>
                 </a>
-
                 <a href="https://ravellsl.github.io/caderno-virtual/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Caderno Digital">
                     <img src="https://i.ibb.co/jf98bKR/1728852209873.jpg" alt="Caderno Digital" loading="lazy">
                     <h4>Caderno Digital</h4>
                 </a>
-
                 <a href="https://ravellsl.github.io/rstech-biblioteca/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Biblioteca Digital">
                     <img src="https://i.ibb.co/TTsZ8Q1/1728852577270.jpg" alt="Biblioteca Digital" loading="lazy">
                     <h4>Biblioteca Digital</h4>
@@ -523,12 +532,10 @@
                     <img src="https://i.ibb.co/H45XwsG/Agentes-de-IA.webp" alt="Agentes de IA" loading="lazy">
                     <h4>Agentes de IA</h4>
                 </a>
-
                 <a href="https://ravellsl.github.io/dicionario-tech/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Dicionário Tech">
                     <img src="https://i.ibb.co/W2cszsn/DALL-E-2024-12-10-22-08-25-Um-dicion-rio-de-tecnologia-ultra-realista-com-capa-dura-met-lica-pratead.webp" alt="Dicionário Tech" loading="lazy">
                     <h4>Dicionário Tech</h4>
                 </a>
-
                 <a href="https://ravellsl.github.io/bloco-de-notas/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Bloco de Notas">
                     <img src="https://i.ibb.co/QD9V36s/Bloco-de-Notas.webp" alt="Bloco de Notas" loading="lazy">
                     <h4>Bloco de Notas</h4>
@@ -542,16 +549,12 @@
                 <div class="card boletim-container">
                     <img src="https://i.ibb.co/YyJ6R9X/1730062044590.jpg" alt="Boletim Tech" loading="lazy">
                     <h4>Boletim Tech</h4>
-                    <button class="toggle-boletim boletim-button" aria-expanded="false" aria-controls="boletim-modal">
-                        Ver Edições
-                    </button>
+                    <button class="toggle-boletim boletim-button" aria-expanded="false" aria-controls="boletim-modal">Ver Edições</button>
                 </div>
-
                 <a href="https://ravellsl.github.io/curiosidades-tech/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Curiosidades">
                     <img src="https://i.ibb.co/0mYZmBx/curiosidades.webp" alt="Curiosidades" loading="lazy">
                     <h4>Curiosidades</h4>
                 </a>
-
                 <a href="https://ravellsl.github.io/palestra-IA-plataforma/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Palestras">
                     <img src="https://i.ibb.co/kQFVGGV/palestras.webp" alt="Palestras" loading="lazy">
                     <h4>Palestras</h4>
@@ -569,7 +572,7 @@
             <button class="close-modal" aria-label="Fechar Modal">&times;</button>
             <h4 id="modal-title">Boletim Tech</h4>
             <p id="modal-description">Aqui estão listadas todas as edições do Boletim Tech. Escolha uma data para acessar a edição correspondente.</p>
-            <div class="card-container">
+            <div class="card-container" style="max-width:500px;">
                 <a href="https://ravellsl.github.io/boletim-tecnologico-14-12-2024/" target="_blank" rel="noopener noreferrer">14/12/2024<br>(atual)</a>
                 <a href="https://ravellsl.github.io/boletim-tecnologico-07-12-2024/" target="_blank" rel="noopener noreferrer">07/12/2024</a>
                 <a href="https://ravellsl.github.io/boletim-tecnologico-30-11-2024/" target="_blank" rel="noopener noreferrer">30/11/2024</a>
