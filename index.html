@@ -74,28 +74,37 @@ header.header h1 {
 }
 
 @media (min-width: 1024px) {
-    body {
-        display: grid;
-        grid-template-areas:
-            "header header"
-            "sidebar main"
-            "footer footer";
-        grid-template-columns: var(--sidebar-width) 1fr;
-        grid-template-rows: var(--header-height) 1fr auto;
-        min-height: 100vh;
+    /* Mantém o body como flex para garantir o rodapé fixo */
+    
+    /* Garantir que a barra lateral esteja sempre visível e fixa */
+    nav.sidebar {
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        width: var(--sidebar-width);
+        height: calc(100% - var(--header-height));
+        background: var(--primary-color);
+        color: var(--light-text);
+        padding: 2rem 1rem;
+        transition: none; /* Remover transição para telas grandes */
+        z-index: 1500;
+    }
+    /* Manter a barra lateral sempre ativa em telas grandes */
+    nav.sidebar.active {
+        left: 0;
     }
 
-    header.header {
-        grid-area: header;
-    }
-    nav.sidebar {
-        grid-area: sidebar;
-    }
+    /* Ajustar o conteúdo principal para não ficar oculto atrás da barra lateral */
     main.main-content {
-        grid-area: main;
+        margin-left: var(--sidebar-width);
+        padding-top: 1.5rem; /* Ajuste conforme necessário */
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
-    footer.footer {
-        grid-area: footer;
+
+    /* Ocultar o botão de menu em telas grandes */
+    #menu-button {
+        display: none;
     }
 }
 
@@ -171,7 +180,7 @@ nav.sidebar a.active {
 
 /* Main content */
 main.main-content {
-    flex: 1;
+    flex: 1; /* Permite que o main ocupe o espaço disponível */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -320,7 +329,7 @@ footer.footer {
     text-align: center;
     padding: 1rem;
     width: 100%;
-    margin-top: auto;
+    /* O margin-top: auto é suficiente para empurrar o footer para o final */
 }
 
 /* Espaçamento maior entre cards em telas muito pequenas */
