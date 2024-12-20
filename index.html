@@ -1,611 +1,554 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Área do Aluno</title>
-    <meta name="description" content="Plataforma de acesso para alunos com materiais de estudo, ferramentas digitais e suplementos tecnológicos."/>
-    <meta name="keywords" content="Área do Aluno, Materiais de Estudo, Ferramentas Digitais, Suplemento Tech, IA, Caderno Digital, Biblioteca Digital"/>
-    <meta name="author" content="Seu Nome ou Instituição"/>
-    <meta name="robots" content="index, follow"/>
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Área do Aluno"/>
-    <meta property="og:description" content="Plataforma de acesso para alunos com materiais de estudo, ferramentas digitais e suplementos tecnológicos."/>
-    <meta property="og:image" content="URL_da_sua_imagem_de_compartilhamento"/>
-    <meta property="og:url" content="URL_da_sua_página"/>
-    <meta property="og:type" content="website"/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Área do Aluno</title>
+<meta name="description" content="Plataforma de acesso para alunos com materiais de estudo, ferramentas digitais e suplementos tecnológicos."/>
+<meta name="keywords" content="Área do Aluno, Materiais de Estudo, Ferramentas Digitais, Suplemento Tech, IA, Caderno Digital, Biblioteca Digital"/>
+<meta name="author" content="Seu Nome ou Instituição"/>
+<meta name="robots" content="index, follow"/>
+<!-- Open Graph Meta Tags -->
+<meta property="og:title" content="Área do Aluno"/>
+<meta property="og:description" content="Plataforma de acesso para alunos com materiais de estudo, ferramentas digitais e suplementos tecnológicos."/>
+<meta property="og:image" content="URL_da_sua_imagem_de_compartilhamento"/>
+<meta property="og:url" content="URL_da_sua_página"/>
+<meta property="og:type" content="website"/>
 
-    <style>
-        :root {
-            --sidebar-width: 25%;
-            --sidebar-width-mobile: 100%;
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --accent-color: #e74c3c;
-            --background-color: #ecf0f1;
-            --text-color: #2c3e50;
-            --light-text: #ffffff;
-            --transition-speed: 0.3s;
-            --border-radius: 0.3125rem;
-            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            --card-background: #ffffff;
-            --button-background: var(--secondary-color);
-            --button-text: var(--light-text);
-            --hover-background: var(--secondary-color);
-            --hover-text: var(--light-text);
-            --footer-height: 3rem;
-            --header-height: 3rem;
-        }
+<style>
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --accent-color: #e74c3c;
+    --background-color: #ecf0f1;
+    --text-color: #2c3e50;
+    --light-text: #ffffff;
+    --border-radius: 0.3125rem;
+    --transition-speed: 0.3s;
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --header-height: 3.5rem;
+    --line-height: 1.6;
+    --sidebar-width: 250px;
+    --max-content-width: 1200px;
+}
 
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-        body {
-            font-family: var(--font-family);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            overflow-x: hidden;
-            line-height: 1.5;
-        }
+body {
+    font-family: var(--font-family);
+    color: var(--text-color);
+    background: var(--background-color);
+    line-height: var(--line-height);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
 
-        a, a:visited {
-            text-decoration: none;
-            color: inherit;
-        }
-        a:hover, a:focus {
-            text-decoration: none;
-        }
+a, a:visited {
+    color: inherit;
+    text-decoration: none;
+}
+a:hover, a:focus {
+    text-decoration: none;
+}
 
-        header.header {
-            background-color: var(--primary-color);
-            color: var(--light-text);
-            text-align: center;
-            padding: 1rem;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1100;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        header.header h1 {
-            font-size: 1.5rem;
-            margin: 0;
-        }
+header.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--header-height);
+    background: var(--primary-color);
+    color: var(--light-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.header h1 {
+    font-size: 1.4rem;
+    text-align: center;
+    margin: 0;
+}
 
-        #menu-button {
-            display: block;
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
-            background-color: var(--primary-color);
-            color: var(--light-text);
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            z-index: 1200;
-            font-size: 1rem;
-        }
+#menu-button {
+    position: absolute;
+    left: 1rem;
+    background: none;
+    border: none;
+    color: var(--light-text);
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--header-height);
+    width: var(--header-height);
+    z-index: 2100;
+}
 
-        nav.sidebar {
-            width: var(--sidebar-width-mobile);
-            background-color: var(--primary-color);
-            color: var(--light-text);
-            padding: 2rem 1.25rem;
-            position: fixed;
-            top: var(--header-height);
-            left: -100%;
-            height: calc(100% - var(--header-height));
-            overflow-y: auto;
-            transition: left var(--transition-speed);
-            z-index: 1000;
-        }
+nav.sidebar {
+    position: fixed;
+    top: var(--header-height);
+    left: -100%;
+    width: var(--sidebar-width);
+    height: calc(100% - var(--header-height));
+    background: var(--primary-color);
+    color: var(--light-text);
+    padding: 2rem 1rem;
+    transition: left var(--transition-speed);
+    z-index: 1500;
+    overflow-y: auto;
+}
+nav.sidebar.active {
+    left: 0;
+}
+nav.sidebar h2 {
+    font-size: 1.3rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+nav.sidebar a {
+    display: block;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: var(--border-radius);
+    transition: background var(--transition-speed);
+}
+nav.sidebar a:hover,
+nav.sidebar a:focus,
+nav.sidebar a.active {
+    background: var(--secondary-color);
+    color: var(--light-text);
+}
 
-        nav.sidebar.active {
-            left: 0;
-        }
+main.main-content {
+    flex: 1;
+    width: 100%;
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+    padding: calc(var(--header-height) + 1rem) 1rem 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
 
-        nav.sidebar h2 {
-            margin-bottom: 1.5rem;
-            text-align: center;
-            font-size: 1.5rem;
-        }
+.section {
+    width: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+.section.active {
+    display: flex;
+}
+.section h3 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--secondary-color);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+.section p {
+    margin: 1rem 0;
+    text-align: center;
+}
 
-        nav.sidebar a {
-            display: block;
-            padding: 0.625rem 0.9375rem;
-            color: var(--light-text);
-            border-radius: var(--border-radius);
-            transition: background-color var(--transition-speed);
-            margin-bottom: 0.625rem;
-        }
-        nav.sidebar a:hover,
-        nav.sidebar a:focus,
-        nav.sidebar a.active {
-            background-color: var(--hover-background);
-            color: var(--hover-text);
-            outline: none;
-        }
+.avisos-container {
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 600px;
+    text-align: left;
+}
+.avisos-container h4 {
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+.avisos-container ul {
+    list-style: disc;
+    padding-left: 1.5rem;
+    margin: 1rem 0;
+}
+.avisos-container ul li {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
 
-        main.main-content {
-            flex: 1;
-            margin-top: var(--header-height);
-            margin-left: 0;
-            padding: 5rem 1.25rem 2rem 1.25rem;
-            max-width: 1200px;
-            width: 100%;
-            margin: 5rem auto 2rem auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            text-align: center;
-        }
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 800px;
+    margin: 2rem auto 0 auto;
+}
+.card {
+    background: #ffffff;
+    border-radius: var(--border-radius);
+    box-shadow: 0 0.25rem 0.375rem rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+.card:hover,
+.card:focus-within {
+    transform: translateY(-0.3125rem);
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.2);
+}
+.card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+}
+.card h4 {
+    background: #f8f8f8;
+    font-size: 1.1rem;
+    padding: 1rem;
+    margin: 0;
+}
 
-        .section {
-            margin-bottom: 2rem;
-            display: none;
-            width: 100%;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-        .section.active {
-            display: flex;
-        }
-        .section h3 {
-            margin-bottom: 1rem;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--secondary-color);
-            display: inline-block;
-            padding-bottom: 0.5rem;
-            font-size: 1.5rem;
-        }
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 3000;
+    width: 100%;
+    height: 100%;
+    display: none;
+    background-color: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+.modal.active {
+    display: flex;
+}
+.modal-content {
+    background: #ffffff;
+    border-radius: var(--border-radius);
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    padding: 2rem;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.3);
+}
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+}
 
-        .section p {
-            margin: 1rem 0;
-        }
+footer.footer {
+    background: var(--primary-color);
+    color: var(--light-text);
+    text-align: center;
+    padding: 1rem;
+    width: 100%;
+    margin-top: auto;
+}
 
-        .avisos-container p {
-            margin: 0.5rem 0;
-        }
+@media (max-width: 768px) {
+    main.main-content {
+        padding-top: calc(var(--header-height) + 1rem);
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
 
-        .card-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 1.5rem;
-            max-width: 800px;
-            margin: 2rem auto 0 auto;
-            justify-content: center;
-            justify-items: center;
-            text-align: center;
-        }
-
-        .card {
-            background-color: var(--card-background);
-            border-radius: var(--border-radius);
-            box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            max-width: 220px;
-            margin: 0 auto;
-        }
-        .card:hover,
-        .card:focus-within {
-            transform: translateY(-0.3125rem);
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
-        }
-
-        .card img {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-            object-position: center;
-            display: block;
-        }
-
-        .card h4 {
-            background-color: #f8f8f8;
-            font-size: 1.1rem;
-            padding: 1rem;
-            margin: 0;
-        }
-
-        .modal {
-            display: none; 
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: rgba(0, 0, 0, 0.5);
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background-color: var(--card-background);
-            padding: 2rem;
-            border-radius: var(--border-radius);
-            width: 80%;
-            max-width: 600px;
-            max-height: 80vh;
-            position: relative;
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: var(--secondary-color) var(--background-color);
-        }
-
-        .modal-content::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
-        }
-
-        .modal-content::-webkit-scrollbar-thumb {
-            background-color: var(--secondary-color);
-            border-radius: 5px;
-        }
-
-        .modal-content::-webkit-scrollbar-track {
-            background-color: var(--background-color);
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-color);
-        }
-
-        footer.footer {
-            background-color: var(--primary-color);
-            color: var(--light-text);
-            text-align: center;
-            padding: 1rem;
-            width: 100%;
-        }
-
-        /* Ajustes para telas bem pequenas (max-width:480px) */
-        @media only screen and (max-width: 480px) {
-            .card {
-                max-width: 180px;
-            }
-            .card h4 {
-                font-size: 1rem;
-                padding: 0.75rem;
-            }
-            main.main-content {
-                padding: 5rem 0.5rem 2rem 0.5rem;
-            }
-        }
-
-        /* Ajustes para tablets (max-width:768px) */
-        @media only screen and (max-width: 768px) {
-            nav.sidebar {
-                width: var(--sidebar-width-mobile);
-                left: -100%;
-            }
-
-            main.main-content {
-                margin-left: 0;
-                padding: 5rem 1rem 2rem 1rem;
-            }
-
-            #menu-button {
-                top: 1rem;
-                left: 1rem;
-            }
-        }
-
-        /* Ajustes para desktops (min-width:1024px) */
-        @media only screen and (min-width: 1024px) {
-            nav.sidebar {
-                width: var(--sidebar-width);
-                left: 0;
-            }
-
-            nav.sidebar.active {
-                left: 0;
-            }
-
-            #menu-button {
-                display: none;
-            }
-
-            main.main-content {
-                margin-left: var(--sidebar-width);
-                padding: 5rem 2rem 2rem 2rem;
-                text-align: left;
-                align-items: flex-start;
-            }
-
-            .section h3 {
-                text-align: left;
-                margin: 0 0 1rem 0;
-            }
-
-            .card-container {
-                justify-content: start;
-                text-align: left;
-            }
-        }
-
-    </style>
+@media (min-width: 1024px) {
+    #menu-button {
+        display: none;
+    }
+    nav.sidebar {
+        left: 0;
+    }
+    main.main-content {
+        margin-left: var(--sidebar-width);
+        padding-left: 2rem;
+        padding-right: 2rem;
+        text-align: left;
+        align-items: flex-start;
+    }
+    .section h3 {
+        text-align: left;
+    }
+    .avisos-container {
+        text-align: left;
+    }
+    .card-container {
+        justify-items: start;
+    }
+}
+</style>
 </head>
 <body>
-    <header class="header">
-        <h1>Área do Aluno</h1>
-    </header>
-
+<header class="header">
+    <h1>Área do Aluno</h1>
     <button id="menu-button" aria-label="Abrir Menu" aria-expanded="false" aria-controls="sidebar">☰</button>
+</header>
 
-    <nav class="sidebar" id="sidebar" role="navigation" aria-label="Menu Principal">
-        <h2>Navegação</h2>
-        <a href="#" data-target="mensagem-padrao" class="nav-link active">Início</a>
-        <a href="#" data-target="area-de-estudo" class="nav-link">Área de Estudo</a>
-        <a href="#" data-target="ferramentas-digitais" class="nav-link">Ferramentas Digitais</a>
-        <a href="#" data-target="suplemento-tech" class="nav-link">Suplemento Tech</a>
-    </nav>
+<nav class="sidebar" id="sidebar" role="navigation" aria-label="Menu Principal">
+    <h2>Navegação</h2>
+    <a href="#" data-target="mensagem-padrao" class="nav-link active">Início</a>
+    <a href="#" data-target="area-de-estudo" class="nav-link">Área de Estudo</a>
+    <a href="#" data-target="ferramentas-digitais" class="nav-link">Ferramentas Digitais</a>
+    <a href="#" data-target="suplemento-tech" class="nav-link">Suplemento Tech</a>
+</nav>
 
-    <main class="main-content" role="main">
-        <section id="mensagem-padrao" class="section active">
-            <h3>Bem-vindo!</h3>
-            <p>Escolha ao lado sua área de interesse.</p>
-            <div class="avisos-container" style="margin-top: 1rem; width: 100%;">
-                <h4 style="color: var(--secondary-color); margin-bottom: 0.5rem;">Atualizações Recentes:</h4>
-                <p>Nova "Área do Aluno" com melhor distribuição de conteúdo e melhorias no design.</p>
-                <p>"Agentes de IA", "Dicionário Tech" e "Bloco de Notas" adicionados na nova seção Ferramentas Digitais</p>
-                <p>Adição de "Curiosidades" e "Boletim Tech - 14/12/2024" na nova seção Suplemento Tech.</p>                
+<main class="main-content" role="main">
+    <section id="mensagem-padrao" class="section active">
+        <h3>Bem-vindo!</h3>
+        <p>Escolha ao lado (ou acima, no menu) sua área de interesse.</p>
+        <div class="avisos-container">
+            <h4>Atualizações Recentes:</h4>
+            <ul>
+                <li>Nova "Área do Aluno" com melhor distribuição de conteúdo e melhorias no design.</li>
+                <li>"Agentes de IA", "Dicionário Tech" e "Bloco de Notas" adicionados na nova seção Ferramentas Digitais.</li>
+                <li>Adição de "Curiosidades" e "Boletim Tech - 14/12/2024" na nova seção Suplemento Tech.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="area-de-estudo" class="section">
+        <h3>Área de Estudo</h3>
+        <div class="card-container">
+            <a href="https://ravellsl.github.io/rstech-aluno/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Material de Aula">
+                <img src="https://i.ibb.co/z4xY0CD/1728852180021.jpg" alt="Material de Aula" loading="lazy">
+                <h4>Material de Aula</h4>
+            </a>
+            <a href="https://ravellsl.github.io/apostilas/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Apostilas">
+                <img src="https://i.ibb.co/wrKQT02/1728852195955.jpg" alt="Apostilas" loading="lazy">
+                <h4>Apostilas</h4>
+            </a>
+            <a href="https://ravellsl.github.io/rstech-material/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Material Complementar">
+                <img src="https://i.ibb.co/jWwR0Nm/1728852237811.jpg" alt="Material Complementar" loading="lazy">
+                <h4>Material Complementar</h4>
+            </a>
+            <a href="https://ravellsl.github.io/caderno-exercicios/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Caderno de Exercícios">
+                <img src="https://i.ibb.co/3y3wjnX/1728852224266.jpg" alt="Caderno de Exercícios" loading="lazy">
+                <h4>Caderno de Exercícios</h4>
+            </a>
+            <a href="https://ravellsl.github.io/caderno-virtual/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Caderno Digital">
+                <img src="https://i.ibb.co/jf98bKR/1728852209873.jpg" alt="Caderno Digital" loading="lazy">
+                <h4>Caderno Digital</h4>
+            </a>
+            <a href="https://ravellsl.github.io/rstech-biblioteca/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Biblioteca Digital">
+                <img src="https://i.ibb.co/TTsZ8Q1/1728852577270.jpg" alt="Biblioteca Digital" loading="lazy">
+                <h4>Biblioteca Digital</h4>
+            </a>
+        </div>
+    </section>
+
+    <section id="ferramentas-digitais" class="section">
+        <h3>Ferramentas Digitais</h3>
+        <div class="card-container">
+            <a href="https://ravellsl.github.io/rstechaluno-agentes-IA/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Agentes de IA">
+                <img src="https://i.ibb.co/H45XwsG/Agentes-de-IA.webp" alt="Agentes de IA" loading="lazy">
+                <h4>Agentes de IA</h4>
+            </a>
+            <a href="https://ravellsl.github.io/dicionario-tech/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Dicionário Tech">
+                <img src="https://i.ibb.co/W2cszsn/DALL-E-2024-12-10-22-08-25-Um-dicion-rio-de-tecnologia-ultra-realista-com-capa-dura-met-lica-pratead.webp" alt="Dicionário Tech" loading="lazy">
+                <h4>Dicionário Tech</h4>
+            </a>
+            <a href="https://ravellsl.github.io/bloco-de-notas/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Bloco de Notas">
+                <img src="https://i.ibb.co/QD9V36s/Bloco-de-Notas.webp" alt="Bloco de Notas" loading="lazy">
+                <h4>Bloco de Notas</h4>
+            </a>
+        </div>
+    </section>
+
+    <section id="suplemento-tech" class="section">
+        <h3>Suplemento Tech</h3>
+        <div class="card-container">
+            <div class="card boletim-container">
+                <img src="https://i.ibb.co/YyJ6R9X/1730062044590.jpg" alt="Boletim Tech" loading="lazy">
+                <h4>Boletim Tech</h4>
+                <button class="toggle-boletim boletim-button" aria-expanded="false" aria-controls="boletim-modal" style="padding:0.5rem; background:var(--secondary-color); border:none; color:var(--light-text); cursor:pointer;">Ver Edições</button>
             </div>
-        </section>
+            <a href="https://ravellsl.github.io/curiosidades-tech/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Curiosidades">
+                <img src="https://i.ibb.co/0mYZmBx/curiosidades.webp" alt="Curiosidades" loading="lazy">
+                <h4>Curiosidades</h4>
+            </a>
+            <a href="https://ravellsl.github.io/palestra-IA-plataforma/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Palestras">
+                <img src="https://i.ibb.co/kQFVGGV/palestras.webp" alt="Palestras" loading="lazy">
+                <h4>Palestras</h4>
+            </a>
+        </div>
+    </section>
+</main>
 
-        <section id="area-de-estudo" class="section">
-            <h3>Área de Estudo</h3>
-            <div class="card-container">
-                <a href="https://ravellsl.github.io/rstech-aluno/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Material de Aula">
-                    <img src="https://i.ibb.co/z4xY0CD/1728852180021.jpg" alt="Material de Aula" loading="lazy">
-                    <h4>Material de Aula</h4>
-                </a>
-                <a href="https://ravellsl.github.io/apostilas/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Apostilas">
-                    <img src="https://i.ibb.co/wrKQT02/1728852195955.jpg" alt="Apostilas" loading="lazy">
-                    <h4>Apostilas</h4>
-                </a>
-                <a href="https://ravellsl.github.io/rstech-material/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Material Complementar">
-                    <img src="https://i.ibb.co/jWwR0Nm/1728852237811.jpg" alt="Material Complementar" loading="lazy">
-                    <h4>Material Complementar</h4>
-                </a>
-                <a href="https://ravellsl.github.io/caderno-exercicios/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Caderno de Exercícios">
-                    <img src="https://i.ibb.co/3y3wjnX/1728852224266.jpg" alt="Caderno de Exercícios" loading="lazy">
-                    <h4>Caderno de Exercícios</h4>
-                </a>
-                <a href="https://ravellsl.github.io/caderno-virtual/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Caderno Digital">
-                    <img src="https://i.ibb.co/jf98bKR/1728852209873.jpg" alt="Caderno Digital" loading="lazy">
-                    <h4>Caderno Digital</h4>
-                </a>
-                <a href="https://ravellsl.github.io/rstech-biblioteca/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Biblioteca Digital">
-                    <img src="https://i.ibb.co/TTsZ8Q1/1728852577270.jpg" alt="Biblioteca Digital" loading="lazy">
-                    <h4>Biblioteca Digital</h4>
-                </a>
-            </div>
-        </section>
+<footer class="footer" role="contentinfo">
+    &copy; 2024
+</footer>
 
-        <section id="ferramentas-digitais" class="section">
-            <h3>Ferramentas Digitais</h3>
-            <div class="card-container">
-                <a href="https://ravellsl.github.io/rstechaluno-agentes-IA/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Agentes de IA">
-                    <img src="https://i.ibb.co/H45XwsG/Agentes-de-IA.webp" alt="Agentes de IA" loading="lazy">
-                    <h4>Agentes de IA</h4>
-                </a>
-                <a href="https://ravellsl.github.io/dicionario-tech/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Dicionário Tech">
-                    <img src="https://i.ibb.co/W2cszsn/DALL-E-2024-12-10-22-08-25-Um-dicion-rio-de-tecnologia-ultra-realista-com-capa-dura-met-lica-pratead.webp" alt="Dicionário Tech" loading="lazy">
-                    <h4>Dicionário Tech</h4>
-                </a>
-                <a href="https://ravellsl.github.io/bloco-de-notas/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Bloco de Notas">
-                    <img src="https://i.ibb.co/QD9V36s/Bloco-de-Notas.webp" alt="Bloco de Notas" loading="lazy">
-                    <h4>Bloco de Notas</h4>
-                </a>
-            </div>
-        </section>
-
-        <section id="suplemento-tech" class="section">
-            <h3>Suplemento Tech</h3>
-            <div class="card-container">
-                <div class="card boletim-container">
-                    <img src="https://i.ibb.co/YyJ6R9X/1730062044590.jpg" alt="Boletim Tech" loading="lazy">
-                    <h4>Boletim Tech</h4>
-                    <button class="toggle-boletim boletim-button" aria-expanded="false" aria-controls="boletim-modal">Ver Edições</button>
-                </div>
-                <a href="https://ravellsl.github.io/curiosidades-tech/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Curiosidades">
-                    <img src="https://i.ibb.co/0mYZmBx/curiosidades.webp" alt="Curiosidades" loading="lazy">
-                    <h4>Curiosidades</h4>
-                </a>
-                <a href="https://ravellsl.github.io/palestra-IA-plataforma/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Palestras">
-                    <img src="https://i.ibb.co/kQFVGGV/palestras.webp" alt="Palestras" loading="lazy">
-                    <h4>Palestras</h4>
-                </a>
-            </div>
-        </section>
-    </main>
-
-    <footer class="footer" role="contentinfo">
-        &copy; 2024
-    </footer>
-
-    <div class="modal" id="boletim-modal" aria-hidden="true">
-        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description">
-            <button class="close-modal" aria-label="Fechar Modal">&times;</button>
-            <h4 id="modal-title">Boletim Tech</h4>
-            <p id="modal-description" style="margin-bottom:1rem;">Aqui estão listadas todas as edições do Boletim Tech. Escolha uma data para acessar a edição correspondente.</p>
-            <div class="card-container" style="max-width:500px;">
-                <a href="https://ravellsl.github.io/boletim-tecnologico-14-12-2024/" target="_blank" rel="noopener noreferrer">14/12/2024<br>(atual)</a>
-                <a href="https://ravellsl.github.io/boletim-tecnologico-07-12-2024/" target="_blank" rel="noopener noreferrer">07/12/2024</a>
-                <a href="https://ravellsl.github.io/boletim-tecnologico-30-11-2024/" target="_blank" rel="noopener noreferrer">30/11/2024</a>
-                <a href="https://ravellsl.github.io/boletim-tecnologico-23-11-2024/" target="_blank" rel="noopener noreferrer">23/11/2024</a>
-                <a href="https://ravellsl.github.io/boletim-tecnologico-16-11-2024/" target="_blank" rel="noopener noreferrer">16/11/2024</a>
-                <a href="https://ravellsl.github.io/boletim-tecnologico-09-11-2024/" target="_blank" rel="noopener noreferrer">09/11/2024</a>
-                <a href="https://ravellsl.github.io/boletim-tecnologico-02-11-2024/" target="_blank" rel="noopener noreferrer">02/11/2024</a>
-                <a href="https://ravellsl.github.io/boletim-tecnologico-26-10-2024/" target="_blank" rel="noopener noreferrer">26/10/2024</a>
-            </div>
+<div class="modal" id="boletim-modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description">
+        <button class="close-modal" aria-label="Fechar Modal">&times;</button>
+        <h4 id="modal-title">Boletim Tech</h4>
+        <p id="modal-description" style="margin-bottom:1rem;">Aqui estão listadas todas as edições do Boletim Tech. Escolha uma data para acessar a edição correspondente:</p>
+        <div class="card-container" style="max-width:500px;">
+            <a href="https://ravellsl.github.io/boletim-tecnologico-14-12-2024/" target="_blank" rel="noopener noreferrer">14/12/2024 (atual)</a>
+            <a href="https://ravellsl.github.io/boletim-tecnologico-07-12-2024/" target="_blank" rel="noopener noreferrer">07/12/2024</a>
+            <a href="https://ravellsl.github.io/boletim-tecnologico-30-11-2024/" target="_blank" rel="noopener noreferrer">30/11/2024</a>
+            <a href="https://ravellsl.github.io/boletim-tecnologico-23-11-2024/" target="_blank" rel="noopener noreferrer">23/11/2024</a>
+            <a href="https://ravellsl.github.io/boletim-tecnologico-16-11-2024/" target="_blank" rel="noopener noreferrer">16/11/2024</a>
+            <a href="https://ravellsl.github.io/boletim-tecnologico-09-11-2024/" target="_blank" rel="noopener noreferrer">09/11/2024</a>
+            <a href="https://ravellsl.github.io/boletim-tecnologico-02-11-2024/" target="_blank" rel="noopener noreferrer">02/11/2024</a>
+            <a href="https://ravellsl.github.io/boletim-tecnologico-26-10-2024/" target="_blank" rel="noopener noreferrer">26/10/2024</a>
         </div>
     </div>
+</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const sidebarLinks = document.querySelectorAll('.nav-link');
-            const sections = document.querySelectorAll('.section');
-            const menuButton = document.getElementById('menu-button');
-            const sidebar = document.getElementById('sidebar');
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const menuButton = document.getElementById('menu-button');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('.section');
 
-            const boletimModal = document.getElementById('boletim-modal');
-            const boletimButtons = document.querySelectorAll('.toggle-boletim');
-            const closeModalButton = boletimModal.querySelector('.close-modal');
+    const boletimModal = document.getElementById('boletim-modal');
+    const boletimButtons = document.querySelectorAll('.toggle-boletim');
+    const closeModalButton = boletimModal.querySelector('.close-modal');
 
-            let focusableElementsString = 'a[href], area[href], input:not([disabled]), select:not([disabled]), ' +
-                                          'textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], ' +
-                                          '[contenteditable]';
-            let focusableElements;
-            let firstFocusableElement;
-            let lastFocusableElement;
+    let focusableElementsString = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]';
+    let focusableElements, firstFocusableElement, lastFocusableElement;
 
-            const showSection = (targetId) => {
-                sections.forEach(section => section.classList.remove('active'));
-                const targetSection = document.getElementById(targetId);
-                if (targetSection) {
-                    targetSection.classList.add('active');
-                }
-            };
+    const showSection = (targetId) => {
+        sections.forEach(section => section.classList.remove('active'));
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) {
+            targetSection.classList.add('active');
+        }
+    };
 
-            const defaultSectionId = 'mensagem-padrao';
-            showSection(defaultSectionId);
+    // Menu toggle
+    if (menuButton) {
+        menuButton.addEventListener('click', () => {
+            const isActive = sidebar.classList.contains('active');
+            sidebar.classList.toggle('active');
+            menuButton.setAttribute('aria-expanded', !isActive);
 
-            sidebarLinks.forEach(link => {
-                if (link.getAttribute('data-target') === defaultSectionId) {
-                    link.classList.add('active');
-                } else {
-                    link.classList.remove('active');
-                }
-            });
-
-            menuButton.addEventListener('click', () => {
-                const isActive = sidebar.classList.contains('active');
-                sidebar.classList.toggle('active');
-                menuButton.setAttribute('aria-expanded', !isActive);
-
-                if (!isActive) {
-                    const firstLink = sidebar.querySelector('.nav-link');
-                    if (firstLink) firstLink.focus();
-                }
-            });
-
-            document.addEventListener('keydown', (event) => {
-                if (event.key === 'Escape' && sidebar.classList.contains('active') && window.innerWidth <= 768) {
-                    sidebar.classList.remove('active');
-                    menuButton.setAttribute('aria-expanded', false);
-                    menuButton.focus();
-                }
-            });
-
-            sidebarLinks.forEach(link => {
-                link.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    const target = link.getAttribute('data-target');
-
-                    sidebarLinks.forEach(l => l.classList.remove('active'));
-                    link.classList.add('active');
-
-                    showSection(target);
-
-                    if (window.innerWidth <= 768) {
-                        sidebar.classList.remove('active');
-                        menuButton.setAttribute('aria-expanded', false);
-                        menuButton.focus();
-                    }
-                });
-            });
-
-            const openModal = (button) => {
-                boletimModal.style.display = "flex";
-                button.setAttribute('aria-expanded', true);
-                boletimModal.setAttribute('aria-hidden', false);
-
-                focusableElements = boletimModal.querySelectorAll(focusableElementsString);
-                if (focusableElements.length) {
-                    firstFocusableElement = focusableElements[0];
-                    lastFocusableElement = focusableElements[focusableElements.length - 1];
-                    firstFocusableElement.focus();
-                }
-            };
-
-            const closeModal = () => {
-                boletimModal.style.display = "none";
-                boletimModal.setAttribute('aria-hidden', true);
-                boletimButtons.forEach(button => button.setAttribute('aria-expanded', false));
-            };
-
-            closeModalButton.addEventListener('click', closeModal);
-
-            boletimButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const isOpen = (boletimModal.style.display === "flex");
-                    if (!isOpen) {
-                        openModal(button);
-                    } else {
-                        closeModal();
-                    }
-                });
-            });
-
-            window.addEventListener('click', (event) => {
-                if (event.target === boletimModal) {
-                    closeModal();
-                }
-            });
-
-            boletimModal.addEventListener('keydown', (event) => {
-                if (event.key === 'Tab') {
-                    if (focusableElements && focusableElements.length > 0) {
-                        if (event.shiftKey) {
-                            if (document.activeElement === firstFocusableElement) {
-                                event.preventDefault();
-                                lastFocusableElement.focus();
-                            }
-                        } else {
-                            if (document.activeElement === lastFocusableElement) {
-                                event.preventDefault();
-                                firstFocusableElement.focus();
-                            }
-                        }
-                    }
-                }
-
-                if (event.key === 'Escape') {
-                    closeModal();
-                }
-            });
+            if (!isActive) {
+                const firstLink = sidebar.querySelector('.nav-link');
+                if (firstLink) firstLink.focus();
+            }
         });
-    </script>
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && sidebar.classList.contains('active') && window.innerWidth <= 1024) {
+                sidebar.classList.remove('active');
+                menuButton.setAttribute('aria-expanded', false);
+                menuButton.focus();
+            }
+        });
+    }
+
+    // Navegação entre seções
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault();
+            const target = link.getAttribute('data-target');
+
+            sidebarLinks.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+
+            showSection(target);
+
+            if (window.innerWidth < 1024) {
+                sidebar.classList.remove('active');
+                menuButton.setAttribute('aria-expanded', false);
+                menuButton.focus();
+            }
+        });
+    });
+
+    // Define a seção inicial
+    const defaultSectionId = 'mensagem-padrao';
+    showSection(defaultSectionId);
+
+    // Modal (Boletim Tech)
+    const openModal = (button) => {
+        boletimModal.classList.add('active');
+        button.setAttribute('aria-expanded', true);
+        boletimModal.setAttribute('aria-hidden', false);
+
+        focusableElements = boletimModal.querySelectorAll(focusableElementsString);
+        if (focusableElements.length) {
+            firstFocusableElement = focusableElements[0];
+            lastFocusableElement = focusableElements[focusableElements.length - 1];
+            firstFocusableElement.focus();
+        }
+    };
+
+    const closeModal = () => {
+        boletimModal.classList.remove('active');
+        boletimModal.setAttribute('aria-hidden', true);
+        boletimButtons.forEach(button => button.setAttribute('aria-expanded', false));
+    };
+
+    closeModalButton.addEventListener('click', closeModal);
+
+    boletimButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const isOpen = boletimModal.classList.contains('active');
+            if (!isOpen) {
+                openModal(button);
+            } else {
+                closeModal();
+            }
+        });
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target === boletimModal) {
+            closeModal();
+        }
+    });
+
+    boletimModal.addEventListener('keydown', (event) => {
+        if (event.key === 'Tab') {
+            if (focusableElements && focusableElements.length > 0) {
+                if (event.shiftKey) {
+                    if (document.activeElement === firstFocusableElement) {
+                        event.preventDefault();
+                        lastFocusableElement.focus();
+                    }
+                } else {
+                    if (document.activeElement === lastFocusableElement) {
+                        event.preventDefault();
+                        firstFocusableElement.focus();
+                    }
+                }
+            }
+        }
+
+        if (event.key === 'Escape') {
+            closeModal();
+        }
+    });
+});
+</script>
 </body>
 </html>
