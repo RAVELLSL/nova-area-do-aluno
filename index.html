@@ -32,12 +32,21 @@
     --max-content-width: 1200px;
 }
 
+/* Reset */
 *,
 *::before,
 *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
 }
 
 body {
@@ -48,38 +57,64 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    overflow-x: hidden;
 }
 
+/* Retirar sublinhado de todos os links */
 a, a:visited {
-    color: inherit;
     text-decoration: none;
+    color: inherit;
 }
 a:hover, a:focus {
     text-decoration: none;
+    color: inherit;
 }
 
+header.header h1 {
+    white-space: nowrap;
+}
+
+@media (min-width: 1024px) {
+    body {
+        display: grid;
+        grid-template-areas:
+            "header header"
+            "sidebar main"
+            "footer footer";
+        grid-template-columns: var(--sidebar-width) 1fr;
+        grid-template-rows: var(--header-height) 1fr auto;
+        min-height: 100vh;
+    }
+
+    header.header {
+        grid-area: header;
+    }
+    nav.sidebar {
+        grid-area: sidebar;
+    }
+    main.main-content {
+        grid-area: main;
+    }
+    footer.footer {
+        grid-area: footer;
+    }
+}
+
+/* Header */
 header.header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: var(--header-height);
     background: var(--primary-color);
     color: var(--light-text);
+    height: var(--header-height);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 2000;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: relative;
 }
 .header h1 {
     font-size: 1.4rem;
-    text-align: center;
     margin: 0;
-    white-space: nowrap; /* Garantir que o título não quebre no tablet */
 }
-
 #menu-button {
     position: absolute;
     left: 1rem;
@@ -96,6 +131,7 @@ header.header {
     z-index: 2100;
 }
 
+/* Sidebar */
 nav.sidebar {
     position: fixed;
     top: var(--header-height);
@@ -116,6 +152,7 @@ nav.sidebar h2 {
     font-size: 1.3rem;
     text-align: center;
     margin-bottom: 1.5rem;
+    color: #fff;
 }
 nav.sidebar a {
     display: block;
@@ -123,6 +160,7 @@ nav.sidebar a {
     margin-bottom: 0.5rem;
     border-radius: var(--border-radius);
     transition: background var(--transition-speed);
+    color: #eee;
 }
 nav.sidebar a:hover,
 nav.sidebar a:focus,
@@ -131,18 +169,24 @@ nav.sidebar a.active {
     color: var(--light-text);
 }
 
+/* Main content */
 main.main-content {
     flex: 1;
-    width: 100%;
-    max-width: var(--max-content-width);
-    margin: 0 auto;
-    padding: calc(var(--header-height) + 1rem) 1rem 2rem 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    padding: calc(var(--header-height) + 1rem) 1rem 2rem 1rem;
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+}
+@media (min-width: 1024px) {
+    main.main-content {
+        padding-top: 1.5rem;
+    }
 }
 
+/* Sections */
 .section {
     width: 100%;
     display: none;
@@ -159,16 +203,13 @@ main.main-content {
     border-bottom: 2px solid var(--secondary-color);
     padding-bottom: 0.5rem;
     margin-bottom: 1.5rem;
-    /* Utilizar caracter não separável para evitar quebra da palavra "Bem-Vindo" */
-    /* Exemplo: Bem‑Vindo (utilizando o caractere U+2011 para non-breaking hyphen) */
-    /* Ou Bem&#8209;Vindo */
-    /* Caso seja apenas esse texto, podemos inserir no HTML diretamente, ver abaixo */
 }
 .section p {
     margin: 1rem 0;
     text-align: center;
 }
 
+/* Avisos */
 .avisos-container {
     margin-top: 1rem;
     width: 100%;
@@ -190,7 +231,7 @@ main.main-content {
     line-height: 1.5;
 }
 
-/* Ajuste no espaçamento entre os cards em telas menores */
+/* Cards */
 .card-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -217,7 +258,6 @@ main.main-content {
 .card img {
     width: 100%;
     height: auto;
-    display: block;
     object-fit: cover;
     object-position: center;
 }
@@ -226,6 +266,7 @@ main.main-content {
     font-size: 1.1rem;
     padding: 1rem;
     margin: 0;
+    color: #4B0082; /* exemplo de cor mais destacada */
 }
 
 /* Modal */
@@ -255,12 +296,10 @@ main.main-content {
     position: relative;
     padding: 2rem;
     box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.3);
-
-    /* Centralizar todo o conteúdo dentro do modal */
     text-align: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; 
     justify-content: flex-start;
 }
 .close-modal {
@@ -274,6 +313,7 @@ main.main-content {
     color: var(--text-color);
 }
 
+/* Footer */
 footer.footer {
     background: var(--primary-color);
     color: var(--light-text);
@@ -283,52 +323,26 @@ footer.footer {
     margin-top: auto;
 }
 
-/* Ajustes para smartphones: aumentar espaçamento entre cards */
+/* Espaçamento maior entre cards em telas muito pequenas */
 @media (max-width: 480px) {
     .card-container {
-        gap: 2rem; /* Aumentando o espaçamento entre os cards em telas muito pequenas */
+        gap: 2rem;
     }
 }
 
-/* Tablets ou telas menores mantêm o menu off-canvas */
-@media (max-width: 768px) {
+/* Ajustes para tablets e telas menores */
+@media (max-width: 1024px) {
     main.main-content {
         padding-top: calc(var(--header-height) + 1rem);
         padding-left: 1rem;
         padding-right: 1rem;
     }
 }
-
-/* Desktops (≥1024px): sidebar fixa, maior espaçamento */
-@media (min-width: 1024px) {
-    #menu-button {
-        display: none;
-    }
-    nav.sidebar {
-        left: 0;
-    }
-    main.main-content {
-        margin-left: var(--sidebar-width);
-        padding-left: 2rem;
-        padding-right: 2rem;
-        text-align: left;
-        align-items: flex-start;
-    }
-    .section h3 {
-        text-align: left;
-    }
-    .avisos-container {
-        text-align: left;
-    }
-    .card-container {
-        justify-items: start;
-    }
-}
 </style>
 </head>
 <body>
 <header class="header">
-    <h1>Área do Aluno</h1>
+    <h1>Bem‑Vindo!</h1>
     <button id="menu-button" aria-label="Abrir Menu" aria-expanded="false" aria-controls="sidebar">☰</button>
 </header>
 
@@ -342,10 +356,6 @@ footer.footer {
 
 <main class="main-content" role="main">
     <section id="mensagem-padrao" class="section active">
-        <!-- Utilize um hífen não separável para evitar a quebra:
-             Bem&#8209;Vindo ou Bem‑Vindo (U+2011)
-        -->
-        <h3>Bem‑Vindo!</h3>
         <p>Escolha ao lado (ou acima, no menu) sua área de interesse.</p>
         <div class="avisos-container">
             <h4>Atualizações Recentes:</h4>
@@ -510,7 +520,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Define a seção inicial
+    // Seção inicial
     const defaultSectionId = 'mensagem-padrao';
     showSection(defaultSectionId);
 
