@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -399,13 +400,16 @@
             }
     
             .card-container {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-                gap: 1rem;
-                width: 100%;
-                max-width: 800px;
-                margin: 0 auto;
-            }
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, auto));
+    gap: 1.25rem;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    justify-content: center; /* Centro horizontal */
+    align-items: start;     /* Ajuste vertical conforme necessário */
+}
+
             .card {
                 width: 100%;
                 max-width: 220px;
