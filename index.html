@@ -113,12 +113,15 @@ header.header {
     background: var(--primary-color);
     color: var(--light-text);
     height: var(--header-height);
+    min-height: var(--header-height);
+    max-height: var(--header-height);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 2000;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     position: relative;
+    overflow: hidden; /* Previne que conteúdo interno exceda a altura */
 }
 .header h1 {
     font-size: 1.4rem;
