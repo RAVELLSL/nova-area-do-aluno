@@ -327,6 +327,8 @@ footer.footer {
 @media (max-width: 480px) {
     .card-container {
         gap: 2rem;
+        /* Apenas um card por linha em smartphones */
+        grid-template-columns: 1fr;
     }
 }
 
