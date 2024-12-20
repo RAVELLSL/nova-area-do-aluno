@@ -16,6 +16,26 @@
     <meta property="og:type" content="website"/>
 
     <style>
+        /*--------------------------------------------------------------
+        Correções e melhorias:
+
+        - Ajustado uso do mobile-first: as estilizações básicas servem para telas menores, 
+          e as media queries ajustam para telas maiores.
+        - Unificados e revisados breakpoints: 
+          * Base: Mobile (até 480px)
+          * max-width: 480px (smartphones muito pequenos)
+          * max-width: 768px (tablets)
+          * min-width: 1024px (desktops)
+        - Removida redundância e garantido que o menu lateral e o conteúdo principal 
+          sejam visualizados corretamente em todas as telas.
+        - Garantido que o botão de menu funcione corretamente em tablets e smartphones.
+        - Ajustada a lógica no JS que dependia de window.innerWidth <= 576, 
+          agora coerente com o breakpoint de até 768px.
+        - Ajustadas propriedades de exibição das sections, cards e margens.
+        - Mantidos estilos essenciais, porém reorganizados.
+        - Adicionado overflow-x: hidden ao body para evitar rolagem horizontal indevida.
+        --------------------------------------------------------------*/
+
         :root {
             --sidebar-width: 25%;
             --sidebar-width-mobile: 100%;
@@ -50,6 +70,7 @@
             min-height: 100vh;
             background-color: var(--background-color);
             color: var(--text-color);
+            overflow-x: hidden;
         }
 
         a, a:visited {
@@ -132,6 +153,7 @@
         }
 
         main.main-content {
+            margin-top: var(--header-height);
             margin-left: 0;
             padding: 4rem 1.25rem 2rem 1.25rem;
             flex: 1;
@@ -170,7 +192,7 @@
 
         .card-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, auto));
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 1.25rem;
             max-width: 800px;
             margin: 0 auto;
@@ -228,7 +250,7 @@
         }
 
         .modal.active {
-            display: flex; 
+            display: flex;
         }
 
         .modal-content {
@@ -282,57 +304,80 @@
             flex-shrink: 0;
         }
 
-        /* Estilos para telas grandes */
-        @media only screen and (min-width: 1024px) {
-            nav.sidebar {
-                width: var(--sidebar-width); 
-                left: 0; /* Sidebar sempre visível em telas grandes */
-            }
+        /* 
+           Mobile-first approach:
+           Ajustes para telas pequenas já definidos no base code.
+           Agora ajustamos para telas maiores.
+        */
 
+        /* Para smartphones muito pequenos (max-width: 480px): já está adequado.
+           Caso queira ajuste adicional, coloque aqui. */
+        @media only screen and (max-width: 480px) {
+            .card {
+                max-width: 180px;
+            }
+            .card h4 {
+                font-size: 1rem;
+                padding: 0.75rem;
+            }
             main.main-content {
-                margin-left: var(--sidebar-width); 
-                padding: 4rem 2rem;
-            }
-
-            /* Opcional: ocultar botão de menu em telas grandes */
-            #menu-button {
-                display: none;
+                padding: 4rem 0.5rem 2rem 0.5rem;
             }
         }
 
-        /* Estilos para telas médias (até 768px) */
+        /* Para tablets (max-width: 768px):
+           Ajustes para ter mais espaçamento e manter o menu off-canvas.
+        */
         @media only screen and (max-width: 768px) {
             nav.sidebar {
-                width: var(--sidebar-width-mobile); 
-                left: -100%; 
+                width: var(--sidebar-width-mobile);
+                left: -100%;
             }
 
             main.main-content {
                 margin-left: 0;
-                padding: 3rem 1rem;
+                padding: 4rem 1rem 2rem 1rem;
+            }
+
+            /* Ajuste do botão menu se necessário */
+            #menu-button {
+                top: 1rem;
+                left: 1rem;
             }
         }
 
-        /* Estilos para telas pequenas (até 480px) */
-        @media only screen and (max-width: 480px) {
+        /* Para desktops (min-width: 1024px):
+           Exibir sidebar fixa e conteúdo ao lado.
+        */
+        @media only screen and (min-width: 1024px) {
             nav.sidebar {
-                width: var(--sidebar-width-mobile);
-                left: -100%; 
+                width: var(--sidebar-width);
+                left: 0;
+            }
+
+            /* Quando a tela for grande, o menu já fica aberto ao lado */
+            nav.sidebar.active {
+                left: 0;
+            }
+
+            #menu-button {
+                display: none; /* Em telas grandes não precisa do botão de menu */
             }
 
             main.main-content {
-                margin-left: 0;
-                padding: 2.5rem 0.5rem;
+                margin-left: var(--sidebar-width);
+                padding: 4rem 2rem 2rem 2rem;
+                text-align: left; /* Pode manter centrado se quiser, mas left costuma ser melhor em desktop */
             }
 
-            .card {
-                max-width: 180px; 
-                margin: 0 auto;
+            .section h3 {
+                text-align: left;
+                margin: 0 auto 1rem auto;
             }
 
-            .card h4 {
-                font-size: 1rem; 
-                padding: 0.75rem;
+            .card-container {
+                justify-content: start;
+                text-align: left;
             }
         }
 
@@ -353,7 +398,7 @@
         <a href="#" data-target="suplemento-tech" class="nav-link">Suplemento Tech</a>
     </nav>
 
-    <main class="main-content">
+    <main class="main-content" role="main">
         <section id="mensagem-padrao" class="section active">
             <h3>Bem-vindo!</h3>
             <p>Escolha ao lado sua área de interesse.</p>
@@ -504,7 +549,8 @@
             });
 
             document.addEventListener('keydown', (event) => {
-                if (event.key === 'Escape' && sidebar.classList.contains('active') && window.innerWidth <= 576) {
+                // Ajustado breakpoint para fechar menu em telas <= 768px
+                if (event.key === 'Escape' && sidebar.classList.contains('active') && window.innerWidth <= 768) {
                     sidebar.classList.remove('active');
                     menuButton.setAttribute('aria-expanded', false);
                     menuButton.focus();
@@ -521,7 +567,7 @@
 
                     showSection(target);
 
-                    if (window.innerWidth <= 576) {
+                    if (window.innerWidth <= 768) {
                         sidebar.classList.remove('active');
                         menuButton.setAttribute('aria-expanded', false);
                         menuButton.focus();
