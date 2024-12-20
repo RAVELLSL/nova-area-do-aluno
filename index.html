@@ -77,6 +77,7 @@ header.header {
     font-size: 1.4rem;
     text-align: center;
     margin: 0;
+    white-space: nowrap; /* Garantir que o título não quebre no tablet */
 }
 
 #menu-button {
@@ -158,6 +159,10 @@ main.main-content {
     border-bottom: 2px solid var(--secondary-color);
     padding-bottom: 0.5rem;
     margin-bottom: 1.5rem;
+    /* Utilizar caracter não separável para evitar quebra da palavra "Bem-Vindo" */
+    /* Exemplo: Bem‑Vindo (utilizando o caractere U+2011 para non-breaking hyphen) */
+    /* Ou Bem&#8209;Vindo */
+    /* Caso seja apenas esse texto, podemos inserir no HTML diretamente, ver abaixo */
 }
 .section p {
     margin: 1rem 0;
@@ -185,6 +190,7 @@ main.main-content {
     line-height: 1.5;
 }
 
+/* Ajuste no espaçamento entre os cards em telas menores */
 .card-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -222,6 +228,7 @@ main.main-content {
     margin: 0;
 }
 
+/* Modal */
 .modal {
     position: fixed;
     top: 0;
@@ -248,6 +255,13 @@ main.main-content {
     position: relative;
     padding: 2rem;
     box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.3);
+
+    /* Centralizar todo o conteúdo dentro do modal */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
 }
 .close-modal {
     position: absolute;
@@ -269,6 +283,14 @@ footer.footer {
     margin-top: auto;
 }
 
+/* Ajustes para smartphones: aumentar espaçamento entre cards */
+@media (max-width: 480px) {
+    .card-container {
+        gap: 2rem; /* Aumentando o espaçamento entre os cards em telas muito pequenas */
+    }
+}
+
+/* Tablets ou telas menores mantêm o menu off-canvas */
 @media (max-width: 768px) {
     main.main-content {
         padding-top: calc(var(--header-height) + 1rem);
@@ -277,6 +299,7 @@ footer.footer {
     }
 }
 
+/* Desktops (≥1024px): sidebar fixa, maior espaçamento */
 @media (min-width: 1024px) {
     #menu-button {
         display: none;
@@ -319,7 +342,10 @@ footer.footer {
 
 <main class="main-content" role="main">
     <section id="mensagem-padrao" class="section active">
-        <h3>Bem-vindo!</h3>
+        <!-- Utilize um hífen não separável para evitar a quebra:
+             Bem&#8209;Vindo ou Bem‑Vindo (U+2011)
+        -->
+        <h3>Bem‑Vindo!</h3>
         <p>Escolha ao lado (ou acima, no menu) sua área de interesse.</p>
         <div class="avisos-container">
             <h4>Atualizações Recentes:</h4>
@@ -406,7 +432,7 @@ footer.footer {
 <div class="modal" id="boletim-modal" aria-hidden="true">
     <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description">
         <button class="close-modal" aria-label="Fechar Modal">&times;</button>
-        <h4 id="modal-title">Boletim Tech</h4>
+        <h4 id="modal-title" style="margin-bottom:1rem;">Boletim Tech</h4>
         <p id="modal-description" style="margin-bottom:1rem;">Aqui estão listadas todas as edições do Boletim Tech. Escolha uma data para acessar a edição correspondente:</p>
         <div class="card-container" style="max-width:500px;">
             <a href="https://ravellsl.github.io/boletim-tecnologico-14-12-2024/" target="_blank" rel="noopener noreferrer">14/12/2024 (atual)</a>
