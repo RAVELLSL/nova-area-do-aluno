@@ -181,6 +181,13 @@ nav.sidebar a.active {
     color: var(--light-text);
 }
 
+/* Esconder o link "Vídeo-Aulas" em dispositivos móveis */
+@media (max-width: 767px) {
+    .video-aulas-link {
+        display: none;
+    }
+}
+
 /* Main content */
 main.main-content {
     flex: 1; /* Permite que o main ocupe o espaço disponível */
@@ -371,7 +378,7 @@ footer.footer {
     <h2>Navegação</h2>
     <a href="#" data-target="mensagem-padrao" class="nav-link active">Início</a>
     <a href="#" data-target="area-de-estudo" class="nav-link">Área de Estudo</a>
-    <a href="https://ravellsl.github.io/video-aulas/" target="_blank" rel="noopener noreferrer">Vídeo-Aulas</a>
+    <a href="https://ravellsl.github.io/video-aulas/" target="_blank" rel="noopener noreferrer" class="video-aulas-link">Vídeo-Aulas</a>
     <a href="#" data-target="ferramentas-digitais" class="nav-link">Ferramentas Digitais</a>
     <a href="#" data-target="suplemento-tech" class="nav-link">Suplemento Tech</a>
 </nav>
