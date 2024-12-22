@@ -183,8 +183,8 @@ nav.sidebar a.active {
 
 /* Esconder o link "Vídeo-Aulas" em dispositivos móveis */
 @media (max-width: 767px) {
-    .video-aulas-link {
-        display: none;
+    nav.sidebar a.video-aulas-link {
+        display: none !important;
     }
 }
 
@@ -519,7 +519,7 @@ document.addEventListener('DOMContentLoaded', () => {
             menuButton.setAttribute('aria-expanded', !isActive);
 
             if (!isActive) {
-                const firstLink = sidebar.querySelector('.nav-link');
+                const firstLink = sidebar.querySelector('.nav-link, .video-aulas-link');
                 if (firstLink) firstLink.focus();
             }
         });
