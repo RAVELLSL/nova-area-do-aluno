@@ -1,619 +1,465 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Área do Aluno</title>
-<meta name="description" content="Plataforma de acesso para alunos com materiais de estudo, ferramentas digitais e suplementos tecnológicos."/>
-<meta name="keywords" content="Área do Aluno, Materiais de Estudo, Ferramentas Digitais, Suplemento Tech, IA, Caderno Digital, Biblioteca Digital"/>
-<meta name="author" content="Seu Nome ou Instituição"/>
-<meta name="robots" content="index, follow"/>
-<!-- Open Graph Meta Tags -->
-<meta property="og:title" content="Área do Aluno"/>
-<meta property="og:description" content="Plataforma de acesso para alunos com materiais de estudo, ferramentas digitais e suplementos tecnológicos."/>
-<meta property="og:image" content="URL_da_sua_imagem_de_compartilhamento"/>
-<meta property="og:url" content="URL_da_sua_página"/>
-<meta property="og:type" content="website"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área do Aluno</title>
+    <meta name="description" content="Plataforma de acesso para alunos com materiais de estudo, ferramentas digitais e suplementos tecnológicos.">
+    <meta name="keywords" content="Área do Aluno, Materiais de Estudo, Ferramentas Digitais, Suplemento Tech, IA, Caderno Digital, Biblioteca Digital">
+    <meta name="author" content="Seu Nome ou Instituição">
+    <meta name="robots" content="index, follow">
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Área do Aluno">
+    <meta property="og:description" content="Plataforma de acesso para alunos com materiais de estudo, ferramentas digitais e suplementos tecnológicos.">
+    <meta property="og:image" content="URL_da_sua_imagem_de_compartilhamento">
+    <meta property="og:url" content="URL_da_sua_página">
+    <meta property="og:type" content="website">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --background-color: #ecf0f1;
+            --text-color: #2c3e50;
+            --light-text: #ffffff;
+            --border-radius: 0.3125rem;
+            --transition-speed: 0.3s;
+            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --header-height: 3.5rem;
+            --line-height: 1.6;
+            --sidebar-width: 250px;
+            --max-content-width: 1200px;
+        }
 
-<style>
-:root {
-    --primary-color: #2c3e50;
-    --secondary-color: #3498db;
-    --accent-color: #e74c3c;
-    --background-color: #ecf0f1;
-    --text-color: #2c3e50;
-    --light-text: #ffffff;
-    --border-radius: 0.3125rem;
-    --transition-speed: 0.3s;
-    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    --header-height: 3.5rem;
-    --line-height: 1.6;
-    --sidebar-width: 250px;
-    --max-content-width: 1200px;
-}
+        /* Reset */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-/* Reset */
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
 
-html, body {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-}
+        body {
+            font-family: var(--font-family);
+            color: var(--text-color);
+            background: var(--background-color);
+            line-height: var(--line-height);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
 
-body {
-    font-family: var(--font-family);
-    color: var(--text-color);
-    background: var(--background-color);
-    line-height: var(--line-height);
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
+        a, a:visited {
+            text-decoration: none;
+            color: inherit;
+        }
 
-/* Retirar sublinhado de todos os links */
-a, a:visited {
-    text-decoration: none;
-    color: inherit;
-}
-a:hover, a:focus {
-    text-decoration: none;
-    color: inherit;
-}
+        a:hover, a:focus {
+            text-decoration: underline;
+            color: var(--secondary-color);
+        }
 
-header.header h1 {
-    white-space: nowrap;
-}
+        /* Header */
+        header.header {
+            background: var(--primary-color);
+            color: var(--light-text);
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
 
-@media (min-width: 1024px) {
-    /* Mantém o body como flex container para garantir o rodapé fixo */
+        .header h1 {
+            font-size: 1.4rem;
+            margin: 0;
+        }
 
-    /* Garantir que a barra lateral esteja sempre visível e fixa */
-    nav.sidebar {
-        position: fixed;
-        top: var(--header-height);
-        left: 0;
-        width: var(--sidebar-width);
-        height: calc(100% - var(--header-height));
-        background: var(--primary-color);
-        color: var(--light-text);
-        padding: 2rem 1rem;
-        transition: none; /* Remover transição para telas grandes */
-        z-index: 1500;
-    }
-    /* Manter a barra lateral sempre ativa em telas grandes */
-    nav.sidebar.active {
-        left: 0;
-    }
+        #menu-button {
+            position: absolute;
+            left: 1rem;
+            background: none;
+            border: none;
+            color: var(--light-text);
+            font-size: 1.3rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: var(--header-height);
+            width: var(--header-height);
+            z-index: 1100;
+        }
 
-    /* Ajustar o conteúdo principal para não ficar oculto atrás da barra lateral */
-    main.main-content {
-        margin-left: var(--sidebar-width);
-        padding-top: 1.5rem; /* Ajuste conforme necessário */
-        padding-left: 1rem;
-        padding-right: 1rem;
-    }
+        /* Sidebar */
+        nav.sidebar {
+            position: fixed;
+            top: var(--header-height);
+            left: -100%;
+            width: var(--sidebar-width);
+            height: calc(100% - var(--header-height));
+            background: var(--primary-color);
+            color: var(--light-text);
+            padding: 2rem 1rem;
+            transition: left var(--transition-speed);
+            z-index: 900;
+            overflow-y: auto;
+        }
 
-    /* Ocultar o botão de menu em telas grandes */
-    #menu-button {
-        display: none;
-    }
-}
+        nav.sidebar.active {
+            left: 0;
+        }
 
-/* Header */
-header.header {
-    background: var(--primary-color);
-    color: var(--light-text);
-    height: var(--header-height);
-    min-height: var(--header-height);
-    max-height: var(--header-height);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2000;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    position: relative;
-    overflow: hidden; /* Previne que conteúdo interno exceda a altura */
-}
-.header h1 {
-    font-size: 1.4rem;
-    margin: 0;
-}
-#menu-button {
-    position: absolute;
-    left: 1rem;
-    background: none;
-    border: none;
-    color: var(--light-text);
-    font-size: 1.3rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: var(--header-height);
-    width: var(--header-height);
-    z-index: 2100;
-}
+        nav.sidebar h2 {
+            font-size: 1.3rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
 
-/* Sidebar */
-nav.sidebar {
-    position: fixed;
-    top: var(--header-height);
-    left: -100%;
-    width: var(--sidebar-width);
-    height: calc(100% - var(--header-height));
-    background: var(--primary-color);
-    color: var(--light-text);
-    padding: 2rem 1rem;
-    transition: left var(--transition-speed);
-    z-index: 1500;
-    overflow-y: auto;
-}
-nav.sidebar.active {
-    left: 0;
-}
-nav.sidebar h2 {
-    font-size: 1.3rem;
-    text-align: center;
-    margin-bottom: 1.5rem;
-    color: #fff;
-}
-nav.sidebar a {
-    display: block;
-    padding: 0.75rem 1rem;
-    margin-bottom: 0.5rem;
-    border-radius: var(--border-radius);
-    transition: background var(--transition-speed);
-    color: #eee;
-}
-nav.sidebar a:hover,
-nav.sidebar a:focus,
-nav.sidebar a.active {
-    background: var(--secondary-color);
-    color: var(--light-text);
-}
+        nav.sidebar a {
+            display: block;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: var(--border-radius);
+            transition: background var(--transition-speed);
+            color: #eee;
+        }
 
-/* Removida a media query que escondia o link "Vídeo-Aulas" em dispositivos móveis */
+        nav.sidebar a:hover,
+        nav.sidebar a:focus {
+            background: var(--secondary-color);
+            color: var(--light-text);
+        }
 
-/* Main content */
-main.main-content {
-    flex: 1; /* Permite que o main ocupe o espaço disponível */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: calc(var(--header-height) + 1rem) 1rem 2rem 1rem;
-    max-width: var(--max-content-width);
-    margin: 0 auto;
-}
-@media (min-width: 1024px) {
-    main.main-content {
-        padding-top: 1.5rem;
-    }
-}
+        /* Main Content */
+        main.main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: calc(var(--header-height) + 1rem) 1rem 2rem 1rem;
+            max-width: var(--max-content-width);
+            margin: 0 auto;
+        }
 
-/* Sections */
-.section {
-    width: 100%;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 2rem;
-}
-.section.active {
-    display: flex;
-}
-.section h3 {
-    font-size: 1.5rem;
-    color: var(--primary-color);
-    border-bottom: 2px solid var(--secondary-color);
-    padding-bottom: 0.5rem;
-    margin-bottom: 1.5rem;
-}
-.section p {
-    margin: 1rem 0;
-    text-align: center;
-}
+        .section {
+            width: 100%;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
 
-/* Adicionado: Título "Bem-Vindo" na Seção Início */
-.section#mensagem-padrao .welcome-title {
-    font-size: 2rem;
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-}
+        .section.active {
+            display: flex;
+        }
 
-/* Avisos */
-.avisos-container {
-    margin-top: 1rem;
-    width: 100%;
-    max-width: 600px;
-    text-align: left;
-}
-.avisos-container h4 {
-    color: var(--secondary-color);
-    margin-bottom: 0.5rem;
-    font-size: 1.2rem;
-}
-.avisos-container ul {
-    list-style: disc;
-    padding-left: 1.5rem;
-    margin: 1rem 0;
-}
-.avisos-container ul li {
-    margin-bottom: 0.5rem;
-    line-height: 1.5;
-}
+        .section h3 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
 
-/* Cards */
-.card-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1.5rem;
-    width: 100%;
-    max-width: 800px;
-    margin: 2rem auto 0 auto;
-}
-.card {
-    background: #ffffff;
-    border-radius: var(--border-radius);
-    box-shadow: 0 0.25rem 0.375rem rgba(0,0,0,0.1);
-    overflow: hidden;
-    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-}
-.card:hover,
-.card:focus-within {
-    transform: translateY(-0.3125rem);
-    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.2);
-}
-.card img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    object-position: center;
-}
-.card h4 {
-    background: #f8f8f8;
-    font-size: 1.1rem;
-    padding: 1rem;
-    margin: 0;
-    color: #4B0082; /* exemplo de cor mais destacada */
-}
+        .section p {
+            margin: 1rem 0;
+            text-align: center;
+        }
 
-/* Modal */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 3000;
-    width: 100%;
-    height: 100%;
-    display: none;
-    background-color: rgba(0,0,0,0.5);
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-}
-.modal.active {
-    display: flex;
-}
-.modal-content {
-    background: #ffffff;
-    border-radius: var(--border-radius);
-    width: 90%;
-    max-width: 600px;
-    max-height: 80vh;
-    overflow-y: auto;
-    position: relative;
-    padding: 2rem;
-    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.3);
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-    justify-content: flex-start;
-}
-.close-modal {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: var(--text-color);
-}
+        /* Cards */
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 800px;
+            margin: 2rem auto 0 auto;
+        }
 
-/* Footer */
-footer.footer {
-    background: var(--primary-color);
-    color: var(--light-text);
-    text-align: center;
-    padding: 1rem;
-    width: 100%;
-    /* O margin-top: auto é suficiente para empurrar o footer para o final */
-}
+        .card {
+            background: #ffffff;
+            border-radius: var(--border-radius);
+            box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
 
-/* Espaçamento maior entre cards em telas muito pequenas */
-@media (max-width: 480px) {
-    .card-container {
-        gap: 2rem;
-        /* Apenas um card por linha em smartphones */
-        grid-template-columns: 1fr;
-    }
-}
+        .card:hover,
+        .card:focus-within {
+            transform: translateY(-0.3125rem);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+        }
 
-/* Ajustes para tablets e telas menores */
-@media (max-width: 1024px) {
-    main.main-content {
-        padding-top: calc(var(--header-height) + 1rem);
-        padding-left: 1rem;
-        padding-right: 1rem;
-    }
-}
-</style>
+        .card img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .card h4 {
+            background: #f8f8f8;
+            font-size: 1.1rem;
+            padding: 1rem;
+            margin: 0;
+            color: var(--primary-color);
+        }
+
+        /* Footer */
+        footer.footer {
+            background: var(--primary-color);
+            color: var(--light-text);
+            text-align: center;
+            padding: 1rem;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 3000;
+            width: 100%;
+            height: 100%;
+            display: none;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            padding: 2rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        /* Responsividade */
+        @media (max-width: 1024px) {
+            main.main-content {
+                padding-top: calc(var(--header-height) + 1rem);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-<header class="header">
-    <h1>Área do Aluno</h1> <!-- Alterado de "Bem‑Vindo!" para "Área do Aluno" -->
-    <button id="menu-button" aria-label="Abrir Menu" aria-expanded="false" aria-controls="sidebar">☰</button>
-</header>
+    <header class="header">
+        <h1>Área do Aluno</h1>
+        <button id="menu-button" aria-label="Abrir Menu" aria-expanded="false" aria-controls="sidebar">☰</button>
+    </header>
 
-<nav class="sidebar" id="sidebar" role="navigation" aria-label="Menu Principal">
-    <h2>Navegação</h2>
+    <nav class="sidebar" id="sidebar" role="navigation" aria-label="Menu Principal">
+        <h2>Navegação</h2>
     <a href="#" data-target="mensagem-padrao" class="nav-link active">Início</a>
     <a href="#" data-target="area-de-estudo" class="nav-link">Área de Estudo</a>
     <a href="https://ravellsl.github.io/video-aulas/" target="_blank" rel="noopener noreferrer" class="video-aulas-link">Vídeo-Aulas</a>
     <a href="#" data-target="ferramentas-digitais" class="nav-link">Ferramentas Digitais</a>
     <a href="#" data-target="suplemento-tech" class="nav-link">Suplemento Tech</a>
-</nav>
+    </nav>
 
-<main class="main-content" role="main">
-    <section id="mensagem-padrao" class="section active">
-        <h2 class="welcome-title">Bem-Vindo</h2> <!-- Adicionado título "Bem-Vindo" -->
-        <p>Escolha no menu sua área de interesse.</p>
-        <div class="avisos-container">
-            <h4>Atualizações Recentes:</h4>
-            <ul>
-                <li>"Boletim Tech - edição - 25/01/2025" adicionado na nova seção Suplemento Tech.</li>
-            </ul>
-        </div>
-    </section>
-
-    <section id="area-de-estudo" class="section">
-        <h3>Área de Estudo</h3>
-        <div class="card-container">
-            <a href="https://ravellsl.github.io/rstech-aluno/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Material de Aula">
-                <img src="https://i.ibb.co/z4xY0CD/1728852180021.jpg" alt="Material de Aula" loading="lazy">
-                <h4>Material de Aula</h4>
-            </a>
-            <a href="https://ravellsl.github.io/apostilas/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Apostilas">
-                <img src="https://i.ibb.co/wrKQT02/1728852195955.jpg" alt="Apostilas" loading="lazy">
-                <h4>Apostilas</h4>
-            </a>
-            <a href="https://ravellsl.github.io/rstech-material/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Material Complementar">
-                <img src="https://i.ibb.co/jWwR0Nm/1728852237811.jpg" alt="Material Complementar" loading="lazy">
-                <h4>Material Complementar</h4>
-            </a>
-            <a href="https://ravellsl.github.io/caderno-exercicios/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Caderno de Exercícios">
-                <img src="https://i.ibb.co/3y3wjnX/1728852224266.jpg" alt="Caderno de Exercícios" loading="lazy">
-                <h4>Caderno de Exercícios</h4>
-            </a>
-            <a href="https://ravellsl.github.io/caderno-virtual/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Caderno Digital">
-                <img src="https://i.ibb.co/jf98bKR/1728852209873.jpg" alt="Caderno Digital" loading="lazy">
-                <h4>Caderno Digital</h4>
-            </a>
-            <a href="https://ravellsl.github.io/rstech-biblioteca/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Biblioteca Digital">
-                <img src="https://i.ibb.co/TTsZ8Q1/1728852577270.jpg" alt="Biblioteca Digital" loading="lazy">
-                <h4>Biblioteca Digital</h4>
-            </a>
-        </div>
-    </section>
-
-    <section id="ferramentas-digitais" class="section">
-        <h3>Ferramentas Digitais</h3>
-        <div class="card-container">
-            <a href="https://ravellsl.github.io/rstechaluno-agentes-IA/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Agentes de IA">
-                <img src="https://i.ibb.co/H45XwsG/Agentes-de-IA.webp" alt="Agentes de IA" loading="lazy">
-                <h4>Agentes de IA</h4>
-            </a>
-            <a href="https://ravellsl.github.io/dicionario-tech/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Dicionário Tech">
-                <img src="https://i.ibb.co/W2cszsn/DALL-E-2024-12-10-22-08-25-Um-dicion-rio-de-tecnologia-ultra-realista-com-capa-dura-met-lica-pratead.webp" alt="Dicionário Tech" loading="lazy">
-                <h4>Dicionário Tech</h4>
-            </a>
-            <a href="https://ravellsl.github.io/bloco-de-notas/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Bloco de Notas">
-                <img src="https://i.ibb.co/QD9V36s/Bloco-de-Notas.webp" alt="Bloco de Notas" loading="lazy">
-                <h4>Bloco de Notas</h4>
-            </a>
-        </div>
-    </section>
-
-    <section id="suplemento-tech" class="section">
-        <h3>Suplemento Tech</h3>
-        <div class="card-container">
-            <div class="card boletim-container">
-                <img src="https://i.ibb.co/YyJ6R9X/1730062044590.jpg" alt="Boletim Tech" loading="lazy">
-                <h4>Boletim Tech</h4>
-                <button class="toggle-boletim boletim-button" aria-expanded="false" aria-controls="boletim-modal" style="padding:0.5rem; background:var(--secondary-color); border:none; color:var(--light-text); cursor:pointer;">Ver Edições</button>
+    <main class="main-content" role="main">
+        <section id="mensagem-padrao" class="section active">
+            <h2 class="welcome-title">Bem-Vindo</h2>
+            <p>Escolha no menu sua área de interesse.</p>
+            <div class="avisos-container">
+                <h4>Atualizações Recentes:</h4>
+                <ul>
+                    <li>"Boletim Tech - edição - 25/01/2025" adicionado na nova seção Suplemento Tech.</li>
+                </ul>
             </div>
-            <a href="https://ravellsl.github.io/curiosidades-tech/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Curiosidades">
-                <img src="https://i.ibb.co/0mYZmBx/curiosidades.webp" alt="Curiosidades" loading="lazy">
-                <h4>Curiosidades</h4>
-            </a>
-            <a href="https://ravellsl.github.io/palestra-IA-plataforma/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Palestras">
-                <img src="https://i.ibb.co/kQFVGGV/palestras.webp" alt="Palestras" loading="lazy">
-                <h4>Palestras</h4>
-            </a>
-        </div>
-    </section>
-</main>
+        </section>
 
-<footer class="footer" role="contentinfo">
-    &copy; 2024-2025
-</footer>
+        <section id="area-de-estudo" class="section">
+            <h3>Área de Estudo</h3>
+            <div class="card-container">
+                <a href="https://ravellsl.github.io/rstech-aluno/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Material de Aula">
+                    <img src="https://i.ibb.co/z4xY0CD/1728852180021.jpg" alt="Material de Aula" loading="lazy">
+                    <h4>Material de Aula</h4>
+                </a>
+                <a href="https://ravellsl.github.io/apostilas/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Apostilas">
+                    <img src="https://i.ibb.co/wrKQT02/1728852195955.jpg" alt="Apostilas" loading="lazy">
+                    <h4>Apostilas</h4>
+                </a>
+                <a href="https://ravellsl.github.io/rstech-material/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Material Complementar">
+                    <img src="https://i.ibb.co/jWwR0Nm/1728852237811.jpg" alt="Material Complementar" loading="lazy">
+                    <h4>Material Complementar</h4>
+                </a>
+                <a href="https://ravellsl.github.io/caderno-exercicios/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Caderno de Exercícios">
+                    <img src="https://i.ibb.co/3y3wjnX/1728852224266.jpg" alt="Caderno de Exercícios" loading="lazy">
+                    <h4>Caderno de Exercícios</h4>
+                </a>
+                <a href="https://ravellsl.github.io/caderno-virtual/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Caderno Digital">
+                    <img src="https://i.ibb.co/jf98bKR/1728852209873.jpg" alt="Caderno Digital" loading="lazy">
+                    <h4>Caderno Digital</h4>
+                </a>
+                <a href="https://ravellsl.github.io/rstech-biblioteca/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Biblioteca Digital">
+                    <img src="https://i.ibb.co/TTsZ8Q1/1728852577270.jpg" alt="Biblioteca Digital" loading="lazy">
+                    <h4>Biblioteca Digital</h4>
+                </a>
+            </div>
+        </section>
 
-<div class="modal" id="boletim-modal" aria-hidden="true">
-    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description">
-        <button class="close-modal" aria-label="Fechar Modal">&times;</button>
-        <h4 id="modal-title" style="margin-bottom:1rem;">Boletim Tech</h4>
-        <p id="modal-description" style="margin-bottom:1rem;">Aqui estão listadas todas as edições do Boletim Tech. Escolha uma data para acessar a edição correspondente:</p>
-        <div class="card-container" style="max-width:500px;">
-            <a href="https://ravellsl.github.io/https-ravellsl.github.io-https-ravellsl.gitboletim-tecnologico-25-01-2025-/" target="_blank" rel="noopener noreferrer">25/01/2025 (atual)</a>
-            <a href="https://ravellsl.github.io/https-ravellsl.github.io-https-ravellsl.github.io-boletim-tecnologico-18-01-2025---/" target="_blank" rel="noopener noreferrer">18/01/2025</a>
-            <a href="https://ravellsl.github.io/https-ravellsl.github.io-boletim-tecnologico-11-01-2025--/" target="_blank" rel="noopener noreferrer">11/01/2025</a>
-            <a href="https://ravellsl.github.io/boletim-tecnologico-04-01-2025-/" target="_blank" rel="noopener noreferrer">04/01/2025</a>
-            <a href="https://ravellsl.github.io/boletim-tecnologico-28-12-2024/" target="_blank" rel="noopener noreferrer">28/12/2024</a>
-            <a href="https://ravellsl.github.io/boletim-tecnologico-21-12-2024/" target="_blank" rel="noopener noreferrer">21/12/2024</a>
-            <a href="https://ravellsl.github.io/boletim-tecnologico-14-12-2024/" target="_blank" rel="noopener noreferrer">14/12/2024</a>
-            <a href="https://ravellsl.github.io/boletim-tecnologico-07-12-2024/" target="_blank" rel="noopener noreferrer">07/12/2024</a>
-            <a href="https://ravellsl.github.io/boletim-tecnologico-30-11-2024/" target="_blank" rel="noopener noreferrer">30/11/2024</a>
-            <a href="https://ravellsl.github.io/boletim-tecnologico-23-11-2024/" target="_blank" rel="noopener noreferrer">23/11/2024</a>
-            <a href="https://ravellsl.github.io/boletim-tecnologico-16-11-2024/" target="_blank" rel="noopener noreferrer">16/11/2024</a>
-            <a href="https://ravellsl.github.io/boletim-tecnologico-09-11-2024/" target="_blank" rel="noopener noreferrer">09/11/2024</a>
-            <a href="https://ravellsl.github.io/boletim-tecnologico-02-11-2024/" target="_blank" rel="noopener noreferrer">02/11/2024</a>
-            <a href="https://ravellsl.github.io/boletim-tecnologico-26-10-2024/" target="_blank" rel="noopener noreferrer">26/10/2024</a>
-        </div>
+        <section id="ferramentas-digitais" class="section">
+            <h3>Ferramentas Digitais</h3>
+            <div class="card-container">
+                <a href="https://ravellsl.github.io/rstechaluno-agentes-IA/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Agentes de IA">
+                    <img src="https://i.ibb.co/H45XwsG/Agentes-de-IA.webp" alt="Agentes de IA" loading="lazy">
+                    <h4>Agentes de IA</h4>
+                </a>
+                <a href="https://ravellsl.github.io/dicionario-tech/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Dicionário Tech">
+                    <img src="https://i.ibb.co/W2cszsn/DALL-E-2024-12-10-22-08-25-Um-dicion-rio-de-tecnologia-ultra-realista-com-capa-dura-met-lica-pratead.webp" alt="Dicionário Tech" loading="lazy">
+                    <h4>Dicionário Tech</h4>
+                </a>
+                <a href="https://ravellsl.github.io/bloco-de-notas/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Bloco de Notas">
+                    <img src="https://i.ibb.co/QD9V36s/Bloco-de-Notas.webp" alt="Bloco de Notas" loading="lazy">
+                    <h4>Bloco de Notas</h4>
+                </a>
+            </div>
+        </section>
+
+        <section id="suplemento-tech" class="section">
+            <h3>Suplemento Tech</h3>
+            <div class="card-container">
+                <div class="card boletim-container">
+                    <img src="https://i.ibb.co/YyJ6R9X/1730062044590.jpg" alt="Boletim Tech" loading="lazy">
+                    <h4>Boletim Tech</h4>
+                    <button class="toggle-boletim boletim-button" aria-expanded="false" aria-controls="boletim-modal" style="padding:0.5rem; background:var(--secondary-color); border:none; color:var(--light-text); cursor:pointer;">Ver Edições</button>
+                </div>
+                <a href="https://ravellsl.github.io/curiosidades-tech/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Curiosidades">
+                    <img src="https://i.ibb.co/0mYZmBx/curiosidades.webp" alt="Curiosidades" loading="lazy">
+                    <h4>Curiosidades</h4>
+                </a>
+                <a href="https://ravellsl.github.io/palestra-IA-plataforma/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Palestras">
+                    <img src="https://i.ibb.co/kQFVGGV/palestras.webp" alt="Palestras" loading="lazy">
+                    <h4>Palestras</h4>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        &copy; 2024-2025
+    </footer>
+
+    <div class="modal" id="boletim-modal" aria-hidden="true">
+        <<div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description">
+            <button class="close-modal" aria-label="Fechar Modal">&times;</button>
+            <h4 id="modal-title" style="margin-bottom:1rem;">Boletim Tech</h4>
+            <p id="modal-description" style="margin-bottom:1rem;">Aqui estão listadas todas as edições do Boletim Tech. Escolha uma data para acessar a edição correspondente:</p>
+            <div class="card-container" style="max-width:500px;">
+                <a href="https://ravellsl.github.io/https-ravellsl.github.io-https-ravellsl.gitboletim-tecnologico-25-01-2025-/" target="_blank" rel="noopener noreferrer">25/01/2025 (atual)</a>
+                <a href="https://ravellsl.github.io/https-ravellsl.github.io-https-ravellsl.github.io-boletim-tecnologico-18-01-2025---/" target="_blank" rel="noopener noreferrer">18/01/2025</a>
+                <a href="https://ravellsl.github.io/https-ravellsl.github.io-boletim-tecnologico-11-01-2025--/" target="_blank" rel="noopener noreferrer">11/01/2025</a>
+                <a href="https://ravellsl.github.io/boletim-tecnologico-04-01-2025-/" target="_blank" rel="noopener noreferrer">04/01/2025</a>
+                <a href="https://ravellsl.github.io/boletim-tecnologico-28-12-2024/" target="_blank" rel="noopener noreferrer">28/12/2024</a>
+                <a href="https://ravellsl.github.io/boletim-tecnologico-21-12-2024/" target="_blank" rel="noopener noreferrer">21/12/2024</a>
+                <a href="https://ravellsl.github.io/boletim-tecnologico-14-12-2024/" target="_blank" rel="noopener noreferrer">14/12/2024</a>
+                <a href="https://ravellsl.github.io/boletim-tecnologico-07-12-2024/" target="_blank" rel="noopener noreferrer">07/12/2024</a>
+                <a href="https://ravellsl.github.io/boletim-tecnologico-30-11-2024/" target="_blank" rel="noopener noreferrer">30/11/2024</a>
+                <a href="https://ravellsl.github.io/boletim-tecnologico-23-11-2024/" target="_blank" rel="noopener noreferrer">23/11/2024</a>
+                <a href="https://ravellsl.github.io/boletim-tecnologico-16-11-2024/" target="_blank" rel="noopener noreferrer">16/11/2024</a>
+                <a href="https://ravellsl.github.io/boletim-tecnologico-09-11-2024/" target="_blank" rel="noopener noreferrer">09/11/2024</a>
+                <a href="https://ravellsl.github.io/boletim-tecnologico-02-11-2024/" target="_blank" rel="noopener noreferrer">02/11/2024</a>
+                <a href="https://ravellsl.github.io/boletim-tecnologico-26-10-2024/" target="_blank" rel="noopener noreferrer">26/10/2024</a>
+            </div>
     </div>
-</div>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const menuButton = document.getElementById('menu-button');
-    const sidebar = document.getElementById('sidebar');
-    const sidebarLinks = document.querySelectorAll('.nav-link');
-    const sections = document.querySelectorAll('.section');
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuButton = document.getElementById('menu-button');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+            const boletimModal = document.getElementById('boletim-modal');
+            const boletimButtons = document.querySelectorAll('.toggle-boletim');
+            const closeModalButton = boletimModal.querySelector('.close-modal');
 
-    const boletimModal = document.getElementById('boletim-modal');
-    const boletimButtons = document.querySelectorAll('.toggle-boletim');
-    const closeModalButton = boletimModal.querySelector('.close-modal');
+            // Menu toggle
+            menuButton.addEventListener('click', () => {
+                const isActive = sidebar.classList.toggle('active');
+                menuButton.setAttribute('aria-expanded', isActive);
+            });
 
-    let focusableElementsString = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]';
-    let focusableElements, firstFocusableElement, lastFocusableElement;
+            // Navegação entre seções
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const target = link.getAttribute('data-target');
+                    sections.forEach(section => section.classList.remove('active'));
+                    document.getElementById(target).classList.add('active');
+                    sidebar.classList.remove('active');
+                    menuButton.setAttribute('aria-expanded', false);
+                });
+            });
 
-    const showSection = (targetId) => {
-        sections.forEach(section => section.classList.remove('active'));
-        const targetSection = document.getElementById(targetId);
-        if (targetSection) {
-            targetSection.classList.add('active');
-        }
-    };
+            // Modal
+            boletimButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    boletimModal.classList.add('active');
+                    button.setAttribute('aria-expanded', true);
+                });
+            });
 
-    // Menu toggle
-    if (menuButton) {
-        menuButton.addEventListener('click', () => {
-            const isActive = sidebar.classList.contains('active');
-            sidebar.classList.toggle('active');
-            menuButton.setAttribute('aria-expanded', !isActive);
+            closeModalButton.addEventListener('click', () => {
+                boletimModal.classList.remove('active');
+                boletimButtons.forEach(button => button.setAttribute('aria-expanded', false));
+            });
 
-            if (!isActive) {
-                const firstLink = sidebar.querySelector('.nav-link, .video-aulas-link');
-                if (firstLink) firstLink.focus();
-            }
-        });
-
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape' && sidebar.classList.contains('active') && window.innerWidth <= 1024) {
-                sidebar.classList.remove('active');
-                menuButton.setAttribute('aria-expanded', false);
-                menuButton.focus();
-            }
-        });
-    }
-
-    // Navegação entre seções
-    sidebarLinks.forEach(link => {
-        link.addEventListener('click', (event) => {
-            event.preventDefault();
-            const target = link.getAttribute('data-target');
-
-            sidebarLinks.forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-
-            showSection(target);
-
-            if (window.innerWidth < 1024) {
-                sidebar.classList.remove('active');
-                menuButton.setAttribute('aria-expanded', false);
-                menuButton.focus();
-            }
-        });
-    });
-
-    // Seção inicial
-    const defaultSectionId = 'mensagem-padrao';
-    showSection(defaultSectionId);
-
-    // Modal (Boletim Tech)
-    const openModal = (button) => {
-        boletimModal.classList.add('active');
-        button.setAttribute('aria-expanded', true);
-        boletimModal.setAttribute('aria-hidden', false);
-
-        focusableElements = boletimModal.querySelectorAll(focusableElementsString);
-        if (focusableElements.length) {
-            firstFocusableElement = focusableElements[0];
-            lastFocusableElement = focusableElements[focusableElements.length - 1];
-            firstFocusableElement.focus();
-        }
-    };
-
-    const closeModal = () => {
-        boletimModal.classList.remove('active');
-        boletimModal.setAttribute('aria-hidden', true);
-        boletimButtons.forEach(button => button.setAttribute('aria-expanded', false));
-    };
-
-    closeModalButton.addEventListener('click', closeModal);
-
-    boletimButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const isOpen = boletimModal.classList.contains('active');
-            if (!isOpen) {
-                openModal(button);
-            } else {
-                closeModal();
-            }
-        });
-    });
-
-    window.addEventListener('click', (event) => {
-        if (event.target === boletimModal) {
-            closeModal();
-        }
-    });
-
-    boletimModal.addEventListener('keydown', (event) => {
-        if (event.key === 'Tab') {
-            if (focusableElements && focusableElements.length > 0) {
-                if (event.shiftKey) {
-                    if (document.activeElement === firstFocusableElement) {
-                        event.preventDefault();
-                        lastFocusableElement.focus();
-                    }
-                } else {
-                    if (document.activeElement === lastFocusableElement) {
-                        event.preventDefault();
-                        firstFocusableElement.focus();
-                    }
+            window.addEventListener('click', (event) => {
+                if (event.target === boletimModal) {
+                    boletimModal.classList.remove('active');
                 }
-            }
-        }
-
-        if (event.key === 'Escape') {
-            closeModal();
-        }
-    });
-});
-</script>
+            });
+        });
+    </script>
 </body>
 </html>
