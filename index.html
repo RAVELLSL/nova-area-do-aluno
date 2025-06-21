@@ -25,11 +25,8 @@
         /* SEÇÕES */.section { width: 100%; display: none; flex-direction: column; align-items: center; margin-bottom: 2rem;}.section.active { display: flex;}.section h3 { font-size: 1.5rem; color: var(--primary-color); border-bottom: 2px solid var(--secondary-color); padding-bottom: 0.5rem; margin-bottom: 1.5rem;}.section p { margin: 1rem 0; text-align: center;}
         /* AVISOS CONTAINER */.avisos-container { width: 100%; max-width: 800px; margin: 1rem auto; padding: 0 1rem;}.avisos-container h4 { font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--primary-color); }
         /* CARDS */.card-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.5rem; width: 100%; max-width: 1000px; margin: 2rem auto 0 auto;}.card { background: #ffffff; border-radius: var(--border-radius); box-shadow: 0 0.25rem 0.375rem rgba(0,0,0,0.1); overflow: hidden; transition: transform var(--transition-speed), box-shadow var(--transition-speed); display: flex; flex-direction: column; text-align: center;}.card:hover,.card:focus-within { transform: translateY(-0.3125rem); box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.2);}.card img { width: 100%; height: 120px; object-fit: cover; object-position: center;}.card h4 { background: #f8f8f8; font-size: 1.1rem; padding: 1rem; margin: 0; color: var(--primary-color); min-height: 60px; display: flex; align-items: center; justify-content: center; flex-grow: 1;}
-        /* MELHORIA: Classe para esconder cards no filtro */
-        .card-hidden { display: none; }
-        /* MELHORIA: Cursor pointer no card do boletim para indicar interatividade */
-        .boletim-container { cursor: pointer; }
-        .boletim-container .boletim-button { padding: 0.5rem; background: var(--secondary-color); border: none; color: var(--light-text); cursor: pointer; width: 100%; margin-top: auto; }
+        /* MELHORIA: Classe para esconder cards no filtro */.card-hidden { display: none; }
+        /* MELHORIA: Cursor pointer no card do boletim para indicar interatividade */.boletim-container { cursor: pointer; }.boletim-container .boletim-button { padding: 0.5rem; background: var(--secondary-color); border: none; color: var(--light-text); cursor: pointer; width: 100%; margin-top: auto; }
         /* FILTRO CENTRAL DE MIDIAS */.filter-menu { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;}.filter-btn { background-color: #fff; border: 1px solid var(--primary-color); color: var(--primary-color); padding: 0.5rem 1rem; border-radius: var(--border-radius); cursor: pointer; transition: background-color var(--transition-speed), color var(--transition-speed); font-weight: 500;}.filter-btn:hover { background-color: var(--secondary-color); color: var(--light-text); border-color: var(--secondary-color);}.filter-btn.active { background-color: var(--primary-color); color: var(--light-text); border-color: var(--primary-color);}
         /* FOOTER */footer.footer { background: var(--primary-color); color: var(--light-text); text-align: center; padding: 1rem; width: 100%; margin-top: auto;}
         /* MODAL BASE */.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; padding: 1rem; z-index: 3000;}.modal.active { display: flex;}.modal-content { background: #ffffff; border-radius: var(--border-radius); width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; position: relative; padding: 2rem; text-align: center; box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.3);}.close-modal { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-color);}
@@ -40,9 +37,21 @@
         /* Botões de Data */.month-links a { display: inline-flex; align-items: center; justify-content: center; width: 100%; max-width: 140px; padding: 0.6rem 0; background: var(--primary-color); color: var(--light-text); font-size: 0.95rem; font-weight: 500; border-radius: var(--border-radius); text-decoration: none; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: background var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);}.month-links a:hover,.month-links a:focus { background: var(--secondary-color); transform: translateY(-2px); box-shadow: 0 2px 6px rgba(0,0,0,0.15); outline: none;}
         /* RESPONSIVIDADE MOBILE-FIRST */@media (max-width: 1024px) { main.main-content { padding-top: calc(var(--header-height) + 1rem); }}
         @media (max-width: 480px) {
-            .card-container { grid-template-columns: 1fr; gap: 2rem; }
-            /* CORREÇÃO: Removido !important desnecessário */
-            .month-links { grid-template-columns: 1fr; gap: 0.75rem; } 
+            .card-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem; /* Espaçamento entre os cards empilhados */
+            }
+            .card img {
+                height: auto; /* Reseta a altura fixa para a responsividade */
+                aspect-ratio: 1 / 1; /* Força a proporção quadrada */
+                object-fit: cover; /* Garante que a imagem preencha o espaço sem distorcer */
+            }
+            .card h4 {
+                min-height: auto; /* Remove a altura mínima para o título se ajustar */
+                padding: 0.75rem;
+                font-size: 1rem;
+            }
+            .month-links { grid-template-columns: 1fr; gap: 0.75rem; }
             .month-links a { max-width: none; }
             .year-title { font-size: 1rem; }
             .month-title { font-size: 1rem; padding: 0.5rem; }
@@ -73,8 +82,8 @@
                 <ul>
                     <li>Atualização da plataforma de usuário.</li>
                     <li>Inclusão da Central de Mídias.</li>
-                    <li>Alocação de ferramentas e mídias em seus respectivos espaços.</li>   
-                    <li>Remodelagem do "Bloco de Notas" em Ferramentas Digitais</li>                 
+                    <li>Alocação de ferramentas e mídias em seus respectivos espaços.</li>
+                    <li>Remodelagem do "Bloco de Notas" em Ferramentas Digitais</li>
                     <li>"Boletim Tech - edição - 21/06/2025" já está disponível.</li>
                 </ul>
             </div>
@@ -321,7 +330,6 @@
             const openModal = () => {
                 boletimModal.classList.add('active');
                 boletimModal.setAttribute('aria-hidden', 'false');
-                 // Seta o atributo para o botão dentro do card
                 const buttonInCard = document.querySelector('.boletim-container .toggle-boletim');
                 if (buttonInCard) buttonInCard.setAttribute('aria-expanded', 'true');
             };
@@ -329,16 +337,14 @@
             const closeModal = () => {
                 boletimModal.classList.remove('active');
                 boletimModal.setAttribute('aria-hidden', 'true');
-                 // Seta o atributo para o botão dentro do card
                 const buttonInCard = document.querySelector('.boletim-container .toggle-boletim');
                 if (buttonInCard) buttonInCard.setAttribute('aria-expanded', 'false');
             };
 
-            // MELHORIA: Evento de clique adicionado ao container do card e ao botão
             boletimTriggers.forEach(trigger => {
                 trigger.addEventListener('click', (e) => {
                     e.preventDefault();
-                    e.stopPropagation(); // Impede que o clique no botão ative o evento do card duas vezes
+                    e.stopPropagation(); 
                     openModal();
                 });
             });
@@ -357,26 +363,24 @@
                 });
             }
 
-            // MELHORIA: Lógica do Accordion permite abrir e fechar o mesmo item.
+            // Lógica do Accordion
             const monthGroups = document.querySelectorAll('.month-group');
             monthGroups.forEach(group => {
                 const title = group.querySelector('.month-title');
                 if(title){
                     title.addEventListener('click', () => {
                         const wasActive = group.classList.contains('active');
-                        // Fecha todos os outros grupos
                         monthGroups.forEach(g => {
                             if (g !== group) {
                                 g.classList.remove('active');
                             }
                         });
-                        // Alterna (abre/fecha) o grupo clicado
                         group.classList.toggle('active', !wasActive);
                     });
                 }
             });
 
-            // MELHORIA: Lógica do Filtro usando classes CSS em vez de estilo inline.
+            // Lógica do Filtro
             const filterButtons = document.querySelectorAll('#central-de-midias .filter-btn');
             const mediaCards = document.querySelectorAll('#media-card-container > [data-category]');
 
@@ -384,12 +388,9 @@
                 button.addEventListener('click', () => {
                     filterButtons.forEach(btn => btn.classList.remove('active'));
                     button.classList.add('active');
-
                     const filter = button.getAttribute('data-filter');
-
                     mediaCards.forEach(card => {
                         const isVisible = filter === 'all' || card.getAttribute('data-category') === filter;
-                        // Adiciona ou remove a classe 'card-hidden'
                         card.classList.toggle('card-hidden', !isVisible);
                     });
                 });
