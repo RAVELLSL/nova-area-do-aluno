@@ -29,14 +29,12 @@
             --sidebar-width: 250px;
             --max-content-width: 1200px;
         }
-
         /* RESET GLOBAL */
         *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-
         /* LAYOUT BASE */
         html, body {
             height: 100%;
@@ -52,7 +50,6 @@
             background: var(--background-color);
             line-height: var(--line-height);
         }
-
         /* LINKS */
         a, a:visited {
             color: inherit;
@@ -62,7 +59,6 @@
             color: var(--secondary-color);
             text-decoration: underline;
         }
-
         /* HEADER */
         .header {
             position: fixed;
@@ -82,7 +78,6 @@
             font-size: 1.4rem;
             margin: 0;
         }
-
         /* BOTÃO MENU (mobile) */
         #menu-button {
             position: absolute;
@@ -97,7 +92,6 @@
             z-index: 1100;
             display: none; /* Escondido por padrão */
         }
-
         /* SIDEBAR */
         .sidebar {
             position: fixed;
@@ -130,7 +124,6 @@
             color: var(--light-text);
             text-decoration: none;
         }
-
         /* MAIN CONTENT */
         .main-content {
             flex: 1;
@@ -139,7 +132,6 @@
             width: calc(100% - var(--sidebar-width));
             transition: margin-left var(--transition-speed), width var(--transition-speed);
         }
-
         /* LÓGICA RESPONSIVA DA SIDEBAR */
         @media (max-width: 1024px) {
             #menu-button {
@@ -156,8 +148,7 @@
                 margin-left: 0;
                 width: 100%;
             }
-        }
-        
+        }                
         /* SEÇÕES */
         .section {
             width: 100%;
@@ -180,7 +171,6 @@
             margin: 1rem 0;
             text-align: center;
         }
-
         /* AVISOS CONTAINER */
         .avisos-container {
             width: 100%;
@@ -200,7 +190,6 @@
         .avisos-container ul {
             list-style-position: inside;
         }
-
         /* CARDS */
         .card-container {
             display: grid;
@@ -243,12 +232,10 @@
             justify-content: center;
             flex-grow: 1;
         }
-
         /* Classe para esconder cards no filtro */
         .card-hidden {
             display: none;
         }
-
         /* FILTRO CENTRAL DE MIDIAS */
         .filter-menu {
             display: flex;
@@ -277,7 +264,6 @@
             color: var(--light-text);
             border-color: var(--primary-color);
         }
-
         /* FOOTER */
         .footer {
             background: var(--primary-color);
@@ -287,7 +273,6 @@
             width: 100%;
             margin-top: auto;
         }
-
         /* MODAL BASE */
         .modal {
             position: fixed;
@@ -329,108 +314,109 @@
             cursor: pointer;
             color: var(--text-color);
             line-height: 1;
-        }
-        
+        }                
         /* === INÍCIO ESTILOS DO BOLETIM TECH (CÓDIGO 2) === */
-        .boletim-container { 
-            cursor: pointer; 
+        .boletim-container {
+             cursor: pointer;
+         }
+        .boletim-container .boletim-button {
+             padding: 0.5rem;
+             background: var(--secondary-color);
+             border: none;
+             color: var(--light-text);
+             cursor: pointer;
+             width: 100%;
+             margin-top: auto;
+         }
+        .boletim-list {
+             max-width: 600px;
+             margin: 0 auto;
+             padding: 0 1rem;
         }
-        .boletim-container .boletim-button { 
-            padding: 0.5rem; 
-            background: var(--secondary-color); 
-            border: none; 
-            color: var(--light-text); 
-            cursor: pointer; 
-            width: 100%; 
-            margin-top: auto; 
+        .year-group {
+             margin-bottom: 2rem;
         }
-        .boletim-list { 
-            max-width: 600px; 
-            margin: 0 auto; 
-            padding: 0 1rem;
+        .year-title {
+             font-size: 1.2rem;
+             color: var(--primary-color);
+             border-bottom: 2px solid var(--secondary-color);
+             padding-bottom: 0.25rem;
+             margin-bottom: 1rem;
+             text-align: center;
         }
-        .year-group { 
-            margin-bottom: 2rem;
+        .month-group {
+             background: #ffffff;
+             border-radius: var(--border-radius);
+             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+             margin-bottom: 1rem;
+             overflow: hidden;
+             transition: max-height var(--transition-speed) ease, box-shadow var(--transition-speed);
+             max-height: 3.5rem; /* Altura do título */
         }
-        .year-title { 
-            font-size: 1.2rem; 
-            color: var(--primary-color); 
-            border-bottom: 2px solid var(--secondary-color); 
-            padding-bottom: 0.25rem; 
-            margin-bottom: 1rem; 
-            text-align: center;
+        .month-group.active {
+             max-height: 1500px;
+             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-        .month-group { 
-            background: #ffffff; 
-            border-radius: var(--border-radius); 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
-            margin-bottom: 1rem; 
-            overflow: hidden; 
-            transition: max-height var(--transition-speed) ease, box-shadow var(--transition-speed); 
-            max-height: 3.5rem; /* Altura do título */
+        .month-title {
+             display: block;
+             width: 100%;
+             padding: 0.75rem 1rem;
+             background: var(--secondary-color);
+             color: var(--light-text);
+             font-size: 1.1rem;
+             font-weight: 600;
+             text-align: center;
+             border-bottom: 1px solid rgba(0,0,0,0.1);
+             transition: background var(--transition-speed);
+             cursor: pointer;
         }
-        .month-group.active { 
-            max-height: 1500px; 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        .month-title:hover {
+             background: var(--accent-color);
         }
-        .month-title { 
-            display: block; 
-            width: 100%; 
-            padding: 0.75rem 1rem; 
-            background: var(--secondary-color); 
-            color: var(--light-text); 
-            font-size: 1.1rem; 
-            font-weight: 600; 
-            text-align: center; 
-            border-bottom: 1px solid rgba(0,0,0,0.1); 
-            transition: background var(--transition-speed); 
-            cursor: pointer;
+        .month-links {
+             display: grid;
+             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+             gap: 1rem;
+             padding: 1rem;
+             justify-content: center;
+             justify-items: center;
         }
-        .month-title:hover { 
-            background: var(--accent-color);
-        }
-        .month-links { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); 
-            gap: 1rem; 
-            padding: 1rem; 
-            justify-content: center; 
-            justify-items: center;
-        }
-        .month-links a { 
-            display: inline-flex; 
-            align-items: center; 
-            justify-content: center; 
-            width: 100%; 
-            max-width: 140px; 
-            padding: 0.6rem 0; 
-            background: var(--primary-color); 
-            color: var(--light-text); 
-            font-size: 0.95rem; 
-            font-weight: 500; 
-            border-radius: var(--border-radius); 
-            text-decoration: none; 
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
-            transition: background var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
+        .month-links a {
+             display: inline-flex;
+             align-items: center;
+             justify-content: center;
+             width: 100%;
+             max-width: 140px;
+             padding: 0.6rem 0;
+             background: var(--primary-color);
+             color: var(--light-text);
+             font-size: 0.95rem;
+             font-weight: 500;
+             border-radius: var(--border-radius);
+             text-decoration: none;
+             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+             transition: background var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
         }
         .month-links a:hover,
-        .month-links a:focus { 
-            background: var(--secondary-color); 
-            transform: translateY(-2px); 
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15); 
-            outline: none;
+        .month-links a:focus {
+             background: var(--secondary-color);
+             transform: translateY(-2px);
+             box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+             outline: none;
             text-decoration: none; /* Mantém sem sublinhado */
         }
         /* === FIM ESTILOS DO BOLETIM TECH === */
-
 
         /* RESPONSIVIDADE MOBILE-FIRST */
         @media (max-width: 480px) {
             .card-container {
                 grid-template-columns: 1fr;
             }
+            /* --- ALTERAÇÃO APLICADA AQUI --- */
             .card img {
-                height: 150px;
+                height: auto; /* Permite que a altura seja definida pela proporção */
+                aspect-ratio: 1 / 1; /* Força a proporção quadrada (1:1) */
+                object-fit: cover; /* Garante que a imagem cubra a área sem distorcer */
             }
             .card h4 {
                 min-height: auto;
@@ -637,19 +623,19 @@
                     <div class="month-group">
                         <h6 class="month-title">Fevereiro</h6>
                         <div class="month-links">
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-22-02-2025/" target="_blank" rel="noopener noreferrer">22/02/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-15-02-2025/" target="_blank" rel="noopener noreferrer">15/02/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-08-02-2025/" target="_blank" rel="noopener noreferrer">08/02/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-01-02-2025/" target="_blank" rel="noopener noreferrer">01/02/2025</a>
+                            <a href="https://ravellsl.github.io/boletim-tecnologico-22-02-2025---/" target="_blank" rel="noopener noreferrer">22/02/2025</a>
+                            <a href="https://ravellsl.github.io/boletim-tecnologico-15-02-2025---/" target="_blank" rel="noopener noreferrer">15/02/2025</a>
+                            <a href="https://ravellsl.github.io/boletim-tecnologico-08-02-2025---/" target="_blank" rel="noopener noreferrer">08/02/2025</a>
+                            <a href="https://ravellsl.github.io/boletim-tecnologico-01-02-2025--/" target="_blank" rel="noopener noreferrer">01/02/2025</a>
                         </div>
                     </div>
                     <div class="month-group">
                         <h6 class="month-title">Janeiro</h6>
                         <div class="month-links">
-                             <a href="https://ravellsl.github.io/boletim-tecnologico-25-01-2025/" target="_blank" rel="noopener noreferrer">25/01/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-18-01-2025/" target="_blank" rel="noopener noreferrer">18/01/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-11-01-2025/" target="_blank" rel="noopener noreferrer">11/01/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-04-01-2025/" target="_blank" rel="noopener noreferrer">04/01/2025</a>
+                             <a href="https://ravellsl.github.io/https-ravellsl.github.io-https-ravellsl.gitboletim-tecnologico-25-01-2025-/" target="_blank" rel="noopener noreferrer">25/01/2025</a>
+                            <a href="https://ravellsl.github.io/https-ravellsl.github.io-https-ravellsl.github.io-boletim-tecnologico-18-01-2025---/" target="_blank" rel="noopener noreferrer">18/01/2025</a>
+                            <a href="https://ravellsl.github.io/https-ravellsl.github.io-boletim-tecnologico-11-01-2025--/" target="_blank" rel="noopener noreferrer">11/01/2025</a>
+                            <a href="https://ravellsl.github.io/boletim-tecnologico-04-01-2025-/" target="_blank" rel="noopener noreferrer">04/01/2025</a>
                         </div>
                     </div>
                 </div>
@@ -704,7 +690,7 @@
             sidebarLinks.forEach(link => {
                 link.addEventListener('click', event => {
                     event.preventDefault();
-                    
+
                     // Remove a classe 'active' de todos os links e adiciona ao clicado
                     sidebarLinks.forEach(navLink => navLink.classList.remove('active'));
                     link.classList.add('active');
@@ -726,7 +712,7 @@
             const boletimModal = document.getElementById('boletim-modal');
             const boletimTriggers = document.querySelectorAll('.toggle-boletim, .boletim-container');
             const closeModalButton = boletimModal.querySelector('.close-modal');
-            
+
             const openModal = () => {
                 boletimModal.classList.add('active');
                 boletimModal.setAttribute('aria-hidden', 'false');
@@ -792,13 +778,13 @@
                     // Atualiza o botão ativo
                     filterButtons.forEach(btn => btn.classList.remove('active'));
                     button.classList.add('active');
-                    
+
                     const filter = button.getAttribute('data-filter');
-                    
+
                     mediaCards.forEach(card => {
                         const cardCategory = card.getAttribute('data-category');
                         const isVisible = filter === 'all' || cardCategory === filter;
-                        
+
                         // Usa a classe card-hidden para esconder
                         card.classList.toggle('card-hidden', !isVisible);
                         // Adiciona estilo para garantir que o display mude
@@ -806,7 +792,7 @@
                     });
                 });
             });
-            
+
             // --- ATUALIZAÇÃO DINÂMICA DO ANO NO RODAPÉ --- 
             const yearSpan = document.getElementById('current-year');
             if (yearSpan) {
