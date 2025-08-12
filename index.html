@@ -1,814 +1,602 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Área do Aluno</title>
-    <meta name="description" content="Plataforma de acesso para alunos com materiais de estudo, ferramentas digitais e suplementos tecnológicos.">
-    <meta name="keywords" content="Área do Aluno, Materiais de Estudo, Ferramentas Digitais, Suplemento Tech, IA, Caderno Digital, Biblioteca Digital, Central de Mídias">
-    <meta name="author" content="Ravel Tech">
-    <meta name="robots" content="index, follow">
-    <meta property="og:title" content="Área do Aluno - Ravel Tech">
-    <meta property="og:description" content="Plataforma de acesso para alunos com materiais de estudo, ferramentas digitais e suplementos tecnológicos.">
-    <meta property="og:image" content="https://i.ibb.co/z4xY0CD/1728852180021.jpg">
-    <meta property="og:url" content="https://ravellsl.github.io/rstech-aluno/">
-    <meta property="og:type" content="website">
-    <style>
-        :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --accent-color: #e74c3c;
-            --background-color: #ecf0f1;
-            --text-color: #2c3e50;
-            --light-text: #ffffff;
-            --border-radius: 0.3125rem;
-            --transition-speed: 0.3s;
-            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            --header-height: 3.5rem;
-            --line-height: 1.6;
-            --sidebar-width: 250px;
-            --max-content-width: 1200px;
-        }
-        /* RESET GLOBAL */
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        /* LAYOUT BASE */
-        html, body {
-            height: 100%;
-            width: 100%;
-            overflow-x: hidden;
-        }
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            font-family: var(--font-family);
-            color: var(--text-color);
-            background: var(--background-color);
-            line-height: var(--line-height);
-        }
-        /* LINKS */
-        a, a:visited {
-            color: inherit;
-            text-decoration: none;
-        }
-        a:hover, a:focus {
-            color: var(--secondary-color);
-            text-decoration: underline;
-        }
-        /* HEADER */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: var(--header-height);
-            background: var(--primary-color);
-            color: var(--light-text);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            z-index: 1000;
-        }
-        .header h1 {
-            font-size: 1.4rem;
-            margin: 0;
-        }
-        /* BOTÃO MENU (mobile) */
-        #menu-button {
-            position: absolute;
-            left: 1rem;
-            background: none;
-            border: none;
-            color: var(--light-text);
-            font-size: 1.5rem; /* Aumentado para melhor toque */
-            height: var(--header-height);
-            width: var(--header-height);
-            cursor: pointer;
-            z-index: 1100;
-            display: none; /* Escondido por padrão */
-        }
-        /* SIDEBAR */
-        .sidebar {
-            position: fixed;
-            top: var(--header-height);
-            left: 0;
-            width: var(--sidebar-width);
-            height: calc(100% - var(--header-height));
-            background: var(--primary-color);
-            color: var(--light-text);
-            padding: 2rem 1rem;
-            transition: left var(--transition-speed);
-            overflow-y: auto;
-            z-index: 900;
-        }
-        .sidebar h2 {
-            text-align: center;
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-        }
-        .sidebar a {
-            display: block;
-            padding: 0.75rem 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: var(--border-radius);
-            transition: background var(--transition-speed);
-            color: #eee;
-        }
-        .sidebar a:hover, .sidebar a:focus, .sidebar a.active {
-            background: var(--secondary-color);
-            color: var(--light-text);
-            text-decoration: none;
-        }
-        /* MAIN CONTENT */
-        .main-content {
-            flex: 1;
-            padding: calc(var(--header-height) + 1rem) 1rem 2rem;
-            margin-left: var(--sidebar-width); /* Espaço para a sidebar */
-            width: calc(100% - var(--sidebar-width));
-            transition: margin-left var(--transition-speed), width var(--transition-speed);
-        }
-        /* LÓGICA RESPONSIVA DA SIDEBAR */
-        @media (max-width: 1024px) {
-            #menu-button {
-                display: block; /* Mostra o botão em telas menores */
-            }
-            .sidebar {
-                left: calc(-1 * var(--sidebar-width)); /* Esconde a sidebar fora da tela */
-                z-index: 1050; /* Garante que a sidebar fique sobre o conteúdo */
-            }
-            .sidebar.active {
-                left: 0;
-            }
-            .main-content {
-                margin-left: 0;
-                width: 100%;
-            }
-        }                
-        /* SEÇÕES */
-        .section {
-            width: 100%;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-        .section.active {
-            display: flex;
-        }
-        .section h3 {
-            font-size: 1.5rem;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--secondary-color);
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-        .section p {
-            margin: 1rem 0;
-            text-align: center;
-        }
-        /* AVISOS CONTAINER */
-        .avisos-container {
-            width: 100%;
-            max-width: 800px;
-            margin: 1rem auto;
-            padding: 0 1rem;
-            background: #fff;
-            border-radius: var(--border-radius);
-            padding: 1rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        .avisos-container h4 {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-            color: var(--primary-color);
-        }
-        .avisos-container ul {
-            list-style-position: inside;
-        }
-        /* CARDS */
-        .card-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 1.5rem;
-            width: 100%;
-            max-width: 1000px;
-            margin: 2rem auto 0 auto;
-        }
-        .card {
-            background: #ffffff;
-            border-radius: var(--border-radius);
-            box-shadow: 0 0.25rem 0.375rem rgba(0,0,0,0.1);
-            overflow: hidden;
-            transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
-            display: flex;
-            flex-direction: column;
-            text-align: center;
-        }
-        .card:hover, .card:focus-within {
-            transform: translateY(-0.3125rem);
-            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.2);
-        }
-        .card img {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
-            object-position: center;
-            display: block;
-        }
-        .card h4 {
-            background: #f8f8f8;
-            font-size: 1.1rem;
-            padding: 1rem;
-            margin: 0;
-            color: var(--primary-color);
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-grow: 1;
-        }
-        /* Classe para esconder cards no filtro */
-        .card-hidden {
-            display: none;
-        }
-        /* FILTRO CENTRAL DE MIDIAS */
-        .filter-menu {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-bottom: 1rem;
-        }
-        .filter-btn {
-            background-color: #fff;
-            border: 1px solid var(--primary-color);
-            color: var(--primary-color);
-            padding: 0.5rem 1rem;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed);
-            font-weight: 500;
-        }
-        .filter-btn:hover {
-            background-color: var(--secondary-color);
-            color: var(--light-text);
-            border-color: var(--secondary-color);
-        }
-        .filter-btn.active {
-            background-color: var(--primary-color);
-            color: var(--light-text);
-            border-color: var(--primary-color);
-        }
-        /* FOOTER */
-        .footer {
-            background: var(--primary-color);
-            color: var(--light-text);
-            text-align: center;
-            padding: 1rem;
-            width: 100%;
-            margin-top: auto;
-        }
-        /* MODAL BASE */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.6);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            z-index: 3000;
-            transition: opacity var(--transition-speed);
-        }
-        .modal.active {
-            display: flex;
-            opacity: 1;
-        }
-        .modal-content {
-            background: #ffffff;
-            border-radius: var(--border-radius);
-            width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-            padding: 2rem;
-            text-align: center; /* Alterado para center */
-            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.3);
-        }
-        .close-modal {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-color);
-            line-height: 1;
-        }                
-        /* === INÍCIO ESTILOS DO BOLETIM TECH (CÓDIGO 2) === */
-        .boletim-container {
-             cursor: pointer;
-         }
-        .boletim-container .boletim-button {
-             padding: 0.5rem;
-             background: var(--secondary-color);
-             border: none;
-             color: var(--light-text);
-             cursor: pointer;
-             width: 100%;
-             margin-top: auto;
-         }
-        .boletim-list {
-             max-width: 600px;
-             margin: 0 auto;
-             padding: 0 1rem;
-        }
-        .year-group {
-             margin-bottom: 2rem;
-        }
-        .year-title {
-             font-size: 1.2rem;
-             color: var(--primary-color);
-             border-bottom: 2px solid var(--secondary-color);
-             padding-bottom: 0.25rem;
-             margin-bottom: 1rem;
-             text-align: center;
-        }
-        .month-group {
-             background: #ffffff;
-             border-radius: var(--border-radius);
-             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-             margin-bottom: 1rem;
-             overflow: hidden;
-             transition: max-height var(--transition-speed) ease, box-shadow var(--transition-speed);
-             max-height: 3.5rem; /* Altura do título */
-        }
-        .month-group.active {
-             max-height: 1500px;
-             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        .month-title {
-             display: block;
-             width: 100%;
-             padding: 0.75rem 1rem;
-             background: var(--secondary-color);
-             color: var(--light-text);
-             font-size: 1.1rem;
-             font-weight: 600;
-             text-align: center;
-             border-bottom: 1px solid rgba(0,0,0,0.1);
-             transition: background var(--transition-speed);
-             cursor: pointer;
-        }
-        .month-title:hover {
-             background: var(--accent-color);
-        }
-        .month-links {
-             display: grid;
-             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-             gap: 1rem;
-             padding: 1rem;
-             justify-content: center;
-             justify-items: center;
-        }
-        .month-links a {
-             display: inline-flex;
-             align-items: center;
-             justify-content: center;
-             width: 100%;
-             max-width: 140px;
-             padding: 0.6rem 0;
-             background: var(--primary-color);
-             color: var(--light-text);
-             font-size: 0.95rem;
-             font-weight: 500;
-             border-radius: var(--border-radius);
-             text-decoration: none;
-             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-             transition: background var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
-        }
-        .month-links a:hover,
-        .month-links a:focus {
-             background: var(--secondary-color);
-             transform: translateY(-2px);
-             box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-             outline: none;
-            text-decoration: none; /* Mantém sem sublinhado */
-        }
-        /* === FIM ESTILOS DO BOLETIM TECH === */
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Área do Aluno</title>
+  <meta name="description" content="Plataforma de acesso para alunos com materiais de estudo, ferramentas digitais e suplementos tecnológicos.">
+  <meta name="keywords" content="Área do Aluno, Materiais de Estudo, Ferramentas Digitais, Suplemento Tech, IA, Caderno Digital, Biblioteca Digital, Central de Mídias">
+  <meta name="author" content="Ravell Tech">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Área do Aluno - Ravell Tech">
+  <meta property="og:description" content="Plataforma de acesso para alunos com materiais de estudo, ferramentas digitais e suplementos tecnológicos.">
+  <meta property="og:image" content="https://i.ibb.co/z4xY0CD/1728852180021.jpg">
+  <meta property="og:url" content="https://ravellsl.github.io/rstech-aluno/">
+  <meta property="og:type" content="website">
+  <style>
+    :root{
+      --primary-color:#2c3e50;--secondary-color:#3498db;--accent-color:#e74c3c;--background-color:#ecf0f1;--text-color:#2c3e50;--light-text:#ffffff;--border-radius:.3125rem;--transition-speed:.3s;--font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;--header-height:3.5rem;--line-height:1.6;--sidebar-width:250px;--max-content-width:1200px
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;width:100%;overflow-x:hidden}
+    body{display:flex;flex-direction:column;min-height:100vh;font-family:var(--font-family);color:var(--text-color);background:var(--background-color);line-height:var(--line-height)}
+    a,a:visited{color:inherit;text-decoration:none}
+    a:hover,a:focus{color:var(--secondary-color);text-decoration:underline}
+    .header{position:fixed;top:0;left:0;width:100%;height:var(--header-height);background:var(--primary-color);color:var(--light-text);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 4px rgba(0,0,0,.1);z-index:1000}
+    .header h1{font-size:1.4rem;margin:0}
+    #menu-button{position:absolute;left:1rem;background:none;border:none;color:var(--light-text);font-size:1.5rem;height:var(--header-height);width:var(--header-height);cursor:pointer;z-index:1100;display:none}
+    .sidebar{position:fixed;top:var(--header-height);left:0;width:var(--sidebar-width);height:calc(100% - var(--header-height));background:var(--primary-color);color:var(--light-text);padding:2rem 1rem;transition:left var(--transition-speed);overflow-y:auto;z-index:900}
+    .sidebar h2{text-align:center;font-size:1.3rem;margin-bottom:1.5rem}
+    .sidebar a{display:block;padding:.75rem 1rem;margin-bottom:.5rem;border-radius:var(--border-radius);transition:background var(--transition-speed);color:#eee}
+    .sidebar a:hover,.sidebar a:focus,.sidebar a.active{background:var(--secondary-color);color:var(--light-text);text-decoration:none}
+    .main-content{flex:1;padding:calc(var(--header-height) + 1rem) 1rem 2rem;margin-left:var(--sidebar-width);width:calc(100% - var(--sidebar-width));transition:margin-left var(--transition-speed),width var(--transition-speed)}
+    @media (max-width:1024px){
+      #menu-button{display:block}
+      .sidebar{left:calc(-1 * var(--sidebar-width));z-index:1050}
+      .sidebar.active{left:0}
+      .main-content{margin-left:0;width:100%}
+    }
+    .section{width:100%;display:none;flex-direction:column;align-items:center;margin-bottom:2rem}
+    .section.active{display:flex}
+    .section h3{font-size:1.5rem;color:var(--primary-color);border-bottom:2px solid var(--secondary-color);padding-bottom:.5rem;margin-bottom:1.5rem}
+    .section p{margin:1rem 0;text-align:center}
+    .avisos-container{width:100%;max-width:800px;margin:1rem auto;background:#fff;border-radius:var(--border-radius);padding:1rem;box-shadow:0 2px 5px rgba(0,0,0,.05)}
+    .avisos-container h4{font-size:1.2rem;margin-bottom:.5rem;color:var(--primary-color)}
+    .avisos-container ul{list-style-position:inside}
+    .card-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.5rem;width:100%;max-width:1000px;margin:2rem auto 0}
+    .card{background:#ffffff;border-radius:var(--border-radius);box-shadow:0 .25rem .375rem rgba(0,0,0,.1);overflow:hidden;transition:opacity .2s ease-in-out,transform .2s ease-in-out;display:flex;flex-direction:column;text-align:center}
+    .card:hover,.card:focus-within{transform:translateY(-.3125rem);box-shadow:0 .5rem 1rem rgba(0,0,0,.2)}
+    .card img{width:100%;height:120px;object-fit:cover;object-position:center;display:block}
+    .card h4{background:#f8f8f8;font-size:1.1rem;padding:1rem;margin:0;color:var(--primary-color);min-height:60px;display:flex;align-items:center;justify-content:center;flex-grow:1}
+    .card-hidden{display:none}
+    .filter-menu{display:flex;justify-content:center;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+    .filter-btn{background-color:#fff;border:1px solid var(--primary-color);color:var(--primary-color);padding:.5rem 1rem;border-radius:var(--border-radius);cursor:pointer;transition:background-color var(--transition-speed),color var(--transition-speed),border-color var(--transition-speed);font-weight:500}
+    .filter-btn:hover{background-color:var(--secondary-color);color:var(--light-text);border-color:var(--secondary-color)}
+    .filter-btn.active{background-color:var(--primary-color);color:var(--light-text);border-color:var(--primary-color)}
+    .footer{background:var(--primary-color);color:var(--light-text);text-align:center;padding:1rem;width:100%;margin-top:auto}
+    .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:1rem;z-index:3000;transition:opacity var(--transition-speed)}
+    .modal.active{display:flex;opacity:1}
+    .modal-content{background:#ffffff;border-radius:var(--border-radius);width:90%;max-width:600px;max-height:80vh;overflow-y:auto;position:relative;padding:2rem;text-align:center;box-shadow:0 .5rem 1rem rgba(0,0,0,.3)}
+    .close-modal{position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--text-color);line-height:1}
 
-        /* RESPONSIVIDADE MOBILE-FIRST */
-        @media (max-width: 480px) {
-            .card-container {
-                grid-template-columns: 1fr;
-            }
-            /* --- ALTERAÇÃO APLICADA AQUI --- */
-            .card img {
-                height: auto; /* Permite que a altura seja definida pela proporção */
-                aspect-ratio: 1 / 1; /* Força a proporção quadrada (1:1) */
-                object-fit: cover; /* Garante que a imagem cubra a área sem distorcer */
-            }
-            .card h4 {
-                min-height: auto;
-                padding: 0.75rem;
-                font-size: 1rem;
-            }
-            /* Estilos responsivos do Boletim (Código 2) */
-            .month-links { grid-template-columns: 1fr; gap: 0.75rem; }
-            .month-links a { max-width: none; }
-            .year-title { font-size: 1rem; }
-            .month-title { font-size: 1rem; padding: 0.5rem; }
-            .month-group { padding: 0; }
-        }
-    </style>
+    /* === INÍCIO ESTILOS DO BOLETIM TECH === */
+    .boletim-container{cursor:pointer}
+    .boletim-container .boletim-button{padding:.5rem;background:var(--secondary-color);border:none;color:var(--light-text);cursor:pointer;width:100%;margin-top:auto}
+    .boletim-list{max-width:600px;margin:0 auto;padding:0 1rem}
+    .year-group{margin-bottom:2rem}
+    .year-title{font-size:1.2rem;color:var(--primary-color);border-bottom:2px solid var(--secondary-color);padding-bottom:.25rem;margin-bottom:1rem;text-align:center}
+    .month-group{background:#ffffff;border-radius:var(--border-radius);box-shadow:0 2px 4px rgba(0,0,0,.05);margin-bottom:1rem;overflow:hidden;transition:max-height var(--transition-speed) ease,box-shadow var(--transition-speed);max-height:3.5rem}
+    .month-group.active{max-height:1500px;box-shadow:0 4px 8px rgba(0,0,0,.1)}
+    .month-title{display:block;width:100%;padding:.75rem 1rem;background:var(--secondary-color);color:var(--light-text);font-size:1.1rem;font-weight:600;text-align:center;border-bottom:1px solid rgba(0,0,0,.1);transition:background var(--transition-speed);cursor:pointer}
+    .month-title:hover{background:var(--accent-color)}
+    .month-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1rem;padding:1rem;justify-content:center;justify-items:center}
+    .month-links a{display:inline-flex;align-items:center;justify-content:center;width:100%;max-width:140px;padding:.6rem 0;background:var(--primary-color);color:var(--light-text);font-size:.95rem;font-weight:500;border-radius:var(--border-radius);text-decoration:none;box-shadow:0 1px 3px rgba(0,0,0,.1);transition:background var(--transition-speed),transform var(--transition-speed),box-shadow var(--transition-speed)}
+    .month-links a:hover,.month-links a:focus{background:var(--secondary-color);transform:translateY(-2px);box-shadow:0 2px 6px rgba(0,0,0,.15);outline:none;text-decoration:none}
+    /* === FIM ESTILOS DO BOLETIM TECH === */
+
+    /* === CENTRAL DE MÍDIAS — VERSÃO SEM IMAGENS === */
+    #central-de-midias .card-container{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+    #central-de-midias .card{position:relative;padding:1.25rem;min-height:150px;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(52,152,219,.08),rgba(231,76,60,.08)) border-box;border:1px solid rgba(44,62,80,.08);isolation:isolate}
+    #central-de-midias .card::before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:linear-gradient(90deg,var(--secondary-color),var(--accent-color));opacity:.8}
+    #central-de-midias .card::after{content:"";position:absolute;width:68px;height:68px;right:10px;bottom:10px;border-radius:16px;background:
+      radial-gradient(circle at 30% 30%,rgba(52,152,219,.20),transparent 60%),
+      radial-gradient(circle at 70% 70%,rgba(231,76,60,.18),transparent 60%);
+      filter:blur(.3px);opacity:.35;z-index:-1}
+    #central-de-midias .card h4{background:transparent;padding:0;margin:0;font-size:1.05rem;line-height:1.3;color:var(--primary-color);text-align:center}
+    #central-de-midias .card:hover,#central-de-midias .card:focus-within{transform:translateY(-.25rem);box-shadow:0 .5rem 1rem rgba(0,0,0,.12)}
+    #central-de-midias .boletim-container{gap:.75rem;min-height:180px}
+    #central-de-midias .boletim-container .boletim-button{margin-top:auto;border-radius:var(--border-radius)}
+    #central-de-midias .card:focus-visible{outline:3px solid var(--secondary-color);outline-offset:2px}
+
+    /* === ÁREA DE ESTUDO e FERRAMENTAS DIGITAIS — replicar estilo da Central de Mídias (sem imagens) === */
+    #area-de-estudo .card-container,
+    #ferramentas-digitais .card-container{
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
+    #area-de-estudo .card img,
+    #ferramentas-digitais .card img{
+      display: none !important;
+    }
+    #area-de-estudo .card,
+    #ferramentas-digitais .card{
+      position: relative;
+      padding: 1.25rem;
+      min-height: 150px;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(52,152,219,.08), rgba(231,76,60,.08)) border-box;
+      border: 1px solid rgba(44,62,80,.08);
+      isolation: isolate;
+    }
+    #area-de-estudo .card::before,
+    #ferramentas-digitais .card::before{
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:6px;
+      background:linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+      opacity:.8;
+    }
+    #area-de-estudo .card::after,
+    #ferramentas-digitais .card::after{
+      content:"";
+      position:absolute;
+      width:68px;
+      height:68px;
+      right:10px;
+      bottom:10px;
+      border-radius:16px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(52,152,219,.20), transparent 60%),
+        radial-gradient(circle at 70% 70%, rgba(231,76,60,.18), transparent 60%);
+      filter: blur(.3px);
+      opacity:.35;
+      z-index:-1;
+    }
+    #area-de-estudo .card h4,
+    #ferramentas-digitais .card h4{
+      background: transparent;
+      padding: 0;
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.3;
+      color: var(--primary-color);
+      text-align: center;
+      min-height: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-grow: 0;
+    }
+    #area-de-estudo .card:hover,
+    #area-de-estudo .card:focus-within,
+    #ferramentas-digitais .card:hover,
+    #ferramentas-digitais .card:focus-within{
+      transform: translateY(-.25rem);
+      box-shadow: 0 .5rem 1rem rgba(0,0,0,.12);
+    }
+    #area-de-estudo .card:focus-visible,
+    #ferramentas-digitais .card:focus-visible{
+      outline: 3px solid var(--secondary-color);
+      outline-offset: 2px;
+    }
+
+    /* === TOOLTIP UNIVERSAL PARA CARDS (todas as seções) === */
+    .card[data-tooltip]{position:relative}
+    .card[data-tooltip]::after{
+      content: attr(data-tooltip);
+      position:absolute;
+      bottom: calc(100% + 10px);
+      left:50%;
+      transform: translate(-50%, 6px);
+      background:#1f2d3a;
+      color:#fff;
+      padding:.5rem .75rem;
+      border-radius:.5rem;
+      box-shadow:0 8px 20px rgba(0,0,0,.18);
+      width:max(200px, 60%);
+      max-width:320px;
+      text-align:center;
+      font-size:.9rem;
+      line-height:1.3;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity var(--transition-speed), transform var(--transition-speed);
+      z-index:2000;
+      white-space:normal;
+    }
+    .card[data-tooltip]::before{
+      content:"";
+      position:absolute;
+      bottom: calc(100% + 4px);
+      left:50%;
+      transform: translateX(-50%) rotate(45deg);
+      width:10px;height:10px;
+      background:#1f2d3a;
+      opacity:0;
+      transition:opacity var(--transition-speed);
+      z-index:1999;
+    }
+    .card[data-tooltip]:hover::after,
+    .card[data-tooltip]:focus-within::after{
+      opacity:1; transform: translate(-50%, 0);
+    }
+    .card[data-tooltip]:hover::before,
+    .card[data-tooltip]:focus-within::before{
+      opacity:1;
+    }
+
+    @media (max-width:480px){
+      .card-container{grid-template-columns:1fr}
+      .card img{height:auto;aspect-ratio:1/1;object-fit:cover}
+      .card h4{min-height:auto;padding:.75rem;font-size:1rem}
+      .month-links{grid-template-columns:1fr;gap:.75rem}
+      .month-links a{max-width:none}
+      .year-title{font-size:1rem}
+      .month-title{font-size:1rem;padding:.5rem}
+      .month-group{padding:0}
+      #central-de-midias .card{min-height:140px;padding:1rem}
+      #central-de-midias .card h4{font-size:1rem}
+      #area-de-estudo .card{min-height:140px;padding:1rem}
+      #ferramentas-digitais .card{min-height:140px;padding:1rem}
+      #area-de-estudo .card h4,#ferramentas-digitais .card h4{font-size:1rem}
+      /* Tooltip mais largo em telas pequenas */
+      .card[data-tooltip]::after{width:90%;max-width:none}
+    }
+  </style>
 </head>
 <body>
-    <header class="header">
-        <h1>Área do Aluno</h1>
-        <button id="menu-button" aria-label="Abrir Menu" aria-expanded="false" aria-controls="sidebar">☰</button>
-    </header>
+  <header class="header">
+    <h1>Área do Aluno</h1>
+    <button id="menu-button" aria-label="Abrir Menu" aria-expanded="false" aria-controls="sidebar">☰</button>
+  </header>
 
-    <nav class="sidebar" id="sidebar" role="navigation" aria-label="Menu Principal">
-        <h2>Navegação</h2>
-        <a href="#" data-target="mensagem-padrao" class="nav-link active">Início</a>
-        <a href="#" data-target="area-de-estudo" class="nav-link">Área de Estudo</a>
-        <a href="#" data-target="central-de-midias" class="nav-link">Central de Mídias</a>
-        <a href="#" data-target="ferramentas-digitais" class="nav-link">Ferramentas Digitais</a>
-    </nav>
+  <nav class="sidebar" id="sidebar" role="navigation" aria-label="Menu Principal">
+    <h2>Navegação</h2>
+    <a href="#" data-target="mensagem-padrao" class="nav-link active">Início</a>
+    <a href="#" data-target="area-de-estudo" class="nav-link">Área de Estudo</a>
+    <a href="#" data-target="central-de-midias" class="nav-link">Central de Mídias</a>
+    <a href="#" data-target="ferramentas-digitais" class="nav-link">Ferramentas Digitais</a>
+  </nav>
 
-    <main class="main-content" role="main">
-        <section id="mensagem-padrao" class="section active">
-            <h3 class="welcome-title">Bem-Vindo</h3>
-            <p>Escolha no menu sua área de interesse.</p>
-            <div class="avisos-container">
-                <h4>Atualizações Recentes:</h4>
-                <ul>
-                    <li>"Boletim Tech - edição - 09/08/2025" já está disponível.</li>
-                    <li>"Biblioteca Digital" novos títulos já está disponível.</li>
-                </ul>
-            </div>
-        </section>
+  <main class="main-content" role="main">
+    <section id="mensagem-padrao" class="section active">
+      <h3 class="welcome-title">Bem-Vindo</h3>
+      <p>Escolha no menu sua área de interesse.</p>
+      <div class="avisos-container">
+        <h4>Atualizações Recentes:</h4>
+        <ul>
+          <li>"Boletim Tech - edição - 09/08/2025" já está disponível.</li>
+          <li>"Biblioteca Digital" novos títulos já está disponível.</li>
+        </ul>
+      </div>
+    </section>
 
-        <section id="area-de-estudo" class="section">
-            <h3>Área de Estudo</h3>
-            <div class="card-container">
-                <a href="https://ravellsl.github.io/rstech-aluno/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Material de Aula">
-                    <img src="https://i.ibb.co/z4xY0CD/1728852180021.jpg" alt="Material de Aula" loading="lazy">
-                    <h4>Material de Aula</h4>
-                </a>
-                <a href="https://ravellsl.github.io/apostilas/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Apostilas">
-                    <img src="https://i.ibb.co/wrKQT02/1728852195955.jpg" alt="Apostilas" loading="lazy">
-                    <h4>Apostilas</h4>
-                </a>
-                <a href="https://ravellsl.github.io/caderno-exercicios/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Caderno de Exercícios">
-                    <img src="https://i.ibb.co/3y3wjnX/1728852224266.jpg" alt="Caderno de Exercícios" loading="lazy">
-                    <h4>Caderno de Exercícios</h4>
-                </a>
-                <a href="https://ravellsl.github.io/caderno-virtual/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Caderno Digital">
-                    <img src="https://i.ibb.co/jf98bKR/1728852209873.jpg" alt="Caderno Digital" loading="lazy">
-                    <h4>Caderno Digital</h4>
-                </a>
-            </div>
-        </section>
+    <section id="area-de-estudo" class="section">
+      <h3>Área de Estudo</h3>
+      <div class="card-container">
+        <a href="https://ravellsl.github.io/rstech-aluno/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Material de Aula">
+          <img src="https://i.ibb.co/z4xY0CD/1728852180021.jpg" alt="Material de Aula" loading="lazy">
+          <h4>Material de Aula</h4>
+        </a>
+        <a href="https://ravellsl.github.io/apostilas/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Apostilas">
+          <img src="https://i.ibb.co/wrKQT02/1728852195955.jpg" alt="Apostilas" loading="lazy">
+          <h4>Apostilas</h4>
+        </a>
+        <a href="https://ravellsl.github.io/caderno-exercicios/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Caderno de Exercícios">
+          <img src="https://i.ibb.co/3y3wjnX/1728852224266.jpg" alt="Caderno de Exercícios" loading="lazy">
+          <h4>Caderno de Exercícios</h4>
+        </a>
+        <a href="https://ravellsl.github.io/caderno-virtual/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Caderno Digital">
+          <img src="https://i.ibb.co/jf98bKR/1728852209873.jpg" alt="Caderno Digital" loading="lazy">
+          <h4>Caderno Digital</h4>
+        </a>
+      </div>
+    </section>
 
-        <section id="central-de-midias" class="section">
-            <h3>Central de Mídias</h3>
-            <div class="filter-menu">
-                <button class="filter-btn active" data-filter="all" aria-labelledby="all-media-filter">Todos</button>
-                <button class="filter-btn" data-filter="leitura" aria-labelledby="leitura-filter">Leitura</button>
-                <button class="filter-btn" data-filter="audio" aria-labelledby="audio-filter">Áudio</button>
-                <button class="filter-btn" data-filter="video" aria-labelledby="video-filter">Vídeo</button>
-            </div>
-            <div class="card-container" id="media-card-container">
-                <a href="https://ravellsl.github.io/rstech-artigos/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Artigos" data-category="leitura">
-                    <img src="https://i.ibb.co/jWwR0Nm/1728852237811.jpg" alt="Artigos" loading="lazy">
-                    <h4>Artigos</h4>
-                </a>
-                <a href="https://ravellsl.github.io/curiosidades-tech/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Curiosidades" data-category="audio">
-                    <img src="https://i.ibb.co/0mYZmBx/curiosidades.webp" alt="Curiosidades" loading="lazy">
-                    <h4>Curiosidades</h4>
-                </a>
-                 <a href="https://ravellsl.github.io/techtube/" target="_blank" rel="noopener noreferrer" class="card" aria-label="TechTube" data-category="video">
-                    <img src="https://i.ibb.co/kQFVGGV/palestras.webp" alt="TechTube" loading="lazy">
-                    <h4>TechTube</h4>
-                </a>
-                <a href="https://ravellsl.github.io/podcast/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Podcast" data-category="audio">
-                    <img src="https://i.ibb.co/LXTjdWQN/Chat-GPT-Image-30-de-abr-de-2025-12-04-44.png" alt="Podcast" loading="lazy">
-                    <h4>Podcast</h4>
-                </a>
-                <a href="https://ravellsl.github.io/rstech-biblioteca/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Biblioteca Digital" data-category="leitura">
-                    <img src="https://i.ibb.co/TTsZ8Q1/1728852577270.jpg" alt="Biblioteca Digital" loading="lazy">
-                    <h4>Biblioteca Digital</h4>
-                </a>
-                <div class="card boletim-container" data-category="leitura" aria-label="Abrir edições do Boletim Tech">
-                    <img src="https://i.ibb.co/YyJ6R9X/1730062044590.jpg" alt="Boletim Tech" loading="lazy">
-                    <h4>Boletim Tech</h4>
-                    <button class="toggle-boletim boletim-button" aria-expanded="false" aria-controls="boletim-modal">Ver Edições</button>
-                </div>
-                <a href="https://ravellsl.github.io/rstech-material/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Material Complementar" data-category="leitura">
-                    <img src="https://i.ibb.co/jWwR0Nm/1728852237811.jpg" alt="Material Complementar" loading="lazy">
-                    <h4>Material Complementar</h4>
-                </a>
-                <a href="https://ravellsl.github.io/palestra-IA-plataforma/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Palestras" data-category="leitura">
-                    <img src="https://i.ibb.co/kQFVGGV/palestras.webp" alt="Palestras" loading="lazy">
-                    <h4>Palestras</h4>
-                </a>
-                <a href="https://ravellsl.github.io/sites-complementares/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Sites Complementares" data-category="leitura">
-                    <img src="https://i.ibb.co/BK5WxxWX/DALL-E-2025-03-26-09-36-07-A-symbolic-digital-illustration-representing-access-to-complementary-webs.webp" alt="Sites Complementares" loading="lazy">
-                    <h4>Sites Complementares</h4>
-                </a>
-                <a href="https://ravellsl.github.io/video-aulas/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Vídeo Aulas" data-category="video">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQd0cyjXhkAvRV70Xotdb7OYSGFhTaTMo5gXg&s" alt="Vídeo Aulas" loading="lazy">
-                    <h4>Vídeo Aulas</h4>
-                </a>
-            </div>
-        </section>
+    <!-- CENTRAL DE MÍDIAS — RECRIADA SEM IMAGENS -->
+    <section id="central-de-midias" class="section">
+      <h3>Central de Mídias</h3>
 
-        <section id="ferramentas-digitais" class="section">
-            <h3>Ferramentas Digitais</h3>
-            <div class="card-container">
-                <a href="https://ravellsl.github.io/SynTHub-IA/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Hub de IA's">
-                    <img src="https://www.aunica.com/wp-content/uploads/2024/09/imagem-tecnologica-sobre-ia-banner.webp" alt="Hub de IA's" loading="lazy">
-                    <h4>Hub de IA's</h4>
-                </a>
-                <a href="https://ravellsl.github.io/rstechaluno-agentes-IA/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Agentes de IA">
-                    <img src="https://i.ibb.co/H45XwsG/Agentes-de-IA.webp" alt="Agentes de IA" loading="lazy">
-                    <h4>Agentes de IA</h4>
-                </a>
-                <a href="https://ravellsl.github.io/dicionario-tech/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Dicionário Tech">
-                    <img src="https://i.ibb.co/W2cszsn/DALL-E-2024-12-10-22-08-25-Um-dicion-rio-de-tecnologia-ultra-realista-com-capa-dura-met-lica-pratead.webp" alt="Dicionário Tech" loading="lazy">
-                    <h4>Dicionário Tech</h4>
-                </a>
-                <a href="https://ravellsl.github.io/ferramenta-busca-noticias/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Diário de Notícias">
-                    <img src="https://i.ibb.co/B284b6wd/19-de-mai-de-2025-20-44-25.png" alt="Diário de Notícias" loading="lazy">
-                    <h4>Diário de Notícias</h4>
-                </a>
-                <a href="https://ravellsl.github.io/bloco-de-notas/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Bloco de Notas">
-                    <img src="https://i.ibb.co/QD9V36s/Bloco-de-Notas.webp" alt="Bloco de Notas" loading="lazy">
-                    <h4>Bloco de Notas</h4>
-                </a>
-            </div>
-        </section>
-    </main>
+      <div class="filter-menu">
+        <button class="filter-btn active" data-filter="all" aria-label="Mostrar todos" aria-pressed="true">Todos</button>
+        <button class="filter-btn" data-filter="leitura" aria-label="Mostrar leitura" aria-pressed="false">Leitura</button>
+        <button class="filter-btn" data-filter="audio" aria-label="Mostrar áudio" aria-pressed="false">Áudio</button>
+        <button class="filter-btn" data-filter="video" aria-label="Mostrar vídeo" aria-pressed="false">Vídeo</button>
+      </div>
 
-    <footer class="footer" role="contentinfo">
-        &copy; <span id="current-year">2025</span> Ravel Tech
-    </footer>
-
-    <div class="modal" id="boletim-modal" aria-hidden="true">
-        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description">
-            <button class="close-modal" aria-label="Fechar Modal">&times;</button>
-            <h4 id="modal-title" style="margin-bottom:1rem;">Boletim Tech</h4>
-            <p id="modal-description" style="margin-bottom:1rem;">
-                Aqui estão listadas todas as edições do Boletim Tech.
-                Selecione a data desejada para acessar a edição correspondente:
-            </p>
-            <div class="boletim-list">
-                <div class="year-group">
-                    <h5 class="year-title">2025</h5>
-                     <div class="month-group">
-                        <h6 class="month-title">Agosto</h6>
-                        <div class="month-links">            
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-09-08-2025/" target="_blank" rel="noopener noreferrer">09/08/2025 (atual)</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-02-08-2025/" target="_blank" rel="noopener noreferrer">02/08/2025</a>
-                        </div>
-                    </div>
-                    <div class="month-group">
-                        <h6 class="month-title">Julho</h6>
-                        <div class="month-links">
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-26-07-2025/" target="_blank" rel="noopener noreferrer">26/07/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-19-07-2025/" target="_blank" rel="noopener noreferrer">19/07/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-12-07-2025/" target="_blank" rel="noopener noreferrer">12/07/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-05-07-2025/" target="_blank" rel="noopener noreferrer">05/07/2025</a>
-                        </div>
-                    </div>
-                    <div class="month-group">
-                        <h6 class="month-title">Junho</h6>
-                        <div class="month-links">
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-28-06-2025/" target="_blank" rel="noopener noreferrer">28/06/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-21-06-2025/" target="_blank" rel="noopener noreferrer">21/06/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-14-06-2025/" target="_blank" rel="noopener noreferrer">14/06/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-07-06-2025/" target="_blank" rel="noopener noreferrer">07/06/2025</a>
-                        </div>
-                    </div>
-                    <div class="month-group">
-                        <h6 class="month-title">Maio</h6>
-                        <div class="month-links">
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-31-05-2025/" target="_blank" rel="noopener noreferrer">31/05/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-24-05-2025/" target="_blank" rel="noopener noreferrer">24/05/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-17-05-2025/" target="_blank" rel="noopener noreferrer">17/05/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-10-05-2025/" target="_blank" rel="noopener noreferrer">10/05/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-03-05-2025/" target="_blank" rel="noopener noreferrer">03/05/2025</a>
-                        </div>
-                    </div>
-                    <div class="month-group">
-                        <h6 class="month-title">Abril</h6>
-                        <div class="month-links">
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-26-04-2025/" target="_blank" rel="noopener noreferrer">26/04/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-19-04-2025/" target="_blank" rel="noopener noreferrer">19/04/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-12-04-2025/" target="_blank" rel="noopener noreferrer">12/04/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-05-04-2025/" target="_blank" rel="noopener noreferrer">05/04/2025</a>
-                        </div>
-                    </div>
-                    <div class="month-group">
-                        <h6 class="month-title">Março</h6>
-                        <div class="month-links">
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-29-03-2025/" target="_blank" rel="noopener noreferrer">29/03/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-22-03-2025/" target="_blank" rel="noopener noreferrer">22/03/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-15-03-2025/" target="_blank" rel="noopener noreferrer">15/03/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-09-03-2025/" target="_blank" rel="noopener noreferrer">09/03/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-01-03-2025/" target="_blank" rel="noopener noreferrer">01/03/2025</a>
-                        </div>
-                    </div>
-                    <div class="month-group">
-                        <h6 class="month-title">Fevereiro</h6>
-                        <div class="month-links">
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-22-02-2025---/" target="_blank" rel="noopener noreferrer">22/02/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-15-02-2025---/" target="_blank" rel="noopener noreferrer">15/02/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-08-02-2025---/" target="_blank" rel="noopener noreferrer">08/02/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-01-02-2025--/" target="_blank" rel="noopener noreferrer">01/02/2025</a>
-                        </div>
-                    </div>
-                    <div class="month-group">
-                        <h6 class="month-title">Janeiro</h6>
-                        <div class="month-links">
-                             <a href="https://ravellsl.github.io/https-ravellsl.github.io-https-ravellsl.gitboletim-tecnologico-25-01-2025-/" target="_blank" rel="noopener noreferrer">25/01/2025</a>
-                            <a href="https://ravellsl.github.io/https-ravellsl.github.io-https-ravellsl.github.io-boletim-tecnologico-18-01-2025---/" target="_blank" rel="noopener noreferrer">18/01/2025</a>
-                            <a href="https://ravellsl.github.io/https-ravellsl.github.io-boletim-tecnologico-11-01-2025--/" target="_blank" rel="noopener noreferrer">11/01/2025</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-04-01-2025-/" target="_blank" rel="noopener noreferrer">04/01/2025</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="year-group">
-                    <h5 class="year-title">2024</h5>
-                    <div class="month-group">
-                        <h6 class="month-title">Dezembro</h6>
-                        <div class="month-links">
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-28-12-2024/" target="_blank" rel="noopener noreferrer">28/12/2024</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-21-12-2024/" target="_blank" rel="noopener noreferrer">21/12/2024</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-14-12-2024/" target="_blank" rel="noopener noreferrer">14/12/2024</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-07-12-2024/" target="_blank" rel="noopener noreferrer">07/12/2024</a>
-                        </div>
-                    </div>
-                    <div class="month-group">
-                        <h6 class="month-title">Novembro</h6>
-                        <div class="month-links">
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-30-11-2024/" target="_blank" rel="noopener noreferrer">30/11/2024</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-23-11-2024/" target="_blank" rel="noopener noreferrer">23/11/2024</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-16-11-2024/" target="_blank" rel="noopener noreferrer">16/11/2024</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-09-11-2024/" target="_blank" rel="noopener noreferrer">09/11/2024</a>
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-02-11-2024/" target="_blank" rel="noopener noreferrer">02/11/2024</a>
-                        </div>
-                    </div>
-                    <div class="month-group">
-                        <h6 class="month-title">Outubro</h6>
-                        <div class="month-links">
-                            <a href="https://ravellsl.github.io/boletim-tecnologico-26-10-2024/" target="_blank" rel="noopener noreferrer">26/10/2024</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <div class="card-container" id="media-card-container">
+        <a href="https://ravellsl.github.io/rstech-artigos/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Artigos" data-category="leitura">
+          <h4>Artigos</h4>
+        </a>
+        <a href="https://ravellsl.github.io/curiosidades-tech/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Curiosidades" data-category="audio">
+          <h4>Curiosidades</h4>
+        </a>
+        <a href="https://ravellsl.github.io/techtube/" target="_blank" rel="noopener noreferrer" class="card" aria-label="TechTube" data-category="video">
+          <h4>TechTube</h4>
+        </a>
+        <a href="https://ravellsl.github.io/podcast/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Podcast" data-category="audio">
+          <h4>Podcast</h4>
+        </a>
+        <a href="https://ravellsl.github.io/rstech-biblioteca/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Biblioteca Digital" data-category="leitura">
+          <h4>Biblioteca Digital</h4>
+        </a>
+        <div class="card boletim-container" data-category="leitura" aria-label="Abrir edições do Boletim Tech">
+          <h4>Boletim Tech</h4>
+          <button class="toggle-boletim boletim-button" aria-expanded="false" aria-controls="boletim-modal">Ver Edições</button>
         </div>
+        <a href="https://ravellsl.github.io/rstech-material/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Material Complementar" data-category="leitura">
+          <h4>Material Complementar</h4>
+        </a>
+        <a href="https://ravellsl.github.io/palestra-IA-plataforma/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Palestras" data-category="leitura">
+          <h4>Palestras</h4>
+        </a>
+        <a href="https://ravellsl.github.io/sites-complementares/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Sites Complementares" data-category="leitura">
+          <h4>Sites Complementares</h4>
+        </a>
+        <a href="https://ravellsl.github.io/video-aulas/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Vídeo Aulas" data-category="video">
+          <h4>Vídeo Aulas</h4>
+        </a>
+      </div>
+    </section>
+
+    <section id="ferramentas-digitais" class="section">
+      <h3>Ferramentas Digitais</h3>
+      <div class="card-container">
+        <a href="https://ravellsl.github.io/SynTHub-IA/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Hub de IA's">
+          <img src="https://www.aunica.com/wp-content/uploads/2024/09/imagem-tecnologica-sobre-ia-banner.webp" alt="Hub de IA's" loading="lazy">
+          <h4>Hub de IA's</h4>
+        </a>
+        <a href="https://ravellsl.github.io/rstechaluno-agentes-IA/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Agentes de IA">
+          <img src="https://i.ibb.co/H45XwsG/Agentes-de-IA.webp" alt="Agentes de IA" loading="lazy">
+          <h4>Agentes de IA</h4>
+        </a>
+        <a href="https://ravellsl.github.io/dicionario-tech/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Dicionário Tech">
+          <img src="https://i.ibb.co/W2cszsn/DALL-E-2024-12-10-22-08-25-Um-dicion-rio-de-tecnologia-ultra-realista-com-capa-dura-met-lica-pratead.webp" alt="Dicionário Tech" loading="lazy">
+          <h4>Dicionário Tech</h4>
+        </a>
+        <a href="https://ravellsl.github.io/ferramenta-busca-noticias/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Diário de Notícias">
+          <img src="https://i.ibb.co/B284b6wd/19-de-mai-de-2025-20-44-25.png" alt="Diário de Notícias" loading="lazy">
+          <h4>Diário de Notícias</h4>
+        </a>
+        <a href="https://ravellsl.github.io/bloco-de-notas/" target="_blank" rel="noopener noreferrer" class="card" aria-label="Bloco de Notas">
+          <img src="https://i.ibb.co/QD9V36s/Bloco-de-Notas.webp" alt="Bloco de Notas" loading="lazy">
+          <h4>Bloco de Notas</h4>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    &copy; <span id="current-year">2025</span> Ravell Tech
+  </footer>
+
+  <div class="modal" id="boletim-modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description">
+      <button class="close-modal" aria-label="Fechar Modal">&times;</button>
+      <h4 id="modal-title" style="margin-bottom:1rem;">Boletim Tech</h4>
+      <p id="modal-description" style="margin-bottom:1rem;">
+        Aqui estão listadas todas as edições do Boletim Tech.
+        Selecione a data desejada para acessar a edição correspondente:
+      </p>
+      <div class="boletim-list">
+        <div class="year-group">
+          <h5 class="year-title">2025</h5>
+          <div class="month-group">
+            <h6 class="month-title">Agosto</h6>
+            <div class="month-links">
+              <a href="https://ravellsl.github.io/boletim-tecnologico-09-08-2025/" target="_blank" rel="noopener noreferrer">09/08/2025 (atual)</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-02-08-2025/" target="_blank" rel="noopener noreferrer">02/08/2025</a>
+            </div>
+          </div>
+          <div class="month-group">
+            <h6 class="month-title">Julho</h6>
+            <div class="month-links">
+              <a href="https://ravellsl.github.io/boletim-tecnologico-26-07-2025/" target="_blank" rel="noopener noreferrer">26/07/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-19-07-2025/" target="_blank" rel="noopener noreferrer">19/07/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-12-07-2025/" target="_blank" rel="noopener noreferrer">12/07/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-05-07-2025/" target="_blank" rel="noopener noreferrer">05/07/2025</a>
+            </div>
+          </div>
+          <div class="month-group">
+            <h6 class="month-title">Junho</h6>
+            <div class="month-links">
+              <a href="https://ravellsl.github.io/boletim-tecnologico-28-06-2025/" target="_blank" rel="noopener noreferrer">28/06/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-21-06-2025/" target="_blank" rel="noopener noreferrer">21/06/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-14-06-2025/" target="_blank" rel="noopener noreferrer">14/06/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-07-06-2025/" target="_blank" rel="noopener noreferrer">07/06/2025</a>
+            </div>
+          </div>
+          <div class="month-group">
+            <h6 class="month-title">Maio</h6>
+            <div class="month-links">
+              <a href="https://ravellsl.github.io/boletim-tecnologico-31-05-2025/" target="_blank" rel="noopener noreferrer">31/05/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-24-05-2025/" target="_blank" rel="noopener noreferrer">24/05/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-17-05-2025/" target="_blank" rel="noopener noreferrer">17/05/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-10-05-2025/" target="_blank" rel="noopener noreferrer">10/05/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-03-05-2025/" target="_blank" rel="noopener noreferrer">03/05/2025</a>
+            </div>
+          </div>
+          <div class="month-group">
+            <h6 class="month-title">Abril</h6>
+            <div class="month-links">
+              <a href="https://ravellsl.github.io/boletim-tecnologico-26-04-2025/" target="_blank" rel="noopener noreferrer">26/04/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-19-04-2025/" target="_blank" rel="noopener noreferrer">19/04/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-12-04-2025/" target="_blank" rel="noopener noreferrer">12/04/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-05-04-2025/" target="_blank" rel="noopener noreferrer">05/04/2025</a>
+            </div>
+          </div>
+          <div class="month-group">
+            <h6 class="month-title">Março</h6>
+            <div class="month-links">
+              <a href="https://ravellsl.github.io/boletim-tecnologico-29-03-2025/" target="_blank" rel="noopener noreferrer">29/03/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-22-03-2025/" target="_blank" rel="noopener noreferrer">22/03/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-15-03-2025/" target="_blank" rel="noopener noreferrer">15/03/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-09-03-2025/" target="_blank" rel="noopener noreferrer">09/03/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-01-03-2025/" target="_blank" rel="noopener noreferrer">01/03/2025</a>
+            </div>
+          </div>
+          <div class="month-group">
+            <h6 class="month-title">Fevereiro</h6>
+            <div class="month-links">
+              <a href="https://ravellsl.github.io/boletim-tecnologico-22-02-2025---/" target="_blank" rel="noopener noreferrer">22/02/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-15-02-2025---/" target="_blank" rel="noopener noreferrer">15/02/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-08-02-2025---/" target="_blank" rel="noopener noreferrer">08/02/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-01-02-2025--/" target="_blank" rel="noopener noreferrer">01/02/2025</a>
+            </div>
+          </div>
+          <div class="month-group">
+            <h6 class="month-title">Janeiro</h6>
+            <div class="month-links">
+              <a href="https://ravellsl.github.io/https-ravellsl.github.io-https-ravellsl.gitboletim-tecnologico-25-01-2025-/" target="_blank" rel="noopener noreferrer">25/01/2025</a>
+              <a href="https://ravellsl.github.io/https-ravellsl.github.io-https-ravellsl.github.io-boletim-tecnologico-18-01-2025---/" target="_blank" rel="noopener noreferrer">18/01/2025</a>
+              <a href="https://ravellsl.github.io/https-ravellsl.github.io-boletim-tecnologico-11-01-2025--/" target="_blank" rel="noopener noreferrer">11/01/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-04-01-2025-/" target="_blank" rel="noopener noreferrer">04/01/2025</a>
+            </div>
+          </div>
+        </div>
+        <div class="year-group">
+          <h5 class="year-title">2024</h5>
+          <div class="month-group">
+            <h6 class="month-title">Dezembro</h6>
+            <div class="month-links">
+              <a href="https://ravellsl.github.io/boletim-tecnologico-28-12-2024/" target="_blank" rel="noopener noreferrer">28/12/2024</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-21-12-2024/" target="_blank" rel="noopener noreferrer">21/12/2024</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-14-12-2024/" target="_blank" rel="noopener noreferrer">14/12/2024</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-07-12-2024/" target="_blank" rel="noopener noreferrer">07/12/2024</a>
+            </div>
+          </div>
+          <div class="month-group">
+            <h6 class="month-title">Novembro</h6>
+            <div class="month-links">
+              <a href="https://ravellsl.github.io/boletim-tecnologico-30-11-2024/" target="_blank" rel="noopener noreferrer">30/11/2024</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-23-11-2024/" target="_blank" rel="noopener noreferrer">23/11/2024</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-16-11-2024/" target="_blank" rel="noopener noreferrer">16/11/2024</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-09-11-2024/" target="_blank" rel="noopener noreferrer">09/11/2024</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-02-11-2024/" target="_blank" rel="noopener noreferrer">02/11/2024</a>
+            </div>
+          </div>
+          <div class="month-group">
+            <h6 class="month-title">Outubro</h6>
+            <div class="month-links">
+              <a href="https://ravellsl.github.io/boletim-tecnologico-26-10-2024/" target="_blank" rel="noopener noreferrer">26/10/2024</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const sidebar = document.getElementById('sidebar');
-            const menuButton = document.getElementById('menu-button');
-            const sidebarLinks = document.querySelectorAll('.nav-link');
-            const sections = document.querySelectorAll('.section');
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('sidebar');
+      const menuButton = document.getElementById('menu-button');
+      const sidebarLinks = document.querySelectorAll('.nav-link');
+      const sections = document.querySelectorAll('.section');
 
-            // --- LÓGICA DO MENU MOBILE --- 
-            if (menuButton) {
-                menuButton.addEventListener('click', () => {
-                    const isActive = sidebar.classList.toggle('active');
-                    menuButton.setAttribute('aria-expanded', isActive);
-                });
-            }
-
-            // --- LÓGICA DE NAVEGAÇÃO ENTRE SEÇÕES --- 
-            sidebarLinks.forEach(link => {
-                link.addEventListener('click', event => {
-                    event.preventDefault();
-
-                    // Remove a classe 'active' de todos os links e adiciona ao clicado
-                    sidebarLinks.forEach(navLink => navLink.classList.remove('active'));
-                    link.classList.add('active');
-
-                    // Mostra a seção correspondente
-                    const targetId = link.getAttribute('data-target');
-                    sections.forEach(sec => sec.classList.remove('active'));
-                    document.getElementById(targetId).classList.add('active');
-
-                    // Fecha a sidebar em telas mobile após clicar em um link
-                    if (window.innerWidth <= 1024) {
-                        sidebar.classList.remove('active');
-                        menuButton.setAttribute('aria-expanded', 'false');
-                    }
-                });
-            });
-
-            // --- LÓGICA DO MODAL BOLETIM TECH (DO CÓDIGO 2) ---
-            const boletimModal = document.getElementById('boletim-modal');
-            const boletimTriggers = document.querySelectorAll('.toggle-boletim, .boletim-container');
-            const closeModalButton = boletimModal.querySelector('.close-modal');
-
-            const openModal = () => {
-                boletimModal.classList.add('active');
-                boletimModal.setAttribute('aria-hidden', 'false');
-                const buttonInCard = document.querySelector('.boletim-container .toggle-boletim');
-                if (buttonInCard) buttonInCard.setAttribute('aria-expanded', 'true');
-            };
-
-            const closeModal = () => {
-                boletimModal.classList.remove('active');
-                boletimModal.setAttribute('aria-hidden', 'true');
-                const buttonInCard = document.querySelector('.boletim-container .toggle-boletim');
-                if (buttonInCard) buttonInCard.setAttribute('aria-expanded', 'false');
-            };
-
-            boletimTriggers.forEach(trigger => {
-                trigger.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    openModal();
-                });
-            });
-
-            if (closeModalButton) {
-                closeModalButton.addEventListener('click', closeModal);
-                // Fecha o modal ao clicar fora dele
-                boletimModal.addEventListener('click', event => {
-                    if (event.target === boletimModal) {
-                        closeModal();
-                    }
-                });
-                // Fecha o modal ao pressionar a tecla 'Escape'
-                window.addEventListener('keydown', event => {
-                    if (event.key === 'Escape' && boletimModal.classList.contains('active')) {
-                        closeModal();
-                    }
-                });
-            }
-
-            // --- LÓGICA DO ACCORDION DO BOLETIM (DO CÓDIGO 2) ---
-            const monthGroups = document.querySelectorAll('.month-group');
-            monthGroups.forEach(group => {
-                const title = group.querySelector('.month-title');
-                if(title){
-                    title.addEventListener('click', () => {
-                        const wasActive = group.classList.contains('active');
-                        // Opcional: Fechar outros accordions ao abrir um
-                        // monthGroups.forEach(g => {
-                        //     if (g !== group) {
-                        //         g.classList.remove('active');
-                        //     }
-                        // });
-                        group.classList.toggle('active', !wasActive);
-                    });
-                }
-            });
-
-            // --- LÓGICA DO FILTRO DA CENTRAL DE MÍDIAS --- 
-            const filterButtons = document.querySelectorAll('#central-de-midias .filter-btn');
-            const mediaCards = document.querySelectorAll('#media-card-container > .card, #media-card-container > .boletim-container');
-
-            filterButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    // Atualiza o botão ativo
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-
-                    const filter = button.getAttribute('data-filter');
-
-                    mediaCards.forEach(card => {
-                        const cardCategory = card.getAttribute('data-category');
-                        const isVisible = filter === 'all' || cardCategory === filter;
-
-                        // Usa a classe card-hidden para esconder
-                        card.classList.toggle('card-hidden', !isVisible);
-                        // Adiciona estilo para garantir que o display mude
-                        card.style.display = isVisible ? 'flex' : 'none'; // 'flex' para manter o layout do card
-                    });
-                });
-            });
-
-            // --- ATUALIZAÇÃO DINÂMICA DO ANO NO RODAPÉ --- 
-            const yearSpan = document.getElementById('current-year');
-            if (yearSpan) {
-                yearSpan.textContent = new Date().getFullYear();
-            }
+      // MENU MOBILE
+      if(menuButton){
+        menuButton.addEventListener('click', () => {
+          const isActive = sidebar.classList.toggle('active');
+          menuButton.setAttribute('aria-expanded', isActive);
         });
-    </script>
+      }
+
+      // NAVEGAÇÃO ENTRE SEÇÕES
+      sidebarLinks.forEach(link => {
+        link.addEventListener('click', event => {
+          event.preventDefault();
+          sidebarLinks.forEach(navLink => navLink.classList.remove('active'));
+          link.classList.add('active');
+          const targetId = link.getAttribute('data-target');
+          sections.forEach(sec => sec.classList.remove('active'));
+          const target = document.getElementById(targetId);
+          if(target) target.classList.add('active');
+          if(window.innerWidth <= 1024){
+            sidebar.classList.remove('active');
+            menuButton.setAttribute('aria-expanded','false');
+          }
+        });
+      });
+
+      // MODAL BOLETIM TECH
+      const boletimModal = document.getElementById('boletim-modal');
+      const boletimTriggers = document.querySelectorAll('.toggle-boletim, .boletim-container');
+      const closeModalButton = boletimModal.querySelector('.close-modal');
+
+      const openModal = () => {
+        boletimModal.classList.add('active');
+        boletimModal.setAttribute('aria-hidden','false');
+        const buttonInCard = document.querySelector('.boletim-container .toggle-boletim');
+        if(buttonInCard) buttonInCard.setAttribute('aria-expanded','true');
+      };
+      const closeModal = () => {
+        boletimModal.classList.remove('active');
+        boletimModal.setAttribute('aria-hidden','true');
+        const buttonInCard = document.querySelector('.boletim-container .toggle-boletim');
+        if(buttonInCard) buttonInCard.setAttribute('aria-expanded','false');
+      };
+
+      boletimTriggers.forEach(trigger=>{
+        trigger.addEventListener('click',(e)=>{
+          e.preventDefault(); e.stopPropagation(); openModal();
+        });
+      });
+      if(closeModalButton){
+        closeModalButton.addEventListener('click', closeModal);
+        boletimModal.addEventListener('click', event => { if(event.target===boletimModal){ closeModal(); }});
+        window.addEventListener('keydown', event => { if(event.key==='Escape' && boletimModal.classList.contains('active')){ closeModal(); }});
+      }
+
+      // ACCORDION DO BOLETIM
+      const monthGroups = document.querySelectorAll('.month-group');
+      monthGroups.forEach(group=>{
+        const title = group.querySelector('.month-title');
+        if(title){
+          title.addEventListener('click', ()=>{
+            const wasActive = group.classList.contains('active');
+            group.classList.toggle('active', !wasActive);
+          });
+        }
+      });
+
+      // FILTRO DA CENTRAL DE MÍDIAS (+ aria-pressed)
+      const filterButtons = document.querySelectorAll('#central-de-midias .filter-btn');
+      const mediaCards = document.querySelectorAll('#media-card-container > .card, #media-card-container > .boletim-container');
+      filterButtons.forEach(button=>{
+        button.addEventListener('click', ()=>{
+          filterButtons.forEach(btn=>{ btn.classList.remove('active'); btn.setAttribute('aria-pressed','false'); });
+          button.classList.add('active'); button.setAttribute('aria-pressed','true');
+          const filter = button.getAttribute('data-filter');
+          mediaCards.forEach(card=>{
+            const cardCategory = card.getAttribute('data-category');
+            const isVisible = filter==='all' || cardCategory===filter;
+            card.classList.toggle('card-hidden', !isVisible);
+            card.style.display = isVisible ? 'flex' : 'none';
+          });
+        });
+      });
+
+      // ANO NO RODAPÉ
+      const yearSpan = document.getElementById('current-year');
+      if(yearSpan){ yearSpan.textContent = new Date().getFullYear(); }
+
+      // === TOOLTIP: define resumos sem alterar o conteúdo publicado nos cards ===
+      const tooltipMap = {
+        "Material de Aula":"Acesso às aulas e materiais didáticos das temáticas abordadas em aula.",
+        "Apostilas":"Coleção de apostilas digitais para estudo e revisão.",
+        "Caderno de Exercícios":"Listas de exercícios e atividades práticas.",
+        "Caderno Digital":"Caderno online para assuntos complementares rápidos (resumo).",
+        "Artigos":"Artigos selecionados sobre tecnologia e inovação.",
+        "Curiosidades":"Conteúdo rápido em áudio e texto com fatos e curiosidades tech.",
+        "TechTube":"Vídeos com temáticas e tutoriais de tecnologia.",
+        "Podcast":"Episódios de podcast com debates aprofundados.",
+        "Biblioteca Digital":"Acervo de livros, e‑books e materiais de referência.",
+        "Boletim Tech":"Boletins semanais com as principais notícias de tecnologia da semana.",
+        "Material Complementar":"Materiais extras que aprofundam o estudo.",
+        "Palestras":"Páginas e recursos de palestras e apresentações.",
+        "Sites Complementares":"Sites com temáticas complementares que aprofundam o estudo.",
+        "Vídeo Aulas":"Aulas em vídeo organizadas por tema.",
+        "Hub de IA's":"Coleção de ferramentas e plataformas de IA para aulas práticas.",
+        "Agentes de IA":"Agentes autônomos de IA para tarefas específicas.",
+        "Dicionário Tech":"Glossário de termos e conceitos de tecnologia.",
+        "Diário de Notícias":"Ferramenta para buscar e filtrar notícias diárias.",
+        "Bloco de Notas":"Aplicativo para anotações rápidas."
+      };
+
+      // Aplica data-tooltip em todos os .card (todas as seções)
+      document.querySelectorAll('.card').forEach(card=>{
+        // usa aria-label como chave; se não houver, usa o texto do h4
+        const h4 = card.querySelector('h4');
+        const key = (card.getAttribute('aria-label') || (h4 ? h4.textContent.trim() : "")).trim();
+        const summary = tooltipMap[key];
+        if(summary){ card.setAttribute('data-tooltip', summary); }
+        // acessibilidade: título nativo como fallback
+        if(!card.hasAttribute('title')){
+          card.setAttribute('title', summary || key);
+        }
+      });
+    });
+  </script>
 </body>
 </html>
