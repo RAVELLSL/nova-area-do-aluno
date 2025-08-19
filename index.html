@@ -1,8 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Área do Aluno</title>
   <meta name="description" content="Plataforma de acesso para alunos com materiais de estudo, ferramentas digitais e suplementos tecnológicos.">
   <meta name="keywords" content="Área do Aluno, Materiais de Estudo, Ferramentas Digitais, Suplemento Tech, IA, Caderno Digital, Biblioteca Digital, Central de Mídias">
@@ -34,7 +34,6 @@
     .sidebar h2{font-size:1.05rem;text-align:center;margin-bottom:.75rem}
     .sidebar a{display:block;padding:.6rem .75rem;border-radius:.5rem;margin:.25rem 0}
     .sidebar a:hover,.sidebar a.active{background:var(--secondary-color);color:#fff;text-decoration:none}
-
     .main-content{flex:1;padding:calc(var(--header) + 1rem) 1rem 2rem;margin-left:var(--sidebar);max-width:var(--maxw)}
     @media (max-width:1024px){#menu-button{display:block}.sidebar{left:-250px}.sidebar.active{left:0}.main-content{margin-left:0}}
 
@@ -67,7 +66,11 @@
     .tile-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.25rem;width:100%;max-width:1000px;margin:1.25rem auto 0}
     .tile{perspective:1000px}
     .tile-inner{position:relative;height:180px;transform-style:preserve-3d;transition:transform .5s}
+    /* Hover/Focus (desktop) */
     .tile--flip:hover .tile-inner,.tile--flip:focus-within .tile-inner{transform:rotateY(180deg)}
+    /* Estado programático para mobile */
+    .tile.flipped .tile-inner{transform:rotateY(180deg)}
+
     .tile-front,.tile-back{
       position:absolute;inset:0;border-radius:var(--radius);box-shadow:0 .3rem .7rem rgba(0,0,0,.1);
       backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;
@@ -75,12 +78,22 @@
     }
     .tile-front{background:linear-gradient(135deg,rgba(52,152,219,.08),rgba(231,76,60,.08))}
     .tile-back{transform:rotateY(180deg);gap:.5rem;background:#fff}
+
     .tile-kicker{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--secondary-color);font-weight:700}
     .tile-title{font-size:1.05rem;color:var(--primary-color);margin:.25rem 0}
     .tile-desc{font-size:.92rem;color:#4a4f55}
+
     .qa{border:1px solid var(--primary-color);background:#fff;color:var(--primary-color);padding:.5rem .75rem;border-radius:.5rem;cursor:pointer;min-width:110px;transition:.2s}
     .qa:hover,.qa:focus{background:var(--secondary-color);color:#fff;border-color:var(--secondary-color)}
-    @media (max-width:480px){.tile-inner{height:200px}}
+
+    @media (max-width:480px){
+      .tile-inner{height:200px;cursor:pointer}
+      /* Desabilita flip por hover em telas pequenas; somente via classe JS */
+      .tile--flip:hover .tile-inner,.tile--flip:focus-within .tile-inner{transform:none}
+      /* Tipografia ligeiramente maior nos cards menores */
+      .tile-title{font-size:1.12rem}
+      .tile-desc{font-size:1rem}
+    }
 
     /* Filtro Central de Mídias */
     .filter-menu{display:flex;justify-content:center;gap:.5rem;flex-wrap:wrap;margin:.25rem 0 .75rem}
@@ -318,7 +331,7 @@
           <div class="month-group">
             <h6 class="month-title">Agosto</h6>
             <div class="month-links">
-              <a href="https://ravellsl.github.io/boletim-tecnologico-16-08-2025/" target="_blank" rel="noopener noreferrer">16/08/2025 (atual)</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-16-08-2025/" target="_blank" rel="noopener noreferrer">16/08/2025</a>
               <a href="https://ravellsl.github.io/boletim-tecnologico-09-08-2025/" target="_blank" rel="noopener noreferrer">09/08/2025</a>
               <a href="https://ravellsl.github.io/boletim-tecnologico-02-08-2025/" target="_blank" rel="noopener noreferrer">02/08/2025</a>
             </div>
@@ -430,7 +443,6 @@
 
         </div>
       </div>
-
     </div>
   </div>
 
@@ -447,186 +459,219 @@
   </aside>
 
   <script>
-  document.addEventListener('DOMContentLoaded',()=>{
+    document.addEventListener('DOMContentLoaded',()=>{
+      /* ---- Menu e navegação ---- */
+      const sidebar=document.getElementById('sidebar');
+      const menuButton=document.getElementById('menu-button');
+      const links=[...document.querySelectorAll('.nav-link')];
+      const sections=[...document.querySelectorAll('.section')];
 
-    /* ---- Menu e navegação ---- */
-    const sidebar=document.getElementById('sidebar');
-    const menuButton=document.getElementById('menu-button');
-    const links=[...document.querySelectorAll('.nav-link')];
-    const sections=[...document.querySelectorAll('.section')];
+      menuButton?.addEventListener('click',()=>{
+        const act=sidebar.classList.toggle('active');
+        menuButton.setAttribute('aria-expanded',act);
+      });
 
-    menuButton?.addEventListener('click',()=>{
-      const act=sidebar.classList.toggle('active');
-      menuButton.setAttribute('aria-expanded',act);
-    });
+      links.forEach(l=>l.addEventListener('click',e=>{
+        e.preventDefault();
+        links.forEach(n=>n.classList.remove('active'));
+        l.classList.add('active');
+        const id=l.getAttribute('data-target');
+        sections.forEach(s=>s.classList.remove('active'));
+        document.getElementById(id)?.classList.add('active');
+        if(innerWidth<=1024){sidebar.classList.remove('active');menuButton.setAttribute('aria-expanded','false')}
+      }));
 
-    links.forEach(l=>l.addEventListener('click',e=>{
-      e.preventDefault();
-      links.forEach(n=>n.classList.remove('active'));
-      l.classList.add('active');
-      const id=l.getAttribute('data-target');
-      sections.forEach(s=>s.classList.remove('active'));
-      document.getElementById(id)?.classList.add('active');
-      if(innerWidth<=1024){sidebar.classList.remove('active');menuButton.setAttribute('aria-expanded','false')}
-    }));
+      document.getElementById('current-year').textContent=new Date().getFullYear();
 
-    document.getElementById('current-year').textContent=new Date().getFullYear();
+      /* ---- Modal Boletim + Accordion ---- */
+      const boletimModal=document.getElementById('boletim-modal');
+      const closeBoletim=()=>{boletimModal.classList.remove('active');boletimModal.setAttribute('aria-hidden','true')};
+      const openBoletim=()=>{boletimModal.classList.add('active');boletimModal.setAttribute('aria-hidden','false')};
+      boletimModal.querySelector('.close-modal')?.addEventListener('click',closeBoletim);
+      boletimModal.addEventListener('click',ev=>{if(ev.target===boletimModal) closeBoletim()});
+      window.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&boletimModal.classList.contains('active')) closeBoletim()});
+      document.querySelectorAll('.month-group .month-title').forEach(t=>t.addEventListener('click',()=>t.parentElement.classList.toggle('active')));
 
-    /* ---- Modal Boletim + Accordion ---- */
-    const boletimModal=document.getElementById('boletim-modal');
-    const closeBoletim=()=>{boletimModal.classList.remove('active');boletimModal.setAttribute('aria-hidden','true')};
-    const openBoletim=()=>{boletimModal.classList.add('active');boletimModal.setAttribute('aria-hidden','false')};
+      /* ---- Filtro Central de Mídias ---- */
+      const fBtns=[...document.querySelectorAll('#central-de-midias .filter-btn')];
+      const mediaTiles=[...document.querySelectorAll('#media-grid .tile')];
+      fBtns.forEach(b=>b.addEventListener('click',()=>{
+        fBtns.forEach(x=>{x.classList.remove('active');x.setAttribute('aria-pressed','false')});
+        b.classList.add('active');b.setAttribute('aria-pressed','true');
+        const f=b.dataset.filter;
+        mediaTiles.forEach(t=>{
+          const c=t.dataset.category;
+          t.style.display=(f==='all'||c===f)?'block':'none';
+        })
+      }));
 
-    boletimModal.querySelector('.close-modal')?.addEventListener('click',closeBoletim);
-    boletimModal.addEventListener('click',ev=>{if(ev.target===boletimModal) closeBoletim()});
-    window.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&boletimModal.classList.contains('active')) closeBoletim()});
-    document.querySelectorAll('.month-group .month-title').forEach(t=>t.addEventListener('click',()=>t.parentElement.classList.toggle('active')));
+      /* ---- Painel de Prévia ---- */
+      const pv=document.getElementById('preview-panel'),
+            pvTitle=document.getElementById('pv-title'),
+            pvIframe=document.getElementById('pv-iframe'),
+            pvOpen=document.getElementById('pv-open');
 
-    /* ---- Filtro Central de Mídias ---- */
-    const fBtns=[...document.querySelectorAll('#central-de-midias .filter-btn')];
-    const mediaTiles=[...document.querySelectorAll('#media-grid .tile')];
-    fBtns.forEach(b=>b.addEventListener('click',()=>{
-      fBtns.forEach(x=>{x.classList.remove('active');x.setAttribute('aria-pressed','false')});
-      b.classList.add('active');b.setAttribute('aria-pressed','true');
-      const f=b.dataset.filter;
-      mediaTiles.forEach(t=>{
-        const c=t.dataset.category;
-        t.style.display=(f==='all'||c===f)?'block':'none';
-      })
-    }));
+      const openPanel=(title,url)=>{
+        pvTitle.textContent=title;
+        pvIframe.src=url;
+        pvOpen.onclick=()=>window.open(url,'_blank','noopener');
+        pv.style.transform='translateX(0)';
+        pv.setAttribute('aria-hidden','false');
+      };
+      const closePanel=()=>{
+        pv.style.transform='translateX(100%)';
+        pv.setAttribute('aria-hidden','true');
+        setTimeout(()=>pvIframe.src='about:blank',250);
+      };
+      document.getElementById('pv-close').addEventListener('click',closePanel);
+      window.addEventListener('keydown',e=>{if(e.key==='Escape'&&pv.getAttribute('aria-hidden')==='false') closePanel()});
 
-    /* ---- Painel de Prévia ---- */
-    const pv=document.getElementById('preview-panel'),
-          pvTitle=document.getElementById('pv-title'),
-          pvIframe=document.getElementById('pv-iframe'),
-          pvOpen=document.getElementById('pv-open');
+      /* ==============================================================
+         FIXAR / DESFIXAR APRIMORADO
+         – Fixar: envia o card para a Área de Destaques da MESMA seção.
+         – Desfixar: devolve o card à posição original.
+         – Persistência por localStorage (por grid + id).
+         ============================================================== */
+      const STORE_KEY='rt_alunos_pins_v2';
 
-    const openPanel=(title,url)=>{
-      pvTitle.textContent=title;
-      pvIframe.src=url;
-      pvOpen.onclick=()=>window.open(url,'_blank','noopener');
-      pv.style.transform='translateX(0)';
-      pv.setAttribute('aria-hidden','false');
-    };
-    const closePanel=()=>{
-      pv.style.transform='translateX(100%)';
-      pv.setAttribute('aria-hidden','true');
-      setTimeout(()=>pvIframe.src='about:blank',250);
-    };
-    document.getElementById('pv-close').addEventListener('click',closePanel);
-    window.addEventListener('keydown',e=>{if(e.key==='Escape'&&pv.getAttribute('aria-hidden')==='false') closePanel()});
+      function indexTiles(){
+        document.querySelectorAll('.tile-grid').forEach(grid=>{
+          const gridId = grid.id;
+          [...grid.children].forEach((tile, idx)=>{
+            if(!tile.dataset.tileId){
+              tile.dataset.tileId = gridId + '__' + (tile.dataset.name || 'tile') + '__' + idx;
+            }
+            tile.dataset.originGrid = gridId;
+            tile.dataset.originIndex = idx;
+          });
+        });
+      }
+      indexTiles();
 
-    /* ==============================================================
-       FIXAR / DESFIXAR APRIMORADO
-       – Fixar: envia o card para a Área de Destaques da MESMA seção.
-       – Desfixar: devolve o card à posição original.
-       – Persistência por localStorage (por grid + id).
-       ============================================================== */
+      const savePins = (data)=>localStorage.setItem(STORE_KEY, JSON.stringify(data));
+      const loadPins = ()=>{
+        try{ return JSON.parse(localStorage.getItem(STORE_KEY)||'{}'); }
+        catch{ return {}; }
+      };
 
-    const STORE_KEY='rt_alunos_pins_v2';
+      function getPinContainerFor(gridId){
+        return document.querySelector(`.pin-grid[data-for="${gridId}"]`);
+      }
+      function getGridById(gridId){
+        return document.getElementById(gridId);
+      }
+      function insertAtIndex(parent, el, index){
+        const children = [...parent.children];
+        if(index<=0) parent.insertBefore(el, children[0]||null);
+        else if(index>=children.length) parent.appendChild(el);
+        else parent.insertBefore(el, children[index]);
+      }
 
-    function indexTiles(){
-      document.querySelectorAll('.tile-grid').forEach(grid=>{
-        const gridId = grid.id;
-        [...grid.children].forEach((tile, idx)=>{
-          if(!tile.dataset.tileId){
-            tile.dataset.tileId = gridId + '__' + (tile.dataset.name || 'tile') + '__' + idx;
+      function applySavedPins(){
+        const pins = loadPins();
+        Object.entries(pins).forEach(([gridId, tileIds])=>{
+          const pinArea = getPinContainerFor(gridId);
+          if(!pinArea) return;
+          tileIds.forEach(id=>{
+            const tile = document.querySelector(`.tile[data-tile-id="${id}"]`);
+            if(tile){
+              pinArea.parentElement.style.display='block';
+              pinArea.appendChild(tile);
+              setBtnState(tile,true);
+            }
+          });
+        });
+      }
+
+      function setBtnState(tile, pinned){
+        const btn = tile.querySelector('.qa.pin');
+        if(btn) btn.textContent = pinned ? 'Desfixar' : 'Fixar';
+      }
+
+      function togglePin(tile){
+        const id = tile.dataset.tileId;
+        const originGrid = tile.dataset.originGrid;
+        const originIndex = parseInt(tile.dataset.originIndex,10);
+        const pins = loadPins();
+        pins[originGrid] = pins[originGrid] || [];
+        const isPinned = pins[originGrid].includes(id);
+
+        if(isPinned){
+          const grid = getGridById(originGrid);
+          insertAtIndex(grid, tile, originIndex);
+          pins[originGrid] = pins[originGrid].filter(x=>x!==id);
+          setBtnState(tile,false);
+        }else{
+          const pinArea = getPinContainerFor(originGrid);
+          if(pinArea){
+            pinArea.parentElement.style.display='block';
+            pinArea.insertBefore(tile, pinArea.firstChild);
+            if(!pins[originGrid].includes(id)) pins[originGrid].push(id);
+            setBtnState(tile,true);
           }
-          tile.dataset.originGrid = gridId;
-          tile.dataset.originIndex = idx;
-        });
-      });
-    }
-    indexTiles();
+        }
 
-    const savePins = (data)=>localStorage.setItem(STORE_KEY, JSON.stringify(data));
-    const loadPins = ()=>{ try{ return JSON.parse(localStorage.getItem(STORE_KEY)||'{}'); }catch{return{}} };
-
-    function getPinContainerFor(gridId){
-      return document.querySelector(`.pin-grid[data-for="${gridId}"]`);
-    }
-    function getGridById(gridId){ return document.getElementById(gridId); }
-
-    function insertAtIndex(parent, el, index){
-      const children = [...parent.children];
-      if(index<=0) parent.insertBefore(el, children[0]||null);
-      else if(index>=children.length) parent.appendChild(el);
-      else parent.insertBefore(el, children[index]);
-    }
-
-    function applySavedPins(){
-      const pins = loadPins();
-      Object.entries(pins).forEach(([gridId, tileIds])=>{
-        const pinArea = getPinContainerFor(gridId);
-        if(!pinArea) return;
-        tileIds.forEach(id=>{
-          const tile = document.querySelector(`.tile[data-tile-id="${id}"]`);
-          if(tile){ pinArea.parentElement.style.display='block'; pinArea.appendChild(tile); setBtnState(tile,true); }
-        });
-      });
-    }
-
-    function setBtnState(tile, pinned){
-      const btn = tile.querySelector('.qa.pin');
-      if(btn) btn.textContent = pinned ? 'Desfixar' : 'Fixar';
-    }
-
-    function togglePin(tile){
-      const id = tile.dataset.tileId;
-      const originGrid = tile.dataset.originGrid;
-      const originIndex = parseInt(tile.dataset.originIndex,10);
-      const pins = loadPins();
-
-      pins[originGrid] = pins[originGrid] || [];
-      const isPinned = pins[originGrid].includes(id);
-
-      if(isPinned){
-        const grid = getGridById(originGrid);
-        insertAtIndex(grid, tile, originIndex);
-        pins[originGrid] = pins[originGrid].filter(x=>x!==id);
-        setBtnState(tile,false);
-      }else{
         const pinArea = getPinContainerFor(originGrid);
-        if(pinArea){
-          pinArea.parentElement.style.display='block';
-          pinArea.insertBefore(tile, pinArea.firstChild);
-          if(!pins[originGrid].includes(id)) pins[originGrid].push(id);
-          setBtnState(tile,true);
+        if(pinArea && pinArea.children.length===0){
+          pinArea.parentElement.style.display='none';
         }
+        savePins(pins);
       }
 
-      const pinArea = getPinContainerFor(originGrid);
-      if(pinArea && pinArea.children.length===0){
-        pinArea.parentElement.style.display='none';
-      }
-      savePins(pins);
-    }
+      document.querySelectorAll('.tile-grid, .pin-grid').forEach(container=>{
+        container.addEventListener('click',e=>{
+          const btn=e.target.closest('.qa');
+          if(!btn) return;
+          const tile=e.target.closest('.tile');
+          const url=tile?.dataset.url;
+          const name=tile?.dataset.name||'Recurso';
+          const isBoletim=tile?.dataset.action==='boletim';
 
-    document.querySelectorAll('.tile-grid, .pin-grid').forEach(container=>{
-      container.addEventListener('click',e=>{
-        const btn=e.target.closest('.qa'); if(!btn) return;
-        const tile=e.target.closest('.tile');
-        const url=tile?.dataset.url;
-        const name=tile?.dataset.name||'Recurso';
-        const isBoletim=tile?.dataset.action==='boletim';
-
-        if(btn.classList.contains('open')){
-          if(isBoletim){openBoletim()} else {window.open(url,'_blank','noopener')}
-          return;
-        }
-        if(btn.classList.contains('preview')){
-          if(isBoletim){openBoletim()} else {openPanel(name,url)}
-          return;
-        }
-        if(btn.classList.contains('pin')){
-          togglePin(tile);
-          return;
-        }
+          if(btn.classList.contains('open')){
+            if(isBoletim){openBoletim()} else {window.open(url,'_blank','noopener')}
+            return;
+          }
+          if(btn.classList.contains('preview')){
+            if(isBoletim){openBoletim()} else {openPanel(name,url)}
+            return;
+          }
+          if(btn.classList.contains('pin')){
+            togglePin(tile);
+            return;
+          }
+        });
       });
-    });
 
-    applySavedPins();
-  });
+      applySavedPins();
+
+      /* ==============================================================
+         FLIP TOUCH-FRIENDLY (SMARTPHONE)
+         Requisito: em telas menores, tocar no card alterna entre frente e verso.
+         Um novo toque retorna ao estado inicial. Interações nos botões
+         não disparam o flip.
+         ============================================================== */
+      const MOBILE_BREAKPOINT = 600; // px
+
+      function isMobileView(){ return window.innerWidth <= MOBILE_BREAKPOINT; }
+
+      function attachMobileFlip(){
+        document.querySelectorAll('.tile.tile--flip').forEach(tile=>{
+          // Evita múltiplos binds
+          if(tile._flipBound) return;
+          tile._flipBound = true;
+
+          tile.addEventListener('click', (ev)=>{
+            if(!isMobileView()) return; // somente em telas menores
+            if(ev.target.closest('.qa')) return; // clicks nos botões não alternam flip
+            tile.classList.toggle('flipped');
+          });
+        });
+      }
+
+      attachMobileFlip();
+      window.addEventListener('resize',()=>{/* nada extra necessário, mas mantemos para futuras extensões */});
+
+    });
   </script>
 </body>
 </html>
