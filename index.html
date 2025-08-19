@@ -42,7 +42,7 @@
     .section.active{display:flex}
     .section h3{font-size:1.4rem;color:var(--primary-color);border-bottom:2px solid var(--secondary-color);padding-bottom:.4rem;margin:.25rem 0 1rem}
 
-    /* Avisos (corrigido o desalinhamento dos bullets) */
+    /* Avisos (alinhamento corrigido) */
     .avisos-container{width:100%;max-width:800px;margin:1rem auto;background:#fff;border-radius:.6rem;padding:1rem 1.25rem;box-shadow:0 2px 5px rgba(0,0,0,.05)}
     .avisos-container h4{font-size:1.05rem;margin-bottom:.4rem}
     .avisos-container ul{list-style:disc outside;padding-left:1.25rem;margin-left:0}
@@ -125,6 +125,7 @@
         <h4>Atualizações Recentes:</h4>
         <ul>
           <li>"Boletim Tech - edição - 16/08/2025" já está disponível.</li>
+          <li>Nova inteface interativa disponível!</li>
         </ul>
       </div>
     </section>
@@ -300,18 +301,135 @@
     &copy; <span id="current-year">2025</span> Ravell Tech
   </footer>
 
-  <!-- ===== Modal Boletim Tech ===== -->
+  <!-- ===== Modal Boletim Tech (TODAS as edições) ===== -->
   <div class="modal" id="boletim-modal" aria-hidden="true">
     <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description">
       <button class="close-modal" aria-label="Fechar Modal">&times;</button>
       <h4 id="modal-title" style="margin-bottom:.6rem">Boletim Tech</h4>
-      <p id="modal-description" style="margin-bottom:.6rem">Aqui estão listadas todas as edições do Boletim Tech. Selecione a data desejada para acessar a edição correspondente:</p>
-      <!-- (Conteúdo do boletim mantido igual ao seu) -->
-      <div class="boletim-list"><div class="year-group"><h5 class="year-title">2025</h5><div class="month-group"><h6 class="month-title">Agosto</h6><div class="month-links">
-        <a href="https://ravellsl.github.io/boletim-tecnologico-16-08-2025/" target="_blank" rel="noopener noreferrer">16/08/2025 (atual)</a>
-        <a href="https://ravellsl.github.io/boletim-tecnologico-09-08-2025/" target="_blank" rel="noopener noreferrer">09/08/2025</a>
-        <a href="https://ravellsl.github.io/boletim-tecnologico-02-08-2025/" target="_blank" rel="noopener noreferrer">02/08/2025</a>
-      </div></div><!-- ...demais meses/anos iguais ao seu código original... --></div></div>
+      <p id="modal-description" style="margin-bottom:.6rem">
+        Aqui estão listadas todas as edições do Boletim Tech. Selecione a data desejada:
+      </p>
+
+      <div class="boletim-list">
+        <div class="year-group">
+          <h5 class="year-title">2025</h5>
+
+          <div class="month-group">
+            <h6 class="month-title">Agosto</h6>
+            <div class="month-links">
+              <a href="https://ravellsl.github.io/boletim-tecnologico-16-08-2025/" target="_blank" rel="noopener noreferrer">16/08/2025 (atual)</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-09-08-2025/" target="_blank" rel="noopener noreferrer">09/08/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-02-08-2025/" target="_blank" rel="noopener noreferrer">02/08/2025</a>
+            </div>
+          </div>
+
+          <div class="month-group">
+            <h6 class="month-title">Julho</h6>
+            <div class="month-links">
+              <a href="https://ravellsl.github.io/boletim-tecnologico-26-07-2025/" target="_blank" rel="noopener noreferrer">26/07/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-19-07-2025/" target="_blank" rel="noopener noreferrer">19/07/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-12-07-2025/" target="_blank" rel="noopener noreferrer">12/07/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-05-07-2025/" target="_blank" rel="noopener noreferrer">05/07/2025</a>
+            </div>
+          </div>
+
+          <div class="month-group">
+            <h6 class="month-title">Junho</h6>
+            <div class="month-links">
+              <a href="https://ravellsl.github.io/boletim-tecnologico-28-06-2025/" target="_blank" rel="noopener noreferrer">28/06/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-21-06-2025/" target="_blank" rel="noopener noreferrer">21/06/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-14-06-2025/" target="_blank" rel="noopener noreferrer">14/06/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-07-06-2025/" target="_blank" rel="noopener noreferrer">07/06/2025</a>
+            </div>
+          </div>
+
+          <div class="month-group">
+            <h6 class="month-title">Maio</h6>
+            <div class="month-links">
+              <a href="https://ravellsl.github.io/boletim-tecnologico-31-05-2025/" target="_blank" rel="noopener noreferrer">31/05/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-24-05-2025/" target="_blank" rel="noopener noreferrer">24/05/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-17-05-2025/" target="_blank" rel="noopener noreferrer">17/05/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-10-05-2025/" target="_blank" rel="noopener noreferrer">10/05/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-03-05-2025/" target="_blank" rel="noopener noreferrer">03/05/2025</a>
+            </div>
+          </div>
+
+          <div class="month-group">
+            <h6 class="month-title">Abril</h6>
+            <div class="month-links">
+              <a href="https://ravellsl.github.io/boletim-tecnologico-26-04-2025/" target="_blank" rel="noopener noreferrer">26/04/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-19-04-2025/" target="_blank" rel="noopener noreferrer">19/04/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-12-04-2025/" target="_blank" rel="noopener noreferrer">12/04/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-05-04-2025/" target="_blank" rel="noopener noreferrer">05/04/2025</a>
+            </div>
+          </div>
+
+          <div class="month-group">
+            <h6 class="month-title">Março</h6>
+            <div class="month-links">
+              <a href="https://ravellsl.github.io/boletim-tecnologico-29-03-2025/" target="_blank" rel="noopener noreferrer">29/03/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-22-03-2025/" target="_blank" rel="noopener noreferrer">22/03/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-15-03-2025/" target="_blank" rel="noopener noreferrer">15/03/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-09-03-2025/" target="_blank" rel="noopener noreferrer">09/03/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-01-03-2025/" target="_blank" rel="noopener noreferrer">01/03/2025</a>
+            </div>
+          </div>
+
+          <div class="month-group">
+            <h6 class="month-title">Fevereiro</h6>
+            <div class="month-links">
+              <a href="https://ravellsl.github.io/boletim-tecnologico-22-02-2025---/" target="_blank" rel="noopener noreferrer">22/02/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-15-02-2025---/" target="_blank" rel="noopener noreferrer">15/02/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-08-02-2025---/" target="_blank" rel="noopener noreferrer">08/02/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-01-02-2025--/" target="_blank" rel="noopener noreferrer">01/02/2025</a>
+            </div>
+          </div>
+
+          <div class="month-group">
+            <h6 class="month-title">Janeiro</h6>
+            <div class="month-links">
+              <a href="https://ravellsl.github.io/https-ravellsl.github.io-https-ravellsl.gitboletim-tecnologico-25-01-2025-/" target="_blank" rel="noopener noreferrer">25/01/2025</a>
+              <a href="https://ravellsl.github.io/https-ravellsl.github.io-https-ravellsl.github.io-boletim-tecnologico-18-01-2025---/" target="_blank" rel="noopener noreferrer">18/01/2025</a>
+              <a href="https://ravellsl.github.io/https-ravellsl.github.io-boletim-tecnologico-11-01-2025--/" target="_blank" rel="noopener noreferrer">11/01/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-04-01-2025-/" target="_blank" rel="noopener noreferrer">04/01/2025</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="year-group">
+          <h5 class="year-title">2024</h5>
+
+          <div class="month-group">
+            <h6 class="month-title">Dezembro</h6>
+            <div class="month-links">
+              <a href="https://ravellsl.github.io/boletim-tecnologico-28-12-2024/" target="_blank" rel="noopener noreferrer">28/12/2024</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-21-12-2024/" target="_blank" rel="noopener noreferrer">21/12/2024</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-14-12-2024/" target="_blank" rel="noopener noreferrer">14/12/2024</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-07-12-2024/" target="_blank" rel="noopener noreferrer">07/12/2024</a>
+            </div>
+          </div>
+
+          <div class="month-group">
+            <h6 class="month-title">Novembro</h6>
+            <div class="month-links">
+              <a href="https://ravellsl.github.io/boletim-tecnologico-30-11-2024/" target="_blank" rel="noopener noreferrer">30/11/2024</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-23-11-2024/" target="_blank" rel="noopener noreferrer">23/11/2024</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-16-11-2024/" target="_blank" rel="noopener noreferrer">16/11/2024</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-09-11-2024/" target="_blank" rel="noopener noreferrer">09/11/2024</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-02-11-2024/" target="_blank" rel="noopener noreferrer">02/11/2024</a>
+            </div>
+          </div>
+
+          <div class="month-group">
+            <h6 class="month-title">Outubro</h6>
+            <div class="month-links">
+              <a href="https://ravellsl.github.io/boletim-tecnologico-26-10-2024/" target="_blank" rel="noopener noreferrer">26/10/2024</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -397,17 +515,15 @@
     document.getElementById('pv-close').addEventListener('click',closePanel);
     window.addEventListener('keydown',e=>{if(e.key==='Escape'&&pv.getAttribute('aria-hidden')==='false') closePanel()});
 
-    /* =========================================================================
+    /* ==============================================================
        FIXAR / DESFIXAR APRIMORADO
-       - Fixar: envia o card para a 'Área de Destaques' da MESMA seção (acima da grade).
-       - Desfixar: devolve o card ao local ORIGINAL (posição exata na grade).
-       - Persistência por localStorage (por grid + id do card).
-       - Cada tile recebe um id estável e metadados de origem.
-       ======================================================================= */
+       – Fixar: envia o card para a Área de Destaques da MESMA seção.
+       – Desfixar: devolve o card à posição original.
+       – Persistência por localStorage (por grid + id).
+       ============================================================== */
 
     const STORE_KEY='rt_alunos_pins_v2';
 
-    // 1) Indexar tiles com id estável e guardar origem (grid + index)
     function indexTiles(){
       document.querySelectorAll('.tile-grid').forEach(grid=>{
         const gridId = grid.id;
@@ -416,13 +532,12 @@
             tile.dataset.tileId = gridId + '__' + (tile.dataset.name || 'tile') + '__' + idx;
           }
           tile.dataset.originGrid = gridId;
-          tile.dataset.originIndex = idx; // índice inicial
+          tile.dataset.originIndex = idx;
         });
       });
     }
     indexTiles();
 
-    // 2) Helpers
     const savePins = (data)=>localStorage.setItem(STORE_KEY, JSON.stringify(data));
     const loadPins = ()=>{ try{ return JSON.parse(localStorage.getItem(STORE_KEY)||'{}'); }catch{return{}} };
 
@@ -438,9 +553,8 @@
       else parent.insertBefore(el, children[index]);
     }
 
-    // 3) Aplicar estado de pins salvos
     function applySavedPins(){
-      const pins = loadPins(); // { gridId: [tileId, tileId...] }
+      const pins = loadPins();
       Object.entries(pins).forEach(([gridId, tileIds])=>{
         const pinArea = getPinContainerFor(gridId);
         if(!pinArea) return;
@@ -451,13 +565,11 @@
       });
     }
 
-    // 4) Atualizar texto do botão Fixar/Desfixar
     function setBtnState(tile, pinned){
       const btn = tile.querySelector('.qa.pin');
       if(btn) btn.textContent = pinned ? 'Desfixar' : 'Fixar';
     }
 
-    // 5) Toggle pin
     function togglePin(tile){
       const id = tile.dataset.tileId;
       const originGrid = tile.dataset.originGrid;
@@ -465,37 +577,30 @@
       const pins = loadPins();
 
       pins[originGrid] = pins[originGrid] || [];
-
       const isPinned = pins[originGrid].includes(id);
 
       if(isPinned){
-        // DESFIXAR: volta ao grid e à posição original
         const grid = getGridById(originGrid);
         insertAtIndex(grid, tile, originIndex);
         pins[originGrid] = pins[originGrid].filter(x=>x!==id);
         setBtnState(tile,false);
       }else{
-        // FIXAR: envia para a área de destaques (no topo da seção)
         const pinArea = getPinContainerFor(originGrid);
         if(pinArea){
           pinArea.parentElement.style.display='block';
-          // inserir no início dos destaques
           pinArea.insertBefore(tile, pinArea.firstChild);
           if(!pins[originGrid].includes(id)) pins[originGrid].push(id);
           setBtnState(tile,true);
         }
       }
 
-      // Ocultar área se ficar vazia
       const pinArea = getPinContainerFor(originGrid);
       if(pinArea && pinArea.children.length===0){
         pinArea.parentElement.style.display='none';
       }
-
       savePins(pins);
     }
 
-    // 6) Delegação: Abrir / Prévia / Fixar
     document.querySelectorAll('.tile-grid, .pin-grid').forEach(container=>{
       container.addEventListener('click',e=>{
         const btn=e.target.closest('.qa'); if(!btn) return;
@@ -519,7 +624,6 @@
       });
     });
 
-    // 7) Estado inicial
     applySavedPins();
   });
   </script>
