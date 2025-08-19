@@ -42,7 +42,7 @@
     .section.active{display:flex}
     .section h3{font-size:1.4rem;color:var(--primary-color);border-bottom:2px solid var(--secondary-color);padding-bottom:.4rem;margin:.25rem 0 1rem}
 
-    /* Avisos (alinhamento corrigido) */
+    /* Avisos */
     .avisos-container{width:100%;max-width:800px;margin:1rem auto;background:#fff;border-radius:.6rem;padding:1rem 1.25rem;box-shadow:0 2px 5px rgba(0,0,0,.05)}
     .avisos-container h4{font-size:1.05rem;margin-bottom:.4rem}
     .avisos-container ul{list-style:disc outside;padding-left:1.25rem;margin-left:0}
@@ -64,16 +64,31 @@
 
     /* ---------- Grade de Tiles Ação Rápida ---------- */
     .tile-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.25rem;width:100%;max-width:1000px;margin:1.25rem auto 0}
-    .tile{perspective:1000px}
-    .tile-inner{position:relative;height:180px;transform-style:preserve-3d;transition:transform .5s}
+
+    .tile{
+      perspective:1000px;
+      -webkit-perspective:1000px;
+    }
+
+    .tile-inner{
+      position:relative;height:180px;
+      transform-style:preserve-3d;
+      -webkit-transform-style:preserve-3d;
+      transition:transform .5s;
+      will-change:transform;
+    }
+
     /* Hover/Focus (desktop) */
-    .tile--flip:hover .tile-inner,.tile--flip:focus-within .tile-inner{transform:rotateY(180deg)}
+    .tile--flip:hover .tile-inner,
+    .tile--flip:focus-within .tile-inner{transform:rotateY(180deg)}
+
     /* Estado programático para mobile */
     .tile.flipped .tile-inner{transform:rotateY(180deg)}
 
     .tile-front,.tile-back{
       position:absolute;inset:0;border-radius:var(--radius);box-shadow:0 .3rem .7rem rgba(0,0,0,.1);
-      backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;
+      backface-visibility:hidden;-webkit-backface-visibility:hidden;
+      display:flex;flex-direction:column;justify-content:center;align-items:center;
       padding:1rem;border:1px solid rgba(44,62,80,.08);text-align:center
     }
     .tile-front{background:linear-gradient(135deg,rgba(52,152,219,.08),rgba(231,76,60,.08))}
@@ -88,8 +103,9 @@
 
     @media (max-width:480px){
       .tile-inner{height:200px;cursor:pointer}
-      /* Desabilita flip por hover em telas pequenas; somente via classe JS */
-      .tile--flip:hover .tile-inner,.tile--flip:focus-within .tile-inner{transform:none}
+      /* Desabilita flip por hover/focus em telas menores; somente via classe JS */
+      .tile--flip:hover .tile-inner,
+      .tile--flip:focus-within .tile-inner{transform:none !important}
       /* Tipografia ligeiramente maior nos cards menores */
       .tile-title{font-size:1.12rem}
       .tile-desc{font-size:1rem}
@@ -645,32 +661,62 @@
       applySavedPins();
 
       /* ==============================================================
-         FLIP TOUCH-FRIENDLY (SMARTPHONE)
-         Requisito: em telas menores, tocar no card alterna entre frente e verso.
-         Um novo toque retorna ao estado inicial. Interações nos botões
-         não disparam o flip.
+         FLIP TOUCH-FRIENDLY (SMARTPHONE) — Revisado
+         - Em telas <= 600px, toque no card alterna entre frente/verso.
+         - Fecha o verso anterior ao abrir um novo (estado único).
+         - Força reflow antes de aplicar o flip para garantir animação.
+         - Cliques em botões (.qa) não alternam o flip.
          ============================================================== */
       const MOBILE_BREAKPOINT = 600; // px
+      let currentFlipped = null;
 
-      function isMobileView(){ return window.innerWidth <= MOBILE_BREAKPOINT; }
+      const isMobileView = ()=> window.innerWidth <= MOBILE_BREAKPOINT;
+
+      function flipTile(tile){
+        // Se outro card estiver aberto, fecha primeiro
+        if(currentFlipped && currentFlipped!==tile){
+          currentFlipped.classList.remove('flipped');
+          currentFlipped = null;
+        }
+
+        const willFlip = !tile.classList.contains('flipped');
+        // Remove e força reflow para garantir que o transition dispare
+        tile.classList.remove('flipped');
+        void tile.offsetWidth; // reflow
+
+        if(willFlip){
+          tile.classList.add('flipped');
+          currentFlipped = tile;
+        }else{
+          currentFlipped = null;
+        }
+      }
 
       function attachMobileFlip(){
         document.querySelectorAll('.tile.tile--flip').forEach(tile=>{
-          // Evita múltiplos binds
           if(tile._flipBound) return;
           tile._flipBound = true;
 
-          tile.addEventListener('click', (ev)=>{
-            if(!isMobileView()) return; // somente em telas menores
-            if(ev.target.closest('.qa')) return; // clicks nos botões não alternam flip
-            tile.classList.toggle('flipped');
-          });
+          tile.addEventListener('click',(ev)=>{
+            if(!isMobileView()) return;                // apenas mobile
+            if(ev.target.closest('.qa')) return;       // não interfere nos botões
+            flipTile(tile);
+          }, {passive:true});
+
+          // Opcional: ao sair da seção, fecha o verso
+          // (útil quando o usuário navega entre abas)
         });
       }
 
       attachMobileFlip();
-      window.addEventListener('resize',()=>{/* nada extra necessário, mas mantemos para futuras extensões */});
 
+      // Ao redimensionar, se sair do mobile, “desvira” qualquer card
+      window.addEventListener('resize',()=>{
+        if(!isMobileView() && currentFlipped){
+          currentFlipped.classList.remove('flipped');
+          currentFlipped = null;
+        }
+      });
     });
   </script>
 </body>
