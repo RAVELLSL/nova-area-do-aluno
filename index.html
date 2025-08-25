@@ -199,7 +199,6 @@
       background: #2980b9; /* Tom mais escuro de --secondary-color */
     }
 
-
     /* Painel de Prévia (slide-over) */
     #preview-panel { position: fixed; top: 0; right: 0; height: 100vh; width: min(760px, 92vw); background: #fff; box-shadow: -8px 0 24px rgba(0,0,0,.2); transform: translateX(100%); transition: transform .35s; z-index: 3200; display: flex; flex-direction: column; }
     #preview-panel header { display: flex; align-items: center; justify-content: space-between; padding: .75rem 1rem; border-bottom: 1px solid #e5e7eb; }
@@ -439,16 +438,16 @@
               <a href="https://ravellsl.github.io/boletim-tecnologico-01-03-2025/" target="_blank" rel="noopener noreferrer">01/03/2025</a>
             </div></div>
             <div class="month-group"><h6 class="month-title">Fevereiro<span class="accordion-icon">▼</span></h6><div class="month-links">
-              <a href="https://ravellsl.github.io/boletim-tecnologico-22-02-2025/" target="_blank" rel="noopener noreferrer">22/02/2025</a>
-              <a href="https://ravellsl.github.io/boletim-tecnologico-15-02-2025/" target="_blank" rel="noopener noreferrer">15/02/2025</a>
-              <a href="https://ravellsl.github.io/boletim-tecnologico-08-02-2025/" target="_blank" rel="noopener noreferrer">08/02/2025</a>
-              <a href="https://ravellsl.github.io/boletim-tecnologico-01-02-2025/" target="_blank" rel="noopener noreferrer">01/02/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-22-02-2025---/" target="_blank" rel="noopener noreferrer">22/02/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-15-02-2025---/" target="_blank" rel="noopener noreferrer">15/02/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-08-02-2025---/" target="_blank" rel="noopener noreferrer">08/02/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-01-02-2025--/" target="_blank" rel="noopener noreferrer">01/02/2025</a>
             </div></div>
             <div class="month-group"><h6 class="month-title">Janeiro<span class="accordion-icon">▼</span></h6><div class="month-links">
-              <a href="https://ravellsl.github.io/boletim-tecnologico-25-01-2025/" target="_blank" rel="noopener noreferrer">25/01/2025</a>
-              <a href="https://ravellsl.github.io/boletim-tecnologico-18-01-2025/" target="_blank" rel="noopener noreferrer">18/01/2025</a>
-              <a href="https://ravellsl.github.io/boletim-tecnologico-11-01-2025/" target="_blank" rel="noopener noreferrer">11/01/2025</a>
-              <a href="https://ravellsl.github.io/boletim-tecnologico-04-01-2025/" target="_blank" rel="noopener noreferrer">04/01/2025</a>
+              <a href="https://ravellsl.github.io/https-ravellsl.github.io-https-ravellsl.gitboletim-tecnologico-25-01-2025-/" target="_blank" rel="noopener noreferrer">25/01/2025</a>
+              <a href="https://ravellsl.github.io/https-ravellsl.github.io-https-ravellsl.github.io-boletim-tecnologico-18-01-2025---/" target="_blank" rel="noopener noreferrer">18/01/2025</a>
+              <a href="https://ravellsl.github.io/https-ravellsl.github.io-boletim-tecnologico-11-01-2025--/" target="_blank" rel="noopener noreferrer">11/01/2025</a>
+              <a href="https://ravellsl.github.io/boletim-tecnologico-04-01-2025-/" target="_blank" rel="noopener noreferrer">04/01/2025</a>
             </div></div>
           </div>
         </div>
@@ -492,7 +491,7 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      
+
       function initializeApp() {
         setupSidebarNavigation();
         setupBoletimModal();
@@ -527,32 +526,36 @@
       }
 
       /**
-       * APRIMORADO: Configura o modal do Boletim Tech e seu accordion interno.
+       * Boletim Tech: abre com todos os meses RECOLHIDOS.
+       * - Remove a abertura automática do primeiro mês.
+       * - Mantém tudo recolhido ao abrir/fechar o modal.
+       * - Controla aria-expanded para acessibilidade e adiciona suporte de teclado.
        */
       function setupBoletimModal() {
         const boletimModal = document.getElementById('boletim-modal');
         if (!boletimModal) return;
 
+        const getMonthGroups = () => [...boletimModal.querySelectorAll('.month-group')];
+        const getMonthTitles = () => [...boletimModal.querySelectorAll('.month-title')];
+
+        const collapseAll = () => {
+          getMonthGroups().forEach(g => g.classList.remove('active'));
+          getMonthTitles().forEach(t => t.setAttribute('aria-expanded', 'false'));
+        };
+
         const openBoletim = () => {
+          collapseAll(); // inicia recolhido
           boletimModal.classList.add('active');
           boletimModal.setAttribute('aria-hidden', 'false');
-          
-          // Abre o primeiro mês por padrão ao abrir o modal
-          const firstMonth = boletimModal.querySelector('.month-group');
-          if (firstMonth) {
-            firstMonth.classList.add('active');
-          }
         };
-        
+
         const closeBoletim = () => {
           boletimModal.classList.remove('active');
           boletimModal.setAttribute('aria-hidden', 'true');
-          // Opcional: fecha todos os meses ao fechar o modal
-          boletimModal.querySelectorAll('.month-group.active').forEach(group => {
-            group.classList.remove('active');
-          });
+          collapseAll(); // mantém recolhido ao fechar
         };
 
+        // Botões/fechamento do modal
         boletimModal.querySelector('.close-modal')?.addEventListener('click', closeBoletim);
         boletimModal.addEventListener('click', ev => {
           if (ev.target === boletimModal) closeBoletim();
@@ -560,28 +563,40 @@
         window.addEventListener('keydown', ev => {
           if (ev.key === 'Escape' && boletimModal.classList.contains('active')) closeBoletim();
         });
-        
-        // Lógica do Accordion
-        document.querySelectorAll('.month-title').forEach(title => {
-          title.addEventListener('click', () => {
-            const group = title.parentElement;
-            group.classList.toggle('active');
 
-            // Opcional: fechar outros meses ao abrir um
-            if (group.classList.contains('active')) {
-              document.querySelectorAll('.month-group').forEach(otherGroup => {
-                if (otherGroup !== group) {
-                  otherGroup.classList.remove('active');
-                }
-              });
+        // Acordeão com ARIA + teclado
+        getMonthTitles().forEach(title => {
+          title.setAttribute('role', 'button');
+          title.setAttribute('tabindex', '0');
+          title.setAttribute('aria-expanded', 'false');
+
+          const toggle = () => {
+            const group = title.parentElement;
+            const willOpen = !group.classList.contains('active');
+            // fecha todos
+            getMonthGroups().forEach(g => g.classList.remove('active'));
+            getMonthTitles().forEach(t => t.setAttribute('aria-expanded', 'false'));
+            // abre o escolhido (se for para abrir)
+            if (willOpen) {
+              group.classList.add('active');
+              title.setAttribute('aria-expanded', 'true');
+            }
+          };
+
+          title.addEventListener('click', toggle);
+          title.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              toggle();
             }
           });
         });
-        
+
+        // Abrir modal a partir do tile "Boletim Tech" (botões "Prévia" ou "Abrir Listagem")
         document.querySelector('[data-action="boletim"]')?.addEventListener('click', e => {
-            if(e.target.closest('.preview, .open')){
-                openBoletim();
-            }
+          if (e.target.closest('.preview, .open')) {
+            openBoletim();
+          }
         });
       }
 
@@ -603,7 +618,7 @@
           });
         }));
       }
-      
+
       function setupPreviewPanel() {
         const panel = document.getElementById('preview-panel');
         const panelTitle = document.getElementById('pv-title');
