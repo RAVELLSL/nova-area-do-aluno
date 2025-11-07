@@ -1,831 +1,993 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <title>Área do Aluno</title>
-  <meta name="description" content="Plataforma de acesso para alunos com materiais de estudo, ferramentas digitais e suplementos tecnológicos.">
-  <meta name="keywords" content="Área do Aluno, Materiais de Estudo, Ferramentas Digitais, Suplemento Tech, IA, Caderno Digital, Biblioteca Digital, Central de Mídias">
-  <meta name="author" content="Ravell Tech">
-  <meta name="robots" content="index, follow">
-  <meta property="og:title" content="Área do Aluno - Ravell Tech">
-  <meta property="og:description" content="Plataforma de acesso para alunos com materiais de estudo, ferramentas digitais e suplementos tecnológicos.">
-  <meta property="og:image" content="https://i.ibb.co/z4xY0CD/1728852180021.jpg">
-  <meta property="og:url" content="https://ravellsl.github.io/rstech-aluno/">
-  <meta property="og:type" content="website">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área do Aluno - Dashboard</title>
+    
+    <style>
+        /* 1. Variáveis de Cor e Reset Global */
+        :root {
+            --bg-main: #141414;
+            --bg-card: #181818;
+            --bg-content-area: #181818;
+            --text-light: #f5f5f5;
+            --text-dark: #b3b3b3;
+            --primary-red: #E50914;
+            --primary-red-hover: #b00710;
+            --border-color: #303030;
+        }
 
-  <style>
-    :root {
-      --primary-color: #2c3e50;
-      --secondary-color: #3498db;
-      --accent-color: #e74c3c;
-      --background-color: #ecf0f1;
-      --text-color: #2c3e50;
-      --light-text: #fff;
-      --radius: .6rem;
-      --t: .3s;
-      --ff: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      --header: 3.5rem;
-      --sidebar: 250px;
-      --maxw: 1200px;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
-    body {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      font-family: var(--ff);
-      color: var(--text-color);
-      background: var(--background-color);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-    a { color: inherit; text-decoration: none; }
-    a:hover, a:focus { color: var(--secondary-color); text-decoration: underline; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    /* Header / Sidebar */
-    .header { position: fixed; top: 0; left: 0; right: 0; height: var(--header); display: flex; align-items: center; justify-content: center; background: var(--primary-color); color: var(--light-text); z-index: 1000; box-shadow: 0 2px 4px rgba(0,0,0,.1); }
-    .header h1 { font-size: 1.2rem; }
-    #menu-button { position: absolute; left: 1rem; background: none; border: 0; color: #fff; font-size: 1.5rem; height: var(--header); width: var(--header); cursor: pointer; display: none; }
-    .sidebar { position: fixed; top: var(--header); left: 0; width: var(--sidebar); height: calc(100% - var(--header)); background: var(--primary-color); color: #eee; padding: 1.25rem .75rem; overflow: auto; transition: left var(--t); z-index: 900; }
-    .sidebar h2 { font-size: 1.05rem; text-align: center; margin-bottom: .75rem; }
-    .sidebar a { display: block; padding: .6rem .75rem; border-radius: .5rem; margin: .25rem 0; }
-    .sidebar a:hover, .sidebar a.active { background: var(--secondary-color); color: #fff; text-decoration: none; }
-    .main-content { flex: 1; padding: calc(var(--header) + 1rem) 1rem 2rem; margin-left: var(--sidebar); max-width: var(--maxw); }
-    @media (max-width:1024px) { #menu-button { display: block; } .sidebar { left: -250px; } .sidebar.active { left: 0; } .main-content { margin-left: 0; } }
+        html {
+            scroll-behavior: smooth;
+        }
 
-    /* Sections */
-    .section { display: none; flex-direction: column; align-items: center; }
-    .section.active { display: flex; }
-    .section h3 { font-size: 1.4rem; color: var(--primary-color); border-bottom: 2px solid var(--secondary-color); padding-bottom: .4rem; margin: .25rem 0 1rem; }
+        /* * >>> MUDANÇA (INÍCIO) <<<
+         * Adicionada imagem de fundo sutil à página
+         */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-light);
+            line-height: 1.5;
+            overflow-x: hidden;
+            counter-reset: section;
 
-    /* Avisos */
-    .avisos-container { width: 100%; max-width: 800px; margin: 1rem auto; background: #fff; border-radius: .6rem; padding: 1rem 1.25rem; box-shadow: 0 2px 5px rgba(0,0,0,.05); }
-    .avisos-container h4 { font-size: 1.05rem; margin-bottom: .4rem; }
-    .avisos-container ul { list-style: disc outside; padding-left: 1.25rem; margin-left: 0; }
-    .avisos-container li { margin: .25rem 0; }
-    .footer { background: var(--primary-color); color: #fff; text-align: center; padding: 1rem; margin-top: auto; }
+            /* Imagem de fundo sutil (mesma fonte do Hero) */
+            background-image: linear-gradient(rgba(20, 20, 20, 0.97) 0%, rgba(20, 20, 20, 0.98) 100%), url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80');
+            background-attachment: fixed; /* Fundo não rola com a página */
+            background-size: cover;
+            background-position: center;
+        }
+        /* >>> MUDANÇA (FIM) <<< */
+        
+        body.modal-open {
+            overflow: hidden;
+        }
 
-    /* Modal genérico */
-    .modal { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: none; align-items: center; justify-content: center; padding: 1rem; z-index: 3000; }
-    .modal.active { display: flex; }
-    .modal-content { background: #fff; border-radius: .6rem; width: 90%; max-width: 640px; max-height: 80vh; overflow: auto; position: relative; padding: 1.25rem; box-shadow: 0 .5rem 1rem rgba(0,0,0,.3); }
-    #modal-title { margin-bottom: .6rem; }
-    #modal-description { margin-bottom: .6rem; }
-    .close-modal { position: absolute; top: .5rem; right: .5rem; background: none; border: 0; font-size: 1.5rem; cursor: pointer; }
+        /* 2. Barra de Navegação Superior (Navbar) */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2.5rem;
+            /* Fundo levemente transparente para ver o scroll por trás */
+            background-color: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(5px); /* Efeito de vidro (opcional) */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
 
-    /* ---------- Área de Destaques (por seção) ---------- */
-    .pin-area { width: 100%; max-width: 1000px; margin: .5rem auto 0; background: #ffffff; border: 1px dashed rgba(44,62,80,.18); border-radius: .75rem; padding: .75rem; }
-    .pin-area:empty { display: none; }
-    .pin-head { display: flex; align-items: center; gap: .5rem; margin: 0 0 .5rem .25rem; color: var(--primary-color); font-weight: 700; font-size: .98rem; }
-    .pin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+        .nav-left { display: flex; align-items: center; }
 
-    /* ---------- Grade de Tiles Ação Rápida ---------- */
-    .tile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.25rem; width: 100%; max-width: 1000px; margin: 1.25rem auto 0; }
-    .tile {
-      perspective: 1000px; -webkit-perspective: 1000px;
-      touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-    }
-    .tile-inner {
-      position: relative; height: 180px;
-      transform-style: preserve-3d; -webkit-transform-style: preserve-3d;
-      transition: transform .5s; will-change: transform;
-      transform: translateZ(0); -webkit-transform: translateZ(0);
-      touch-action: manipulation;
-      cursor: pointer;
-    }
-    .tile.flipped .tile-inner { transform: rotateY(180deg); }
-    .tile-front, .tile-back {
-      position: absolute; inset: 0; border-radius: var(--radius); box-shadow: 0 .3rem .7rem rgba(0,0,0,.1);
-      backface-visibility: hidden; -webkit-backface-visibility: hidden;
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      padding: 1rem; border: 1px solid rgba(44,62,80,.08); text-align: center;
-      transform: translateZ(0); -webkit-transform: translateZ(0);
-    }
-    .tile-front { background: linear-gradient(135deg, rgba(52,152,219,.08), rgba(231,76,60,.08)); }
-    .tile-back { transform: rotateY(180deg); gap: .5rem; background: #fff; }
-    .tile-kicker { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--secondary-color); font-weight: 700; }
-    .tile-title { font-size: 1.05rem; color: var(--primary-color); margin: .25rem 0; }
-    .tile-desc { font-size: .92rem; color: #4a4f55; }
-    .qa { border: 1px solid var(--primary-color); background: #fff; color: var(--primary-color); padding: .5rem .75rem; border-radius: .5rem; cursor: pointer; min-width: 110px; transition: .2s; }
-    .qa:hover, .qa:focus { background: var(--secondary-color); color: #fff; border-color: var(--secondary-color); }
-    @media (max-width:480px) { .tile-inner { height: 200px; } }
+        .navbar-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-red);
+            text-decoration: none;
+            margin-right: 2rem;
+        }
 
-    /* Filtro Central de Mídias */
-    .filter-menu { display: flex; justify-content: center; gap: .5rem; flex-wrap: wrap; margin: .25rem 0 .75rem; }
-    .filter-btn { background: #fff; border: 1px solid var(--primary-color); color: var(--primary-color); padding: .45rem .8rem; border-radius: .5rem; cursor: pointer; transition: .2s; }
-    .filter-btn:hover, .filter-btn.active { background: var(--secondary-color); color: #fff; border-color: var(--secondary-color); }
+        .nav-tabs { display: flex; gap: 1.5rem; }
 
-    /* ================================================= */
-    /* === APRIMORAMENTO: Boletim Tech (accordion) === */
-    /* ================================================= */
-    .boletim-list { padding: 0 .25rem; }
-    .year-group { margin-bottom: 1.5rem; }
-    .year-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--primary-color);
-      text-align: center;
-      padding-bottom: .5rem;
-      margin-bottom: 1rem;
-      border-bottom: 2px solid var(--secondary-color);
-    }
-    .year-content {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: .75rem;
-    }
-    .month-group {
-      background: #fff;
-      border-radius: var(--radius);
-      box-shadow: 0 2px 4px rgba(0,0,0,.05);
-      overflow: hidden;
-    }
-    .month-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      padding: .75rem 1rem;
-      background: var(--primary-color);
-      color: var(--light-text);
-      font-size: 1rem;
-      font-weight: 600;
-      text-align: left;
-      cursor: pointer;
-    }
-    .accordion-icon {
-      font-size: .8em;
-      transition: transform var(--t) ease-in-out;
-    }
-    .month-group.active .accordion-icon {
-      transform: rotate(180deg);
-    }
-    /* Mecanismo de sanfona robusto com max-height */
-    .month-links {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: .6rem;
-      padding: 0 1rem; /* Padding horizontal fixo */
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
-    }
-    .month-group.active .month-links {
-      padding: 1rem; /* Padding vertical restaurado na abertura */
-      max-height: 500px; /* Altura máxima generosa para o conteúdo */
-    }
-    .month-links a {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      padding: .55rem .25rem;
-      background: var(--secondary-color);
-      color: var(--light-text);
-      font-size: .9rem;
-      border-radius: .5rem;
-      text-decoration: none;
-      box-shadow: 0 1px 3px rgba(0,0,0,.1);
-      transition: background-color var(--t);
-    }
-    .month-links a:hover {
-      background: #2980b9; /* Tom mais escuro de --secondary-color */
-    }
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+            white-space: nowrap;
+        }
+        .nav-link:hover { color: var(--text-light); }
+        .nav-link.active { color: var(--text-light); font-weight: 700; }
 
-    /* Painel de Prévia (slide-over) */
-    #preview-panel { position: fixed; top: 0; right: 0; height: 100vh; width: min(760px, 92vw); background: #fff; box-shadow: -8px 0 24px rgba(0,0,0,.2); transform: translateX(100%); transition: transform .35s; z-index: 3200; display: flex; flex-direction: column; }
-    #preview-panel header { display: flex; align-items: center; justify-content: space-between; padding: .75rem 1rem; border-bottom: 1px solid #e5e7eb; }
-    #preview-panel #pv-title { color: var(--primary-color); }
-    #preview-panel #pv-actions { display: flex; gap: .5rem; }
-    #preview-panel #pv-iframe-wrapper { flex: 1; min-height: 0; }
-    #preview-panel iframe { width: 100%; height: 100%; border: 0; }
+        /* --- Barra de Busca --- */
+        .search-bar {
+            background-color: var(--border-color);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 0.35rem 0.75rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .search-icon { color: var(--text-dark); margin-right: 0.5rem; }
+        
+        .search-input {
+            background: none;
+            border: none;
+            outline: none;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            width: 200px;
+            transition: width 0.3s;
+        }
+        .search-input:focus { width: 300px; }
 
-    /* ================================================= */
-    /* =========== MODAL Cobertura Rec'n Play ========== */
-    /* ================================================= */
-    .recnplay-modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(44, 62, 80, 0.85); /* Usando --primary-color com alpha */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 5000;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity .3s, visibility .3s;
-    }
-    .recnplay-modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-    .recnplay-modal-content {
-      background: var(--background-color);
-      color: var(--text-color);
-      padding: 2rem 2.5rem;
-      border-radius: var(--radius);
-      width: 90%;
-      max-width: 500px;
-      text-align: center;
-      position: relative;
-      box-shadow: 0 5px 20px rgba(0,0,0,.3);
-      transform: scale(0.9);
-      transition: transform .3s;
-    }
-    .recnplay-modal-overlay.active .recnplay-modal-content {
-      transform: scale(1);
-    }
-    #recnplay-modal-title {
-      color: var(--primary-color);
-      margin-bottom: 1rem;
-    }
-    .recnplay-logo-placeholder {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 1.25rem;
-    }
-    .recnplay-modal-content p {
-      margin-bottom: 1.5rem;
-    }
-    .recnplay-modal-button {
-      display: inline-block;
-      background: var(--secondary-color);
-      color: var(--light-text);
-      padding: .75rem 2rem;
-      border-radius: .5rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: background-color var(--t);
-    }
-    .recnplay-modal-button:hover, .recnplay-modal-button:focus {
-      background: #2980b9; /* Tom mais escuro de --secondary-color */
-      color: var(--light-text);
-      text-decoration: none;
-    }
-    .recnplay-modal-close {
-      position: absolute;
-      top: .5rem;
-      right: .75rem;
-      background: none;
-      border: 0;
-      font-size: 2rem;
-      color: #95a5a6;
-      cursor: pointer;
-      line-height: 1;
-      transition: color var(--t);
-    }
-    .recnplay-modal-close:hover {
-      color: var(--accent-color);
-    }
-  </style>
+        /* 3. Conteúdo Principal e Abas */
+        .main-content { padding: 0; }
+        .tab-content { display: none; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .tab-content.active { display: block; }
+
+        /* 4. Seção "Hero" (Destaque) */
+        .hero-section {
+            height: 50vh;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 2.5rem;
+            background: linear-gradient(to right, rgba(20, 20, 20, 1) 30%, rgba(20, 20, 20, 0.6)), url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80') center center/cover;
+            margin-bottom: 2.5rem;
+        }
+        .hero-section h1 { font-size: 2.5rem; font-weight: 700; max-width: 50%; }
+        .hero-section p { font-size: 1.1rem; color: var(--text-dark); max-width: 50%; margin-top: 1rem; }
+        .hide-on-search { display: flex; }
+
+        /* 5. Layout de Grade para Seções */
+        .grid-row {
+            display: grid;
+            padding: 0 2.5rem 2.5rem 2.5rem;
+            gap: 2.5rem;
+        }
+        
+        .grid-row-2col { grid-template-columns: 1fr 1fr; }
+        .grid-row-3col { grid-template-columns: 1fr 1fr 1fr; }
+
+        .category-row.standalone {
+            padding: 0 2.5rem 2.5rem 2.5rem;
+        }
+        
+        .category-row {
+            min-width: 0;
+        }
+
+        .category-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+        
+        #videos .category-title::before {
+            counter-increment: section;
+            content: counter(section) ". ";
+            color: var(--primary-red);
+            font-weight: 700;
+        }
+        
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        /* 6. Cards Responsivos (video-card) */
+        .video-card {
+            aspect-ratio: 16 / 9;
+            background-color: var(--bg-card);
+            border-radius: 6px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border 0.25s ease;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border: 2px solid transparent;
+            flex: 1 1 280px; 
+            min-width: 280px;
+        }
+
+        .video-card:hover {
+            transform: scale(1.04);
+            z-index: 10;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        .video-card.active {
+            border: 2px solid var(--primary-red);
+            transform: scale(1.02);
+        }
+
+        .card-thumbnail {
+            width: 100%;
+            height: 100%;
+            filter: brightness(0.9);
+        }
+        
+        /* 7. Estilos do Conteúdo do Modal */
+        .inline-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            /* Ajustes de espaçamento agora controlados pelo padding do .modal-content */
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .inline-modal-header h3 { font-size: 1.25rem; }
+        
+        .inline-modal-close-btn {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .inline-modal-close-btn:hover { color: var(--text-light); }
+
+        .inline-video-list { display: flex; flex-direction: column; gap: 1rem; }
+
+        .inline-video-list a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.2s, color 0.2s, transform 0.2s;
+        }
+        .inline-video-list a:hover {
+            background-color: var(--border-color);
+            color: var(--text-light);
+            transform: translateX(5px);
+        }
+        .inline-video-list a::before {
+            content: '▶';
+            font-size: 0.8rem;
+            color: var(--primary-red);
+        }
+        
+        /* 8. Cards de Mídias e Ferramentas (tool-card) */
+        .tool-card {
+            aspect-ratio: 16 / 9; 
+            background: var(--bg-card);
+            border-radius: 6px;
+            overflow: hidden;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 1rem;
+            text-decoration: none;
+            color: var(--text-light);
+            font-size: 1rem;
+            font-weight: 600;
+            flex: 1 1 280px; 
+            min-width: 280px;
+        }
+        .tool-card span {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .tool-card:hover {
+            transform: scale(1.04);
+            z-index: 10;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            border: 2px solid var(--primary-red);
+        }
+        
+        /* 9. Responsividade */
+        @media (max-width: 1024px) { /* Tablet */
+            .grid-row-3col {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) { /* Mobile */
+            .navbar { flex-direction: column; align-items: flex-start; gap: 1rem; padding: 1rem 1.5rem; }
+            .search-input:focus { width: 250px; }
+            .hero-section { padding: 1.5rem; text-align: center; align-items: center; height: 40vh; }
+            .hero-section h1 { font-size: 2rem; max-width: 90%; }
+            .hero-section p { max-width: 90%; }
+            
+            .grid-row-2col, .grid-row-3col {
+                grid-template-columns: 1fr;
+            }
+            .grid-row, .category-row.standalone {
+                padding: 0 1.5rem 1.5rem 1.5rem;
+            }
+        }
+        
+        .hidden-modal-source { display: none; }
+
+
+        /* 10. CSS do Modal Centralizado */
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            
+            display: none; /* Alterado por JS para 'flex' */
+            align-items: center;
+            justify-content: center;
+            
+            z-index: 2000;
+            padding: 1.5rem;
+            animation: fadeIn 0.3s ease;
+            overflow: hidden;
+        }
+
+        .modal-overlay::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 1;
+            background-image: linear-gradient(rgba(20, 20, 20, 0.7), rgba(20, 20, 20, 0.7)), url('https://images.unsplash.com/photo-1550745165-9bc0b252726c?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px);
+            transform: scale(1.1);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        /* * >>> MUDANÇA (INÍCIO) <<<
+         * Ajustes no .modal-content para remover barra de rolagem horizontal
+         */
+        .modal-content {
+            background-color: var(--bg-content-area);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            
+            width: 100%;
+            max-width: 700px;
+            max-height: 90vh; /* 90% da altura da tela */
+            
+            overflow-y: auto;   /* Barra de rolagem vertical (Y) se precisar */
+            overflow-x: hidden; /* *** ADICIONADO: Remove a barra horizontal (X) *** */
+            
+            padding: 1.5rem;    /* *** ADICIONADO: Espaçamento interno *** */
+            
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            
+            word-break: break-word; /* *** ADICIONADO: Quebra palavras longas *** */
+
+            animation: modalFadeIn 0.3s ease-out; /* Animação de entrada */
+        }
+        /* >>> MUDANÇA (FIM) <<< */
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+    </style>
 </head>
 <body>
-  <header class="header">
-    <h1>Área do Aluno</h1>
-    <button id="menu-button" aria-label="Abrir Menu" aria-expanded="false" aria-controls="sidebar">☰</button>
-  </header>
 
-  <nav class="sidebar" id="sidebar" role="navigation" aria-label="Menu Principal">
-    <h2>Navegação</h2>
-    <a href="#" data-target="mensagem-padrao" class="nav-link active">Início</a>
-    <a href="#" data-target="area-de-estudo" class="nav-link">Área de Estudo</a>
-    <a href="#" data-target="central-de-midias" class="nav-link">Central de Mídias</a>
-    <a href="#" data-target="ferramentas-digitais" class="nav-link">Ferramentas Digitais</a>
-  </nav>
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="#" class="navbar-logo">Prof. Ravell</a>
+            <div class="nav-tabs" id="main-tabs">
+                <a href="#videos" class="nav-link active">Vídeos</a>
+                <a href="#midias" class="nav-link">Central de Mídias</a>
+                <a href="#ferramentas" class="nav-link">Ferramentas</a>
+            </div>
+        </div>
+        <div class="search-bar">
+            <span class="search-icon">🔍</span>
+            <input type="search" class="search-input" id="search-input" placeholder="Buscar por tema...">
+        </div>
+    </nav>
+    
+    <main class="main-content">
 
-  <main class="main-content" role="main">
-    <section id="mensagem-padrao" class="section active">
-      <h3>Bem-Vindo</h3>
-      <p>Escolha no menu sua área de interesse.</p>
-      <div class="avisos-container">
-        <h4>Atualizações Recentes:</h4>
-        <ul>
-          <li>"Boletim Tech - edição - 02/11/2025" já está disponível.</li>
-        </ul>
-      </div>
-    </section>
+        <section id="videos" class="tab-content active">
 
-    <section id="area-de-estudo" class="section">
-      <h3>Área de Estudo</h3>
-      <div class="pin-area" id="pin-area-grid-estudo" aria-label="Destaques - Área de Estudo">
-        <div class="pin-head">Destaques</div>
-        <div class="pin-grid" data-for="grid-estudo"></div>
-      </div>
-      <div class="tile-grid" id="grid-estudo">
-        <div class="tile tile--flip" data-name="Material de Aula" data-url="https://ravellsl.github.io/rstech-aluno/">
-          <div class="tile-inner">
-            <div class="tile-front"><span class="tile-kicker">Estudo</span><h4 class="tile-title">Material de Aula</h4><p class="tile-desc">Conteúdo programático e anexos</p></div>
-            <div class="tile-back"><button class="qa open">Abrir</button><button class="qa preview">Prévia</button><button class="qa pin">Fixar</button></div>
-          </div>
-        </div>
-        <div class="tile tile--flip" data-name="Apostilas" data-url="https://ravellsl.github.io/apostilas/">
-          <div class="tile-inner">
-            <div class="tile-front"><span class="tile-kicker">Leitura</span><h4 class="tile-title">Apostilas</h4><p class="tile-desc">Coleções e guias de estudo</p></div>
-            <div class="tile-back"><button class="qa open">Abrir</button><button class="qa preview">Prévia</button><button class="qa pin">Fixar</button></div>
-          </div>
-        </div>
-        <div class="tile tile--flip" data-name="Caderno de Exercícios" data-url="https://ravellsl.github.io/caderno-exercicios/">
-          <div class="tile-inner">
-            <div class="tile-front"><span class="tile-kicker">Prática</span><h4 class="tile-title">Caderno de Exercícios</h4><p class="tile-desc">Listas e atividades</p></div>
-            <div class="tile-back"><button class="qa open">Abrir</button><button class="qa preview">Prévia</button><button class="qa pin">Fixar</button></div>
-          </div>
-        </div>
-        <div class="tile tile--flip" data-name="Caderno Digital" data-url="https://ravellsl.github.io/caderno-virtual/">
-          <div class="tile-inner">
-            <div class="tile-front"><span class="tile-kicker">Notas</span><h4 class="tile-title">Caderno Digital</h4><p class="tile-desc">Resumos e insights</p></div>
-            <div class="tile-back"><button class="qa open">Abrir</button><button class="qa preview">Prévia</button><button class="qa pin">Fixar</button></div>
-          </div>
-        </div>
-      </div>
-    </section>
+            <header class="hero-section hide-on-search">
+                <h1>Bem-vindo à sua Área de Aluno</h1>
+                <p>Explore a tecnologia no seu momento preferido!</p>
+            </header>
 
-    <section id="central-de-midias" class="section">
-      <h3>Central de Mídias</h3>
-      <div class="filter-menu">
-        <button class="filter-btn active" data-filter="all" aria-pressed="true">Todos</button>
-        <button class="filter-btn" data-filter="leitura" aria-pressed="false">Leitura</button>
-        <button class="filter-btn" data-filter="audio" aria-pressed="false">Áudio</button>
-        <button class="filter-btn" data-filter="video" aria-pressed="false">Vídeo</button>
-      </div>
-      <div class="pin-area" id="pin-area-media-grid" aria-label="Destaques - Central de Mídias">
-        <div class="pin-head">Destaques</div>
-        <div class="pin-grid" data-for="media-grid"></div>
-      </div>
-      <div class="tile-grid" id="media-grid">
-        <div class="tile tile--flip" data-category="leitura" data-name="Artigos" data-url="https://ravellsl.github.io/rstech-artigos/">
-          <div class="tile-inner">
-            <div class="tile-front"><span class="tile-kicker">Leitura</span><h4 class="tile-title">Artigos</h4><p class="tile-desc">Tecnologia e inovação</p></div>
-            <div class="tile-back"><button class="qa open">Abrir</button><button class="qa preview">Prévia</button><button class="qa pin">Fixar</button></div>
-          </div>
-        </div>
-        <div class="tile tile--flip" data-category="audio" data-name="Curiosidades" data-url="https://ravellsl.github.io/curiosidades-tech/">
-          <div class="tile-inner">
-            <div class="tile-front"><span class="tile-kicker">Áudio</span><h4 class="tile-title">Curiosidades</h4><p class="tile-desc">Pílulas rápidas</p></div>
-            <div class="tile-back"><button class="qa open">Abrir</button><button class="qa preview">Prévia</button><button class="qa pin">Fixar</button></div>
-          </div>
-        </div>
-        <div class="tile tile--flip" data-category="video" data-name="TechTube" data-url="https://ravellsl.github.io/techtube/">
-          <div class="tile-inner">
-            <div class="tile-front"><span class="tile-kicker">Vídeo</span><h4 class="tile-title">TechTube</h4><p class="tile-desc">Tutoriais e demos</p></div>
-            <div class="tile-back"><button class="qa open">Abrir</button><button class="qa preview">Prévia</button><button class="qa pin">Fixar</button></div>
-          </div>
-        </div>
-        <div class="tile tile--flip" data-category="audio" data-name="Podcast" data-url="https://ravellsl.github.io/podcast/">
-          <div class="tile-inner">
-            <div class="tile-front"><span class="tile-kicker">Áudio</span><h4 class="tile-title">Podcast</h4><p class="tile-desc">Debates aprofundados</p></div>
-            <div class="tile-back"><button class="qa open">Abrir</button><button class="qa preview">Prévia</button><button class="qa pin">Fixar</button></div>
-          </div>
-        </div>
-        <div class="tile tile--flip" data-category="leitura" data-name="Biblioteca Digital" data-url="https://ravellsl.github.io/rstech-biblioteca/">
-          <div class="tile-inner">
-            <div class="tile-front"><span class="tile-kicker">Leitura</span><h4 class="tile-title">Biblioteca Digital</h4><p class="tile-desc">Acervo e referências</p></div>
-            <div class="tile-back"><button class="qa open">Abrir</button><button class="qa preview">Prévia</button><button class="qa pin">Fixar</button></div>
-          </div>
-        </div>
-        <div class="tile tile--flip" data-category="leitura" data-action="boletim" data-name="Boletim Tech">
-          <div class="tile-inner">
-            <div class="tile-front"><span class="tile-kicker">Leitura</span><h4 class="tile-title">Boletim Tech</h4><p class="tile-desc">Notícias da Semana</p></div>
-            <div class="tile-back"><button class="qa preview">Abrir</button><button class="qa pin">Fixar</button></div>
-          </div>
-        </div>
-        <div class="tile tile--flip" data-category="leitura" data-name="Material Complementar" data-url="https://ravellsl.github.io/rstech-material/">
-          <div class="tile-inner">
-            <div class="tile-front"><span class="tile-kicker">Leitura</span><h4 class="tile-title">Material Complementar</h4><p class="tile-desc">Aprofundamentos</p></div>
-            <div class="tile-back"><button class="qa open">Abrir</button><button class="qa preview">Prévia</button><button class="qa pin">Fixar</button></div>
-          </div>
-        </div>
-        <div class="tile tile--flip" data-category="leitura" data-name="Palestras" data-url="https://ravellsl.github.io/palestra-IA-plataforma/">
-          <div class="tile-inner">
-            <div class="tile-front"><span class="tile-kicker">Leitura</span><h4 class="tile-title">Palestras</h4><p class="tile-desc">Páginas e recursos</p></div>
-            <div class="tile-back"><button class="qa open">Abrir</button><button class="qa preview">Prévia</button><button class="qa pin">Fixar</button></div>
-          </div>
-        </div>
-        <div class="tile tile--flip" data-category="leitura" data-name="Sites Complementares" data-url="https://ravellsl.github.io/sites-complementares/">
-          <div class="tile-inner">
-            <div class="tile-front"><span class="tile-kicker">Leitura</span><h4 class="tile-title">Sites Complementares</h4><p class="tile-desc">Exploração guiada</p></div>
-            <div class="tile-back"><button class="qa open">Abrir</button><button class="qa preview">Prévia</button><button class="qa pin">Fixar</button></div>
-          </div>
-        </div>
-        <div class="tile tile--flip" data-category="video" data-name="Vídeo Aulas" data-url="https://ravellsl.github.io/video-aulas/">
-          <div class="tile-inner">
-            <div class="tile-front"><span class="tile-kicker">Vídeo</span><h4 class="tile-title">Vídeo Aulas</h4><p class="tile-desc">Conteúdo por tema</p></div>
-            <div class="tile-back"><button class="qa open">Abrir</button><button class="qa preview">Prévia</button><button class="qa pin">Fixar</button></div>
-          </div>
-        </div>
-      </div>
-    </section>
+            <div class="grid-row grid-row-2col">
+                <section class="category-row" data-title="Inclusão Digital">
+                    <h2 class="category-title">Inclusão Digital</h2>
+                    <div class="card-container">
+                        <div class="video-card" data-modal-target="modal-inclusao-1" data-tooltip-search="As 4 Revoluções Industriais e seus impactos na sociedade.">
+                            <svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle" dy="-0.5em">Fundamentos</text><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle" dy="0.5em">Históricos</text></svg>
+                        </div>
+                        <div class="video-card" data-modal-target="modal-inclusao-2" data-tooltip-search="A história da informática, tipos de computadores e sistemas operacionais.">
+                            <svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle" dy="-0.5em">Evolução da</text><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle" dy="0.5em">Computação</text></svg>
+                        </div>
+                    </div>
+                </section>
+                <section class="category-row" data-title="Infraestrutura Computacional">
+                    <h2 class="category-title">Infraestrutura Computacional</h2>
+                    <div class="card-container">
+                        <div class="video-card" data-modal-target="modal-infra-1" data-tooltip-search="Componentes internos (CPU, bits), processamento de dados e algoritmos.">
+                            <svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle" dy="-0.5em">Arquitetura de</text><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle" dy="0.5em">Computadores</text></svg>
+                        </div>
+                        <div class="video-card" data-modal-target="modal-infra-2" data-tooltip-search="Entenda Servidores, Data Centers e computação em Nuvem, Névoa e Borda.">
+                            <svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Serviços e Ambientes</text></svg>
+                        </div>
+                        <div class="video-card" data-modal-target="modal-infra-3" data-tooltip-search="A interdisciplinaridade entre Ciência, Tecnologia, Engenharia e Matemática.">
+                            <svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">STEM</text></svg>
+                        </div>
+                    </div>
+                </section>
+            </div>
 
-    <section id="ferramentas-digitais" class="section">
-    <h3>Ferramentas Digitais</h3>
-    <div class="pin-area" id="pin-area-grid-tools" aria-label="Destaques - Ferramentas Digitais">
-        <div class="pin-head">Destaques</div>
-        <div class="pin-grid" data-for="grid-tools"></div>
+            <section class="category-row standalone" data-title="Redes e Comunicação Digital">
+                <h2 class="category-title">Redes e Comunicação Digital</h2>
+                <div class="card-container">
+                    <div class="video-card" data-modal-target="modal-redes-1" data-tooltip-search="A evolução das redes de comunicação, do 1G ao 5G e conectividade via satélite."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Gerações de Redes</text></svg></div>
+                    <div class="video-card" data-modal-target="modal-redes-2" data-tooltip-search="Padrões de conexão sem fio como Wi-Fi, Bluetooth, BLE, Li-Fi e mais."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Conexão Sem Fio</text></svg></div>
+                    <div class="video-card" data-modal-target="modal-redes-3" data-tooltip-search="Tecnologias de proximidade: Infravermelho (IrDA), GPS, NFC e RFID."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Comunicação (NFC/GPS)</text></svg></div>
+                    <div class="video-card" data-modal-target="modal-redes-4" data-tooltip-search="Como funcionam os padrões visuais: Código de Barras, QR Code, PDF417 e Data Matrix."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Padrões Visuais (QR)</text></svg></div>
+                    <div class="video-card" data-modal-target="modal-redes-5" data-tooltip-search="A infraestrutura da web: Navegadores, tipos de redes, HTTP/HTTPS e DNS."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Navegação e Protocolos</svg></div>
+                </div>
+            </section>
+
+            <div class="grid-row grid-row-3col">
+                <section class="category-row" data-title="Dispositivos e Equipamentos Digitais">
+                    <h2 class="category-title">Dispositivos e Equipamentos Digitais</h2>
+                    <div class="card-container">
+                        <div class="video-card" data-modal-target="modal-dispositivos-1" data-tooltip-search="Um catálogo de gadgets: de Cartões SD a Smartwatches e Drones."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Catálogo de Dispositivos</svg></div>
+                        <div class="video-card" data-modal-target="modal-dispositivos-2" data-tooltip-search="Os diferentes níveis e conceitos da Automação Residencial (Casa Inteligente)."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Automação Residencial</svg></div>
+                    </div>
+                </section>
+                <section class="category-row" data-title="Expansão Digital">
+                    <h2 class="category-title">Expansão Digital</h2>
+                    <div class="card-container">
+                        <div class="video-card" data-modal-target="modal-expansao-1" data-tooltip-search="O futuro: IoT, Metaverso, IA, Blockchain, Realidade Aumentada e mais."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Tecnologias Emergentes</svg></div>
+                    </div>
+                </section>
+                <section class="category-row" data-title="Economia Digital e Sistemas Financeiros">
+                    <h2 class="category-title">Economia Digital e Sistemas Financeiros</h2>
+                    <div class="card-container">
+                        <div class="video-card" data-modal-target="modal-economia-1" data-tooltip-search="Fundamentos da nova economia: Criptomoedas, Criptografia e Smart Contracts."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Fundamentos da Economia</svg></div>
+                        <div class="video-card" data-modal-target="modal-economia-2" data-tooltip-search="Novos modelos de negócio: Fintechs, Bancos Digitais, Marketplaces e NFTs."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Finanças e Serviços</svg></div>
+                        <div class="video-card" data-modal-target="modal-economia-3" data-tooltip-search="O impacto da automação no trabalho, Gig Economy e as Profissões do Futuro."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Trabalho e Sociedade</svg></div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="grid-row grid-row-3col">
+                <section class="category-row" data-title="Robótica e Fabricação Aditiva">
+                    <h2 class="category-title">Robótica e Fabricação Aditiva</h2>
+                    <div class="card-container">
+                        <div class="video-card" data-modal-target="modal-robotica-1" data-tooltip-search="Conceitos de robótica, IA, Cobots, Sensores e o que é uma 'Dark Factory'."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Robótica e Sistemas</text></svg></div>
+                        <div class="video-card" data-modal-target="modal-fabricacao-1" data-tooltip-search="Conheça a Impressão 3D, seu uso na construção civil e a Impressão 4D."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Fabricação Aditiva</text></svg></div>
+                    </div>
+                </section>
+                <section class="category-row" data-title="Sociedade e Cultura Tech">
+                    <h2 class="category-title">Sociedade e Cultura Tech</h2>
+                    <div class="card-container">
+                        <div class="video-card" data-modal-target="modal-sociedade-1" data-tooltip-search="Os efeitos da tecnologia na sociedade: Bolhas, 'Quinto Poder' e Paradoxo da Conexão."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Tecnologia e Sociedade</text></svg></div>
+                        <div class="video-card" data-modal-target="modal-filosofia-1" data-tooltip-search="Correntes de pensamento como Cyberpunk, Transumanismo, Dataísmo e Neo-Luddismo."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Correntes Filosóficas</text></svg></div>
+                    </div>
+                </section>
+                <section class="category-row" data-title="Saúde e Tecnologia">
+                    <h2 class="category-title">Saúde e Tecnologia</h2>
+                    <div class="card-container">
+                        <div class="video-card" data-modal-target="modal-saude-1" data-tooltip-search="A relação entre tecnologia e saúde: Burnout Digital, Distúrbios do Sono e Saúde Mental."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Saúde e Tecnologia</text></svg></div>
+                    </div>
+                </section>
+            </div>
+
+        </section> 
+        <section id="midias" class="tab-content">
+            <section class="category-row standalone" data-title="Central de Mídias">
+                <h2 class="category-title" style="padding-top: 2rem;">Central de Mídias</h2>
+                <div class="card-container">
+                    <a href="https://ravellsl.github.io/podcast/" target="_blank" class="tool-card" data-title="Podcast">
+                        <span>🎙️</span>
+                        Podcast
+                    </a>
+                    <a href="https://ravellsl.github.io/boletim-tecnologico-02-11-2025/" target="_blank" class="tool-card" data-title="Boletim Tech">
+                        <span>📰</span>
+                        Boletim Tech
+                    </a>
+                    <a href="https://ravellsl.github.io/rstech-artigos/" target="_blank" class="tool-card" data-title="Artigos">
+                        <span>📄</span>
+                        Artigos
+                    </a>
+                    <a href="https://ravellsl.github.io/video-aulas/#home" target="_blank" class="tool-card" data-title="Dúvidas em Vídeo">
+                        <span>💬</span>
+                        Dúvidas em Vídeo
+                    </a>
+                </div>
+            </section>
+        </section> 
+        <section id="ferramentas" class="tab-content">
+            <section class="category-row standalone" data-title="Ferramentas Digitais">
+                <h2 class="category-title" style="padding-top: 2rem;">Ferramentas Digitais</h2>
+                <div class="card-container">
+                    <a href="https://ravellsl.github.io/dicionario-tech/" target="_blank" class="tool-card" data-title="Dicionário Tech">
+                        <span>📖</span>
+                        Dicionário Tech
+                    </a>
+                    <a href="https://ravellsl.github.io/rstechaluno-agentes-IA/" target="_blank" class="tool-card" data-title="Agentes de IA">
+                        <span>🤖</span>
+                        Agentes de IA
+                    </a>
+                    <a href="https://ravellsl.github.io/ferramenta-busca-noticias/" target="_blank" class="tool-card" data-title="Diário de Notícias">
+                        <span>🔍</span>
+                        Diário de Notícias
+                    </a>
+                    <a href="https://ravellsl.github.io/IA-plataform/" target="_blank" class="tool-card" data-title="Inteligência Artificial">
+                        <span>🧠</span>
+                        Inteligência Artificial
+                    </a>
+                    <a href="https://ravellsl.github.io/SynTHub-IA/" target="_blank" class="tool-card" data-title="Hub de IA">
+                        <span>💡</span>
+                        Hub de IA
+                    </a>
+                    <a href="https://ravellsl.github.io/bloco-de-notas/" target="_blank" class="tool-card" data-title="Bloco de Notas">
+                        <span>📝</span>
+                        Bloco de Notas
+                    </a>
+                </div>
+            </section>
+        </section> 
+    </main>
+    
+    <div class="hidden-modal-source">
+        <div id="modal-inclusao-1">
+            <div class="inline-modal-header"><h3>Fundamentos Históricos e Tecnológicos</h3><button class="inline-modal-close-btn">&times;</button></div>
+            <div class="inline-video-list">
+                <a href="https://drive.google.com/file/d/1VauRulgLM5oyapz1N1NNOX7zpNT3H0_j/preview" target="_blank">1ª Revolução Industrial</a>
+                <a href="https://drive.google.com/file/d/1P746992E6vM75wuALE-Ixb_HqJ3HFYHw/preview" target="_blank">2ª Revolução Industrial</a>
+                <a href="https://drive.google.com/file/d/1p3kc97rY7cmohcYUapdrCKljjBYrg42p/preview" target="_blank">3ª Revolução Industrial</a>
+                <a href="https://drive.google.com/file/d/1phlnfnpg9vhhups246AWt-GrsUxf_kO5/preview" target="_blank">4ª Revolução Industrial</a>
+            </div>
+        </div>
+        <div id="modal-inclusao-2">
+            <div class="inline-modal-header"><h3>Evolução da Computação e da Informática</h3><button class="inline-modal-close-btn">&times;</button></div>
+            <div class="inline-video-list">
+                <a href="https://drive.google.com/file/d/1PBLGlu7wUe1dW2wB1SzVoTqORZ3b7m2p/preview" target="_blank">Introdução à Informática</a>
+                <a href="https://drive.google.com/file/d/1mUB8hmEeHiplG60F3K0hloCzSh9U83h3/preview" target="_blank">Evolução da Computação</a>
+                <a href="https://drive.google.com/file/d/1_6zOqtFkOzNEiLTmygRPjSfb4OpRQiJW/preview" target="_blank">Tipos de Computadores</a>
+                <a href="https://drive.google.com/file/d/12F__7jibSxK4KRRUOdG2DUWKoWEkHnUc/preview" target="_blank">Sistemas Operacionais</a>
+            </div>
+        </div>
+        <div id="modal-infra-1">
+            <div class="inline-modal-header"><h3>Arquitetura de Computadores</h3><button class="inline-modal-close-btn">&times;</button></div>
+            <div class="inline-video-list">
+                <a href="https://drive.google.com/file/d/1B1EQGiarLYni19P5BmYcLOdPWFwIPH90/preview" target="_blank">Estrutura e Componentes Internos</a>
+                <a href="https://drive.google.com/file/d/1JMlLZpCLv458MG2uSKed9jskctEcIR4a/preview" target="_blank">Os Múltiplos dos Bits</a>
+                <a href="https://drive.google.com/file/d/1NhaQ2tt4FbH-ktqOIlvbwKmvEA8fFimk/preview" target="_blank">Processamento de Dados na CPU</a>
+                <a href="https://drive.google.com/file/d/1jFgW3fiDSjTNOhhIXdUbCJsIPWvYbwab/preview" target="_blank">Algoritmos</a>
+            </div>
+        </div>
+        <div id="modal-infra-2">
+            <div class="inline-modal-header"><h3>Serviços e Ambientes Tecnológicos</h3><button class="inline-modal-close-btn">&times;</button></div>
+            <div class="inline-video-list">
+                <a href="https://drive.google.com/file/d/1CaNCwx1G3BMrHyplThSHTQZI7U9DNNYy/preview" target="_blank">Servidores e Data Centers</a>
+                <a href="https://drive.google.com/file/d/1I8pnJ0ufj_HNMvrulnxtiUIaIUbkWaf6/preview" target="_blank">Cloud Computing</a>
+                <a href="https://drive.google.com/file/d/1i83xaqZFl2egA6B9InrhEAZ5gDPKszHv/preview" target="_blank">Fog Computing</a>
+                <a href="https://drive.google.com/file/d/16h9WQRy6EX4c7ugWQCxaoNztksPVLeHg/preview" target="_blank">Edge Computing</a>
+            </div>
+        </div>
+        <div id="modal-infra-3">
+            <div class="inline-modal-header"><h3>Ciência, Tecnologia, Engenharia e Matemática (STEM)</h3><button class="inline-modal-close-btn">&times;</button></div>
+            <div class="inline-video-list">
+                <a href="https://drive.google.com/file/d/1978-HRY04zxPfI0lsDSJvL3n_Mfyv7YG/preview" target="_blank">STEM</a>
+                <a href="https://drive.google.com/file/d/1c4Y1m9a4cOSP6bxL0v8DMzdabkykbQks/preview" target="_blank">Matemática Essencial</a>
+                <a href="https://drive.google.com/file/d/11e4RJaR3rSWBzoEhosJll92lHkHZNvcD/preview" target="_blank">Transformada de Fourier</a>
+                <a href="https://drive.google.com/file/d/1bmyrpugoSPPF8qJy9X3L86BzKUFdJRmD/preview" target="_blank">Física Clássica vs Quântica</a>
+                <a href="https://drive.google.com/file/d/1cuEmsRofyObN7h7otnZDEn4rY_GJnw5I/preview" target="_blank">Física Quântica</a>
+                <a href="https://drive.google.com/file/d/1V0ymHNMpq1zHGb2TeMNGqCWgXNKP6CIi/preview" target="_blank">Química & Tecnologia</a>
+                <a href="https://drive.google.com/file/d/1ZxSHGOTzeD3Cnw3TdjHk3YaGthsdLswq/preview" target="_blank">Biologia & Tecnologia</a>
+            </div>
+        </div>
+        <div id="modal-redes-1">
+            <div class="inline-modal-header"><h3>História e Gerações de Redes</h3><button class="inline-modal-close-btn">&times;</button></div>
+            <div class="inline-video-list">
+                <a href="https://drive.google.com/file/d/1tdwvsAFD__KU_7qQWcakI_99PP8ivger/preview" target="_blank">Criação e Evolução das Redes</a>
+                <a href="https://drive.google.com/file/d/1r4fIWE67ye4gsNtbhvZbag-gOLpS7fzY/preview" target="_blank">Rede 1G</a>
+                <a href="https://drive.google.com/file/d/1vwhAry-J-TJ0DphCyUC8Jg3rx0wECnqA/preview" target="_blank">Rede 2G</a>
+                <a href="https://drive.google.com/file/d/1sPb6HZaHvpW4wO27WMc5dQ9c0Td59KdV/preview" target="_blank">Rede 3G</a>
+                <a href="https://drive.google.com/file/d/10u7FA5z9aV9Ebl8oYCI26s0RzRmWR2-D/preview" target="_blank">Rede 4G</a>
+                <a href="https://drive.google.com/file/d/1kZxVr4RucQnXT975aZA-0ivPACnDkkPP/preview" target="_blank">Rede 5G</a>
+                <a href="https://drive.google.com/file/d/1M57-ts_ZO7krfOP7LlUgXNZ-CtGp6nBl/preview" target="_blank">Conectividade por Satélites</a>
+            </div>
+        </div>
+        <div id="modal-redes-2">
+            <div class="inline-modal-header"><h3>Padrões de Conexão Sem Fio</h3><button class="inline-modal-close-btn">&times;</button></div>
+            <div class="inline-video-list">
+                <a href="https://drive.google.com/file/d/1G9AP6R2ojcu6xyjz5yacBhcmKs7c7r9v/preview" target="_blank">Wi-Fi</a>
+                <a href="https://drive.google.com/file/d/15mNOJMBpUpXFt6sSbNms5a44Q68na1Xx/preview" target="_blank">Bluetooth</a>
+                <a href="https://drive.google.com/file/d/1VwkQ8Dj1dSao4M8ybrWT2IX3FyYXBPAP/preview" target="_blank">Bluetooth Low Energy</a>
+                <a href="https://drive.google.com/file/d/1_aMjAUGSqvTeCwf5SHmu0Bfo-BNOM5PW/preview" target="_blank">Li-Fi</a>
+                <a href="https://drive.google.com/file/d/1W-EqyxZSOOLaTBtaQfaN1r76qtSFy4EL/preview" target="_blank">Thread</a>
+                <a href="https://drive.google.com/file/d/1m15pxLPwtW2_ledtVXxLTJ6XWog8WnUR/preview" target="_blank">Ultra Wideband</a>
+                <a href="https://drive.google.com/file/d/1w4eHHFpxgl2jh-GjI_LmbCZfWQkI5hl2/preview" target="_blank">Zigbee</a>
+            </div>
+        </div>
+        <div id="modal-redes-3">
+            <div class="inline-modal-header"><h3>Comunicação por Proximidade</h3><button class="inline-modal-close-btn">&times;</button></div>
+            <div class="inline-video-list">
+                <a href="https://drive.google.com/file/d/1J4ZL_r8ZkbzK8F6eC5xIXzDpmyjRa2hd/preview" target="_blank">Infravermelho (IrDA)</a>
+                <a href="https://drive.google.com/file/d/1YGevrVlEwkBTMIuZSYpHStTeF_gAf0wG/preview" target="_blank">GPS</a>
+                <a href="https://drive.google.com/file/d/1GWctg-KtXF3C7XXvbZ8FQogsrNgmQ_eM/preview" target="_blank">NFC</a>
+                <a href="https://drive.google.com/file/d/1QGisW3IBr4nsl0IB3A6qc7pAnLaH_H3w/preview" target="_blank">RFID</a>
+            </div>
+        </div>
+        <div id="modal-redes-4">
+            <div class="inline-modal-header"><h3>Padrões Visuais de Dados</h3><button class="inline-modal-close-btn">&times;</button></div>
+            <div class="inline-video-list">
+                <a href="https://drive.google.com/file/d/1HDNLHecSo4vfw9z_aNoQljAyBzSTIg2V/preview" target="_blank">Código de Barras</a>
+                <a href="https://drive.google.com/file/d/102EDP9L5rHjDZNwZ0Dz4xeVBPMuVbFb0/preview" target="_blank">QR Code</a>
+                <a href="https://drive.google.com/file/d/1RYE4cmxEz_QrvsuqRg7qOuiW04vVR1bM/preview" target="_blank">PDF417</a>
+                <a href="https://drive.google.com/file/d/11tzKRTRCm93ekdAWifnQD1Tmh0LGBqt8/preview" target="_blank">Data Matrix</a>
+            </div>
+        </div>
+        <div id="modal-redes-5">
+            <div class="inline-modal-header"><h3>Ferramentas de Navegação e Protocolos</h3><button class="inline-modal-close-btn">&times;</button></div>
+            <div class="inline-video-list">
+                <a href="https://drive.google.com/file/d/1BgkjxNeahyzceorvjtFJMqMaM3dzMINu/preview" target="_blank">Infraestrutura Global & Tipos de Redes</a>
+                <a href="https://drive.google.com/file/d/1ZHKZ8ys_xX5qtYbGvwIufPpxTUjNUVp3/preview" target="_blank">Navegadores</a>
+                <a href="https://drive.google.com/file/d/1a3tXNpGxJnrjKLRYU85Dn9zxwjvVAExT/preview" target="_blank">HTTP e HTTPS</a>
+                <a href="https://drive.google.com/file/d/1NFbIR1Giud1W727tJboVPFG_N8sAlRLb/preview" target="_blank">DNS</a>
+            </div>
+        </div>
+        <div id="modal-dispositivos-1">
+            <div class="inline-modal-header"><h3>Catálogo de Dispositivos Digitais</h3><button class="inline-modal-close-btn">&times;</button></div>
+            <div class="inline-video-list">
+                <a href="https://drive.google.com/file/d/1rkj1dsKL0pIf6TbynNUaIEVfRNyOkJnS/preview" target="_blank">Cartões SD-MicroSD</a>
+                <a href="https://drive.google.com/file/d/1SitXhHokFqiqqcNU5zFYAggmjlZGvbeQ/preview" target="_blank">Controladores Hápticos</a>
+                <a href="https://drive.google.com/file/d/1TQ_dqF0ARaL9QWqz5RTAXXe6ILkPZcR5/preview" target="_blank">Drones</a>
+                <a href="https://drive.google.com/file/d/1qX8IzfMyJZkFODcSueH-WDSzBdDhUQFJ/preview" target="_blank">HD Externo</a>
+                <a href="https://drive.google.com/file/d/1oCMtZk7O0KeFJdgL59QmszBs5kiNcNjM/preview" target="_blank">Impressoras Multifuncionais</a>
+                <a href="https://drive.google.com/file/d/1Fm54CNSifVjdP2Gd5panQxq3TaorBtx1/preview" target="_blank">Impressoras</a>
+                <a href="https://drive.google.com/file/d/1gJUx0n4pnGN_5A1eQ88zhuGS5GJSa6Zl/preview" target="_blank">Kindle</a>
+                <a href="https://drive.google.com/file/d/1rOW8ufA91Fhxnc6HAZW3S67CMF7LSxbl/preview" target="_blank">Mesa Digitalizadora</a>
+                <a href="https://drive.google.com/file/d/1WPUyAjlTU68c1w6ikC6Nfg7lSwm9PXLG/preview" target="_blank">Óculos de Realidade Virtual</a>
+                <a href="https://drive.google.com/file/d/1tv4h3_7VL4mlj1_it_G7I4e8BZDjd_0x/preview" target="_blank">Pen Drives</a>
+                <a href="https://drive.google.com/file/d/1n7d1gKFbHOsjnjdaWJ4aMCB_PPghJ7br/preview" target="_blank">Projetores Domésticos</a>
+                <a href="https://drive.google.com/file/d/1Gx0VrrzPJqNaXF8kcF-GW188unG2_hOy/preview" target="_blank">Roteador Mesh</a>
+                <a href="https://drive.google.com/file/d/1kaXiD6o41_B3mOGTyRFacFeoqC5bYN3q/preview" target="_blank">Roteadores Wi-Fi</a>
+                <a href="https://drive.google.com/file/d/1bHW2yE0Hltf9YYEh5Gw93SsDWEUNfNUB/preview" target="_blank">Scanners</a>
+                <a href="https://drive.google.com/file/d/1JiGUHjP3-RhfZiCTl9rdtTu0i9FjZt7z/preview" target="_blank">Smart TV</a>
+                <a href="https://drive.google.com/file/d/14HOtTcj7kyUDkyHyqTsf6-5wdkECLr3Q/preview" target="_blank">Smartglasses</a>
+                <a href="https://drive.google.com/file/d/1wTlyITihRcETI3cXUeluirH_47xT1PCt/preview" target="_blank">Smartphones</a>
+                <a href="https://drive.google.com/file/d/1pzjIJnmZmf2yoRebzTsu7IcVhTi5VReD/preview" target="_blank">Smartwatches</a>
+                <a href="https://drive.google.com/file/d/1Ax75h0SIVoO9xGyPhxdT6uD3gsFoBco2/preview" target="_blank">Webcam</a>
+            </div>
+        </div>
+        <div id="modal-dispositivos-2">
+            <div class="inline-modal-header"><h3>Automação Residencial</h3><button class="inline-modal-close-btn">&times;</button></div>
+            <div class="inline-video-list">
+                <a href="https://drive.google.com/file/d/1QXusfEzFKsXa-QE4-ZHKvuUTfTfBcFuN/preview" target="_blank">Nível 1</a>
+                <a href="https://drive.google.com/file/d/17ymBmFPyXtd0CgmIoSDpRCbgX7925ZBi/preview" target="_blank">Nível 2</a>
+                <a href="https://drive.google.com/file/d/1xj28ruyJG8dPWp6azG1e0_qr1w7auFuh/preview" target="_blank">Nível 3</a>
+            </div>
+        </div>
+        <div id="modal-expansao-1">
+            <div class="inline-modal-header"><h3>Tecnologias Emergentes</h3><button class="inline-modal-close-btn">&times;</button></div>
+            <div class="inline-video-list">
+                <a href="https://drive.google.com/file/d/1b1_NcOUefRFADk-zQFKt4RbN6wTA2b6c/preview" target="_blank">Ameaças Virtuais</a>
+                <a href="https://drive.google.com/file/d/1nGGPo3dEwKiY3HTexrWTW6o-HISjGZA6/preview" target="_blank">Automação da Confiança</a>
+                <a href="https://drive.google.com/file/d/1EM06EFRXYVpwpbP0tCnJsLG8XhB-rba3/preview" target="_blank">Blockchain</a>
+                <a href="https://drive.google.com/file/d/1T9R5VNZsy-YAChDqVVC0MFmocArt-jZ0/preview" target="_blank">Cidades Inteligentes</a>
+                <a href="https://drive.google.com/file/d/1LgOE-c6Vsz4uaVxY4ZeIhT71CPQ3__1t/preview" target="_blank">Computação Ubiqua</a>
+                <a href="https://drive.google.com/file/d/13HKgcYTFP94HeTU8rOVm6uuMLol5cUDQ/preview" target="_blank">Gêmeos Digitais</a>
+                <a href="https://drive.google.com/file/d/1AXJGYg52l1lmG0WZtEbehVDuE6DnP6ZH/preview" target="_blank">Inteligência Artificial das Coisas (AloT)</a>
+                <a href="https://drive.google.com/file/d/1TkVaNbygwYAHjqlQDGoenjpTlqeqRK2b/preview" target="_blank">Internet das Coisas (IoT)</a>
+                <a href="https://drive.google.com/file/d/1qLAFGODxMrFHlb6Rud0ZLns1yCm4cNcH/preview" target="_blank">Metamateriais</a>
+                <a href="https://drive.google.com/file/d/1UJVAareS515shr9HjAcX78HvFDppGfMn/preview" target="_blank">Metaverso</a>
+                <a href="https://drive.google.com/file/d/1X266It6pG90aqGr5ZCWQ4XZ3aD3VjBub/preview" target="_blank">Nanotecnologia</a>
+                <a href="https://drive.google.com/file/d/1SGYc6SK2zFwBrjwRltBRGrfVRzyhq4hD/preview" target="_blank">O Paradoxo Ambiental da Economia Digital</a>
+                <a href="https://drive.google.com/file/d/1Ly2I1VY1LlhvS4rCXOAQiP_mjNjJHwM1/preview" target="_blank">Plataformas de Streaming</a>
+                <a href="https://drive.google.com/file/d/1wO1PSV61Awcl0GGEWxGV14ieqD-gTpCB/preview" target="_blank">Realidade Aumentada</a>
+                <a href="https://drive.google.com/file/d/12U4_YL6-XaICraFyhQGiNAS_xFBJVoMh/preview" target="_blank">Realidade Háptica</a>
+                <a href="https://drive.google.com/file/d/1-Bi3XTaKTfiOx28KdVZM5kHQImQIG4me/preview" target="_blank">Realidade Mista</a>
+                <a href="https://drive.google.com/file/d/1g9iDGefEKQm0FX45_MZJMrPFJ2rEPFS_/preview" target="_blank">Realidade Virtual</a>
+                <a href="https://drive.google.com/file/d/17Y0dFBePNFwXEEI3wCi-kZ55VlPW_vVb/preview" target="_blank">Simbiose Homem-Máquina</a>
+                <a href="https://drive.google.com/file/d/1GFxr-FpaGxxroPJ31DCOj-F05fv6bPVG/preview" target="_blank">Smart Rental</a>
+            </div>
+        </div>
+        <div id="modal-economia-1">
+            <div class="inline-modal-header"><h3>Introdução, Contexto e Fundamentos</h3><button class="inline-modal-close-btn">&times;</button></div>
+            <div class="inline-video-list">
+                <a href="https://drive.google.com/file/d/1h57z4PW6enrp_VMgpJFYqB8XMQSL0MWq/preview" target="_blank">Desmaterialização Econômica</a>
+                <a href="https://drive.google.com/file/d/1QAswNzWda1ZE0ktPeOyOVxdJKwin1kV3/preview" target="_blank">PIB Digital</a>
+                <a href="https://drive.google.com/file/d/1z4D_hQ__XXNzlG0rIITqDapvR5u07fvL/preview" target="_blank">Economia do Conhecimento e Cursos Online</a>
+                <a href="https://drive.google.com/file/d/1rV7YwvN-Lz0fnDbhel3mi68UzE3YPdGJ/preview" target="_blank">Economia Digital</a>
+                <a href="https://drive.google.com/file/d/1QxPgzUvgonF7kcQ_TmkPQTKUDZJ3JWxL/preview" target="_blank">Criptografia</a>
+                <a href="https://drive.google.com/file/d/1bO1yAe8lXDgKvMly00Lvbf3tQIfpDa68/preview" target="_blank">Criptomoedas</a>
+                <a href="https://drive.google.com/file/d/13NKKqmZPChqqBbYV34x8gJGawLSwyHig/preview" target="_blank">Tokenização, Stablecoins e a Nova Arquitetura Financeira</a>
+                <a href="https://drive.google.com/file/d/1gUEtLcGXeraNaIsyNv2wkZW3A9USjgYr/preview" target="_blank">Smart Contracts</a>
+            </div>
+        </div>
+        <div id="modal-economia-2">
+            <div class="inline-modal-header"><h3>Finanças, Serviços e Modelos Econômicos</h3><button class="inline-modal-close-btn">&times;</button></div>
+            <div class="inline-video-list">
+                <a href="https://drive.google.com/file/d/1xpM0CUUHAobOxxjaUb94GDLFM1EVTzuF/preview" target="_blank">Fintechs e Bancos Digitais</a>
+                <a href="https://drive.google.com/file/d/1Pub3vlgSmsBXVpMInAWW_67twdqTgEE7/preview" target="_blank">Carteiras Digitais</a>
+                <a href="https://drive.google.com/file/d/1juKdRyqSVxPu939kXNKv-9WxzmuKo8js/preview" target="_blank">SuperApps</a>
+                <a href="https://drive.google.com/file/d/1Cs9oXGyTt_bJKwcwNqqvf-HmMBsgqAtV/preview" target="_blank">Marketplaces</a>
+                <a href="https://drive.google.com/file/d/18KLS5eiqmA5XXmMmbHcFWGIboCjpx3P4/preview" target="_blank">NFTs</a>
+                <a href="https://drive.google.com/file/d/1SjMeBlE4uCB_HmMhhOt69rGCnLeX0n7W/preview" target="_blank">Tokenização</a>
+            </div>
+        </div>
+        <div id="modal-economia-3">
+            <div class="inline-modal-header"><h3>Trabalho, Sociedade e Transformação</h3><button class="inline-modal-close-btn">&times;</button></div>
+            <div class="inline-video-list">
+                <a href="https://drive.google.com/file/d/1pqf5f5wrT2yy3UWsvLZPAD2_V1lflRfA/preview" target="_blank">Gig Economy</a>
+                <a href="https://drive.google.com/file/d/1F0SVSZMWln_iz1uWk_vcwBrOEBIGFm_2/preview" target="_blank">Automação, IA e a Reinvenção do Trabalho</a>
+                <a href="https://drive.google.com/file/d/1HInPyYBTRI8TU81fRSStWXJGU_pjusCs/preview" target="_blank">Automação, Emprego e o Futuro do Trabalho no Brasil</a>
+                <a href="https://drive.google.com/file/d/1VJabxu0dMMVUMV9xEiBXhXeFZNAzp4BJ/preview" target="_blank">AgroTech</a>
+                <a href="https://drive.google.com/file/d/1GOXZ3KlxVvFCJMRB6zxDNhIgziQRJE2j/preview" target="_blank">Inclusão Digital e A Nova Desigualdade de Classes</a>
+                <a href="https://drive.google.com/file/d/18EYqBxNwxnp7qhdXZVaW6i9e5bK1Rt6w/preview" target="_blank">Educação Tecnológica e Requalificação</a>
+                <a href="https://drive.google.com/file/d/1UjDXOUTJAkmU9jgSI10gCcMYYHDRHIXe/preview" target="_blank">Profissões do Futuro</a>
+            </div>
+        </div>
+        <div id="modal-robotica-1">
+            <div class="inline-modal-header"><h3>Robótica e Sistemas Autônomos</h3><button class="inline-modal-close-btn">&times;</button></div>
+            <div class="inline-video-list">
+                <a href="https://drive.google.com/file/d/1xXTPD0vHHb6WxtcA6_2AzZdbcktSaNYW/preview" target="_blank">Robôs - Conceitos Básicos e Aplicações</a>
+                <a href="https://drive.google.com/file/d/1v6VTu6SE3zwFJqdk7KvS9hu8EI4osWZ-/preview" target="_blank">Tipos de robôs</a>
+                <a href="https://drive.google.com/file/d/1rPHdm6_WghFkVUb0Bik_tPQ6Wd5kjKs0/preview" target="_blank">Classificações da Robótica</a>
+                <a href="https://drive.google.com/file/d/1zcbIBCKGDAAB2aYffv2NjeCqwwmIcQjM/preview" target="_blank">Cobots</a>
+                <a href="https://drive.google.com/file/d/15DyEcT16FjHpRYMTRgY-_PDJXH-QccE4/preview" target="_blank">Sensores e Atuadores</a>
+                <a href="https://drive.google.com/file/d/1vS42PZg0_nxBgh9m2VPJN62Af6s2vMvs/preview" target="_blank">Inteligência Artificial na Robótica</a>
+                <a href="https://drive.google.com/file/d/1QxCWgFOM8akSOWM3yrUqH3IKO-mduYj-/preview" target="_blank">Aprendizado de máquina para robôs</a>
+                <a href="https://drive.google.com/file/d/10CqClT8aG46r_kntEgo9-6OnaSfWUAUX/preview" target="_blank">Dark Factory</a>
+            </div>
+        </div>
+        <div id="modal-fabricacao-1">
+            <div class="inline-modal-header"><h3>Fabricação Aditiva</h3><button class="inline-modal-close-btn">&times;</button></div>
+            <div class="inline-video-list">
+                <a href="https://drive.google.com/file/d/1rcLcKKzsttD_MIKOCYlhrqvMUXjsnZOF/preview" target="_blank">Impressão 3D</a>
+                <a href="https://drive.google.com/file/d/14aRw7dsW_gnqU_lHNu0qpuP6WhWJwnmu/preview" target="_blank">Impressão 3D na Construção Civil</a>
+                <a href="https://drive.google.com/file/d/1Cv98qbfkL4fZf2LkLynm0V2cWitB0NSt/preview" target="_blank">Impressão 4D</a>
+            </div>
+        </div>
+        <div id="modal-sociedade-1">
+            <div class="inline-modal-header"><h3>Tecnologia e Sociedade</h3><button class="inline-modal-close-btn">&times;</button></div>
+            <div class="inline-video-list">
+                <a href="https://drive.google.com/file/d/11l87fY9QzukdaQcuALq-HK4nuWSTjjtq/preview" target="_blank">Bolhas Informacionais</a>
+                <a href="https://drive.google.com/file/d/1NiJSR4YXXKIOebwUkIkKkDVEC1Y40vrA/preview" target="_blank">Como a Tecnologia Redefiniu a Percepção do Tempo</a>
+                <a href="https://drive.google.com/file/d/1tPFzn_E8pxE2zcbJxy4QKqU8r3fYQ_bD/preview" target="_blank">Novas Estruturas Sociais na Era Tecnológica</a>
+                <a href="https://drive.google.com/file/d/1snz6eSe3K9FA5KFOkFyNMRP0VhVoamwD/preview" target="_blank">O Quinto Poder</a>
+                <a href="https://drive.google.com/file/d/1TCuouFiBS0akZYYgPn6BmBr_i0cBJV8f/preview" target="_blank">Paradoxo da Conexão</a>
+            </div>
+        </div>
+        <div id="modal-filosofia-1">
+            <div class="inline-modal-header"><h3>Correntes Filosóficas e Culturais</h3><button class="inline-modal-close-btn">&times;</button></div>
+            <div class="inline-video-list">
+                <a href="https://drive.google.com/file/d/1guVBthHG42QPvs-pkEz-K4GIgEPb7Ot2/preview" target="_blank">Tecnoautoritarismo</a>
+                <a href="https://drive.google.com/file/d/1jEpyUwGXTnYjtjjwuTS_SXsuDG8_wqFY/preview" target="_blank">Cyberpunk</a>
+                <a href="https://drive.google.com/file/d/1ovMj2BIfXAUHr77QoO_BkjHtyPInZdCG/preview" target="_blank">Cypherpunk</a>
+                <a href="https://drive.google.com/file/d/1EQ5qH-zY-F5ZT1YSTXqlvLSDUe49a7kU/preview" target="_blank">Dataísmo</a>
+                <a href="https://drive.google.com/file/d/1-jK9Dy9vPBlYGoRNszi3KhZW6KULRvZ7/preview" target="_blank">Transumanismo</a>
+                <a href="https://drive.google.com/file/d/1DF5p-HhzF9cBvSm8OQGZt4wNxUGAh7Px/preview" target="_blank">Biohacking e Nootrópicos</a>
+                <a href="https://drive.google.com/file/d/1rIltUueS2kvzilZr8ibjEzbxLibPuRIQ/preview" target="_blank">Ludologia</a>
+                <a href="https://drive.google.com/file/d/1Rh0XNDMLn5MSDIibd8pJ4R8ElgzewSX8/preview" target="_blank">Anarquismo Digital</a>
+                <a href="https://drive.google.com/file/d/1JXI3nJM7wgEbqhxvwlg9d9sVyrUx9eZq/preview" target="_blank">Neo-Luddismo</a>
+                <a href="https://drive.google.com/file/d/18F14r-yRAkPzZ4Tc4l3kMsJ0jUqKmurW/preview" target="_blank">Tecnofeminismo</a>
+                <a href="https://drive.google.com/file/d/1x1NS7rI1yr5MzdHqXI_UKUIED8W2liEs/preview" target="_blank">Tecnogaianismo</a>
+                <a href="https://drive.google.com/file/d/1WTcpvjgvhxGdHwXOgbbUzE9J1xIz9zlZ/preview" target="_blank">Cibernética</a>
+                <a href="https://drive.google.com/file/d/1fWp6kNJjv_HKST6HRsMzEptHJoSebV8X/preview" target="_blank">Singularidade Tecnológica</a>
+            </div>
+        </div>
+        <div id="modal-saude-1">
+            <div class="inline-modal-header"><h3>Saúde e Tecnologia</h3><button class="inline-modal-close-btn">&times;</button></div>
+            <div class="inline-video-list">
+                <a href="https://drive.google.com/file/d/1CkAU8bvL7gIGwRwzPdK8-dq6kEUY990M/preview" target="_blank">Ansiedade e Estresse no Contexto Tecnológico</a>
+                <a href="https://drive.google.com/file/d/1kxTs_8ndG72NbjalH4M5uJ-9yAOghKL-/preview" target="_blank">Atuação da Computação Quântica nas Vacinas</a>
+                <a href="https://drive.google.com/file/d/1RZfHMbzsH1D_ogKEWxPwLebKUVpCc1Tn/preview" target="_blank">Cansaço Tecnológico</a>
+                <a href="https://drive.google.com/file/d/1VqehNXPr3dq-moOWijL-eQ2yzgplfVEy/preview" target="_blank">Dependência Tecnológica na Era Digital</a>
+                <a href="https://drive.google.com/file/d/1X4zYUuZDnrw-uE5k0LUKsCsHYyMn7oLr/preview" target="_blank">Despersonalização e Isolamento Social</a>
+                <a href="https://drive.google.com/file/d/1P0hJx08ZBWKKkReKdNyFHpHS2mGJKbG7/preview" target="_blank">Distúrbios Auditivos</a>
+                <a href="https://drive.google.com/file/d/1SGuzAZM7kxUzs8_h8GCkdWAQdRwnpTIP/preview" target="_blank">Distúrbios do Sono</a>
+                <a href="https://drive.google.com/file/d/1BvIcbreFJiuRgUJi7amHFFyhSxegwQbv/preview" target="_blank">Distúrbios Visuais</a>
+                <a href="https://drive.google.com/file/d/1mgqP_nhzwqrldagHCXNNq61ouPAUVDfW/preview" target="_blank">Estresse Pós-Traumático</a>
+                <a href="https://drive.google.com/file/d/1YQynUuN-KDV4Qq2idRHkBuCrZUT846HS/preview" target="_blank">Lesão por Esforço Repetitivo</a>
+                <a href="https://drive.google.com/file/d/1OJ9UtnI3BTHvzNGZfs4W-K4VHY23UdTE/preview" target="_blank">Síndrome de Burnout Digital</a>
+                <a href="https://drive.google.com/file/d/1bD2OepN_TwP0dcQR9lnr4fm8p-EfSqBd/preview" target="_blank">Tecnologia e Saúde Mental</a>
+            </div>
+        </div>
     </div>
-    <div class="tile-grid" id="grid-tools">
-        <div class="tile tile--flip" data-name="Inteligência Artificial" data-url="https://ravellsl.github.io/IA-plataform/">
-            <div class="tile-inner">
-                <div class="tile-front"><span class="tile-kicker">Ferramenta</span><h4 class="tile-title">Inteligência Artificial</h4><p class="tile-desc">Inteligências Artificiais mais utilizadas.</p></div>
-                <div class="tile-back"><button class="qa open">Abrir</button><button class="qa preview">Prévia</button><button class="qa pin">Fixar</button></div>
+    
+    <div class="modal-overlay" id="global-modal-overlay">
+        <div class="modal-content" id="global-modal-content">
             </div>
-        </div>
-        <div class="tile tile--flip" data-name="Hub de IA's" data-url="https://ravellsl.github.io/SynTHub-IA/">
-            <div class="tile-inner">
-                <div class="tile-front"><span class="tile-kicker">Ferramenta</span><h4 class="tile-title">Hub de IA's</h4><p class="tile-desc">Catálogo de IAs para prática</p></div>
-                <div class="tile-back"><button class="qa open">Abrir</button><button class="qa preview">Prévia</button><button class="qa pin">Fixar</button></div>
-            </div>
-        </div>
-        <div class="tile tile--flip" data-name="Agentes de IA" data-url="https://ravellsl.github.io/rstechaluno-agentes-IA/">
-            <div class="tile-inner">
-                <div class="tile-front"><span class="tile-kicker">Ferramenta</span><h4 class="tile-title">Agentes de IA</h4><p class="tile-desc">Execução autônoma</p></div>
-                <div class="tile-back"><button class="qa open">Abrir</button><button class="qa preview">Prévia</button><button class="qa pin">Fixar</button></div>
-            </div>
-        </div>
-        <div class="tile tile--flip" data-name="Dicionário Tech" data-url="https://ravellsl.github.io/dicionario-tech/">
-            <div class="tile-inner">
-                <div class="tile-front"><span class="tile-kicker">Ferramenta</span><h4 class="tile-title">Dicionário Tech</h4><p class="tile-desc">Termos e conceitos</p></div>
-                <div class="tile-back"><button class="qa open">Abrir</button><button class="qa preview">Prévia</button><button class="qa pin">Fixar</button></div>
-            </div>
-        </div>
-        <div class="tile tile--flip" data-name="Diário de Notícias" data-url="https://ravellsl.github.io/ferramenta-busca-noticias/">
-            <div class="tile-inner">
-                <div class="tile-front"><span class="tile-kicker">Ferramenta</span><h4 class="tile-title">Diário de Notícias</h4><p class="tile-desc">Busca e filtros diários</p></div>
-                <div class="tile-back"><button class="qa open">Abrir</button><button class="qa preview">Prévia</button><button class="qa pin">Fixar</button></div>
-            </div>
-        </div>
-        <div class="tile tile--flip" data-name="Bloco de Notas" data-url="https://ravellsl.github.io/bloco-de-notas/">
-            <div class="tile-inner">
-                <div class="tile-front"><span class="tile-kicker">Ferramenta</span><h4 class="tile-title">Bloco de Notas</h4><p class="tile-desc">Anotações rápidas</p></div>
-                <div class="tile-back"><button class="qa open">Abrir</button><button class="qa preview">Prévia</button><button class="qa pin">Fixar</button></div>
-            </div>
-        </div>
     </div>
-</section>
-  </main>
 
-  <footer class="footer" role="contentinfo">
-    &copy; <span id="current-year">2025</span> Ravell Tech
-  </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- Variáveis Globais ---
+            const navLinks = document.querySelectorAll('.nav-link');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const videoCards = document.querySelectorAll('.video-card');
+            const allCards = document.querySelectorAll('.video-card');
+            const searchInput = document.getElementById('search-input');
+            const heroSection = document.querySelector('.hero-section');
 
-  <div class="modal" id="boletim-modal" aria-hidden="true">
-    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description">
-      <button class="close-modal" aria-label="Fechar Modal">&times;</button>
-      <h4 id="modal-title">Boletim Tech</h4>
-      <p id="modal-description">Acompanhe as notícias mais importantes da semana!</p>
-      <div class="boletim-list">
-        <div class="year-group">
-          <h5 class="year-title">2025</h5>
-          <div class="year-content">
-            <div class="month-group"><h6 class="month-title">Novembro<span class="accordion-icon">▼</span></h6><div class="month-links">
-              <a href="https://ravellsl.github.io/boletim-tecnologico-02-11-2025/" target="_blank" rel="noopener noreferrer">02/11/2025</a>              
-                                     </div></div>     
-          </div>
-        </div>
-       
-      </div>
-    </div>
-  </div>
-
-  <aside id="preview-panel" aria-hidden="true">
-    <header>
-      <strong id="pv-title">Prévia</strong>
-      <div id="pv-actions">
-        <button id="pv-open" class="qa">Abrir</button>
-        <button id="pv-close" class="qa" aria-label="Fechar painel">Fechar</button>
-      </div>
-    </header>
-    <div id="pv-iframe-wrapper">
-      <iframe id="pv-iframe" title="Prévia"></iframe>
-    </div>
-  </aside>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-
-      function initializeApp() {
-        setupSidebarNavigation();
-        setupBoletimModal();
-        setupMediaFilters();
-        setupPreviewPanel();
-        initializePinFeature();
-        initializeFlipMechanism();
-        updateFooterYear();
-        setupRecnplayModal(); // <-- CHAMADA PARA A NOVA FUNÇÃO DO MODAL
-      }
-
-      function setupRecnplayModal() {
-        const modalOverlay = document.getElementById('recnplay-modal-overlay');
-        const closeModalBtn = document.getElementById('close-recnplay-modal');
-
-        if (!modalOverlay) return;
-
-        const openModal = () => modalOverlay.classList.add('active');
-        const closeModal = () => modalOverlay.classList.remove('active');
-
-        // Abre o modal assim que a página carrega
-        openModal();
-
-        // Eventos para fechar o modal
-        closeModalBtn.addEventListener('click', closeModal);
-        modalOverlay.addEventListener('click', (e) => {
-          if (e.target === modalOverlay) {
-            closeModal();
-          }
-        });
-        window.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
-            closeModal();
-          }
-        });
-      }
-
-      function setupSidebarNavigation() {
-        const sidebar = document.getElementById('sidebar');
-        const menuButton = document.getElementById('menu-button');
-        const links = [...document.querySelectorAll('.nav-link')];
-        const sections = [...document.querySelectorAll('.section')];
-        menuButton?.addEventListener('click', () => {
-          const isActive = sidebar.classList.toggle('active');
-          menuButton.setAttribute('aria-expanded', isActive);
-        });
-        links.forEach(link => link.addEventListener('click', e => {
-          e.preventDefault();
-          links.forEach(navLink => navLink.classList.remove('active'));
-          link.classList.add('active');
-          const targetId = link.getAttribute('data-target');
-          sections.forEach(section => section.classList.remove('active'));
-          document.getElementById(targetId)?.classList.add('active');
-          if (window.innerWidth <= 1024) {
-            sidebar.classList.remove('active');
-            menuButton.setAttribute('aria-expanded', 'false');
-          }
-        }));
-      }
-
-      /**
-       * Boletim Tech: abre com todos os meses RECOLHIDOS.
-       * - Remove a abertura automática do primeiro mês.
-       * - Mantém tudo recolhido ao abrir/fechar o modal.
-       * - Controla aria-expanded para acessibilidade e adiciona suporte de teclado.
-       */
-      function setupBoletimModal() {
-        const boletimModal = document.getElementById('boletim-modal');
-        if (!boletimModal) return;
-
-        const getMonthGroups = () => [...boletimModal.querySelectorAll('.month-group')];
-        const getMonthTitles = () => [...boletimModal.querySelectorAll('.month-title')];
-
-        const collapseAll = () => {
-          getMonthGroups().forEach(g => g.classList.remove('active'));
-          getMonthTitles().forEach(t => t.setAttribute('aria-expanded', 'false'));
-        };
-
-        const openBoletim = () => {
-          collapseAll(); // inicia recolhido
-          boletimModal.classList.add('active');
-          boletimModal.setAttribute('aria-hidden', 'false');
-        };
-
-        const closeBoletim = () => {
-          boletimModal.classList.remove('active');
-          boletimModal.setAttribute('aria-hidden', 'true');
-          collapseAll(); // mantém recolhido ao fechar
-        };
-
-        // Botões/fechamento do modal
-        boletimModal.querySelector('.close-modal')?.addEventListener('click', closeBoletim);
-        boletimModal.addEventListener('click', ev => {
-          if (ev.target === boletimModal) closeBoletim();
-        });
-        window.addEventListener('keydown', ev => {
-          if (ev.key === 'Escape' && boletimModal.classList.contains('active')) closeBoletim();
-        });
-
-        // Acordeão com ARIA + teclado
-        getMonthTitles().forEach(title => {
-          title.setAttribute('role', 'button');
-          title.setAttribute('tabindex', '0');
-          title.setAttribute('aria-expanded', 'false');
-
-          const toggle = () => {
-            const group = title.parentElement;
-            const willOpen = !group.classList.contains('active');
-            // fecha todos
-            getMonthGroups().forEach(g => g.classList.remove('active'));
-            getMonthTitles().forEach(t => t.setAttribute('aria-expanded', 'false'));
-            // abre o escolhido (se for para abrir)
-            if (willOpen) {
-              group.classList.add('active');
-              title.setAttribute('aria-expanded', 'true');
+            const modalOverlay = document.getElementById('global-modal-overlay');
+            const modalContent = document.getElementById('global-modal-content');
+            const body = document.body;
+            
+            // --- FUNÇÃO: Padronizar Altura dos Cards ---
+            function standardizeCardHeights() {
+                const activeTab = document.querySelector('.tab-content.active');
+                if (!activeTab) return;
+                const cardsInActiveTab = activeTab.querySelectorAll('.video-card, .tool-card');
+                if (cardsInActiveTab.length === 0) return;
+                let maxHeight = 0;
+                cardsInActiveTab.forEach(card => {
+                    card.style.height = 'auto';
+                });
+                setTimeout(() => {
+                    cardsInActiveTab.forEach(card => {
+                        if (card.offsetParent !== null) {
+                            if (card.offsetHeight > maxHeight) {
+                                maxHeight = card.offsetHeight;
+                            }
+                        }
+                    });
+                    if (maxHeight > 0) {
+                        cardsInActiveTab.forEach(card => {
+                            card.style.height = `${maxHeight}px`;
+                        });
+                    }
+                }, 0); 
             }
-          };
 
-          title.addEventListener('click', toggle);
-          title.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              toggle();
-            }
-          });
-        });
-
-        // Abrir modal a partir do tile "Boletim Tech" (botões "Prévia" ou "Abrir Listagem")
-        document.querySelector('[data-action="boletim"]')?.addEventListener('click', e => {
-          if (e.target.closest('.preview, .open')) {
-            openBoletim();
-          }
-        });
-      }
-
-      function setupMediaFilters() {
-        const filterButtons = [...document.querySelectorAll('#central-de-midias .filter-btn')];
-        const mediaTiles = [...document.querySelectorAll('#media-grid .tile')];
-        if (filterButtons.length === 0) return;
-        filterButtons.forEach(button => button.addEventListener('click', () => {
-          filterButtons.forEach(btn => {
-            btn.classList.remove('active');
-            btn.setAttribute('aria-pressed', 'false');
-          });
-          button.classList.add('active');
-          button.setAttribute('aria-pressed', 'true');
-          const filter = button.dataset.filter;
-          mediaTiles.forEach(tile => {
-            const category = tile.dataset.category;
-            tile.style.display = (filter === 'all' || category === filter) ? 'block' : 'none';
-          });
-        }));
-      }
-
-      function setupPreviewPanel() {
-        const panel = document.getElementById('preview-panel');
-        const panelTitle = document.getElementById('pv-title');
-        const panelIframe = document.getElementById('pv-iframe');
-        const panelOpenBtn = document.getElementById('pv-open');
-        const panelCloseBtn = document.getElementById('pv-close');
-        if(!panel) return;
-        window.openPreviewPanel = (title, url) => {
-          panelTitle.textContent = title;
-          panelIframe.src = url;
-          panelOpenBtn.onclick = () => window.open(url, '_blank', 'noopener');
-          panel.style.transform = 'translateX(0)';
-          panel.setAttribute('aria-hidden', 'false');
-        };
-        const closePanel = () => {
-          panel.style.transform = 'translateX(100%)';
-          panel.setAttribute('aria-hidden', 'true');
-          setTimeout(() => panelIframe.src = 'about:blank', 350);
-        };
-        panelCloseBtn.addEventListener('click', closePanel);
-        window.addEventListener('keydown', e => {
-          if (e.key === 'Escape' && panel.getAttribute('aria-hidden') === 'false') closePanel();
-        });
-      }
-
-      function initializePinFeature() {
-        const STORE_KEY = 'rt_alunos_pins_v2';
-        const savePins = (data) => localStorage.setItem(STORE_KEY, JSON.stringify(data));
-        const loadPins = () => { try { return JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch { return {}; }};
-
-        function indexTiles() {
-          document.querySelectorAll('.tile-grid').forEach(grid => {
-            const gridId = grid.id;
-            [...grid.children].forEach((tile, idx) => {
-              if (!tile.dataset.tileId) {
-                tile.dataset.tileId = `${gridId}__${idx}`;
-              }
-              tile.dataset.originGrid = gridId;
-              tile.dataset.originIndex = idx;
+            // --- 1. Lógica de Navegação por Abas ---
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    tabContents.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    const targetTab = document.querySelector(this.getAttribute('href'));
+                    if(targetTab) {
+                        targetTab.classList.add('active');
+                    }
+                    searchInput.value = '';
+                    filterContent('');
+                    standardizeCardHeights();
+                });
             });
-          });
-        }
 
-        function applySavedPins() {
-          const pins = loadPins();
-          Object.entries(pins).forEach(([gridId, tileIds]) => {
-            const pinArea = document.querySelector(`.pin-grid[data-for="${gridId}"]`);
-            if (!pinArea) return;
-            tileIds.forEach(id => {
-              const tile = document.querySelector(`.tile[data-tile-id="${id}"]`);
-              if (tile) {
-                pinArea.parentElement.style.display = 'block';
-                pinArea.appendChild(tile);
-                setPinButtonState(tile, true);
-              }
+            
+            // --- 2. Lógica do Modal Centralizado ---
+
+            function closeModal() {
+                modalOverlay.classList.remove('active');
+                modalContent.innerHTML = '';
+                body.classList.remove('modal-open');
+                allCards.forEach(c => c.classList.remove('active'));
+            }
+
+            videoCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const targetModalId = this.dataset.modalTarget;
+                    const contentSource = document.getElementById(targetModalId);
+                    if (!contentSource) return;
+
+                    allCards.forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+
+                    modalContent.innerHTML = contentSource.innerHTML;
+
+                    modalOverlay.classList.add('active');
+                    body.classList.add('modal-open');
+
+                    const closeBtn = modalContent.querySelector('.inline-modal-close-btn');
+                    if (closeBtn) {
+                        closeBtn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            closeModal();
+                        });
+                    }
+                });
             });
-          });
-        }
 
-        function setPinButtonState(tile, isPinned) {
-          const btn = tile.querySelector('.qa.pin');
-          if (btn) btn.textContent = isPinned ? 'Desfixar' : 'Fixar';
-        }
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) {
+                    closeModal();
+                }
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === "Escape" && modalOverlay.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+            
+            // --- 3. Lógica de Busca ---
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase().trim();
+                filterContent(searchTerm);
+            });
 
-        function togglePin(tile) {
-          const id = tile.dataset.tileId;
-          const originGridId = tile.dataset.originGrid;
-          const originIndex = parseInt(tile.dataset.originIndex, 10);
-          const pinArea = document.querySelector(`.pin-grid[data-for="${originGridId}"]`);
-          const originGrid = document.getElementById(originGridId);
-          const pins = loadPins();
-          pins[originGridId] = pins[originGridId] || [];
+            function filterContent(searchTerm) {
+                if (searchTerm) {
+                    heroSection.style.display = 'none';
+                } else {
+                    heroSection.style.display = 'flex';
+                }
 
-          const isPinned = pins[originGridId].includes(id);
+                const allRows = document.querySelectorAll('.grid-row, .category-row.standalone');
+                
+                allRows.forEach(row => {
+                    let rowHasMatch = false;
+                    const rowTitle = row.dataset.title?.toLowerCase() || '';
 
-          if (isPinned) {
-            const children = [...originGrid.children];
-            const referenceNode = children[originIndex] || null;
-            originGrid.insertBefore(tile, referenceNode);
-            pins[originGridId] = pins[originGridId].filter(x => x !== id);
-            setPinButtonState(tile, false);
-          } else if (pinArea) {
-            pinArea.parentElement.style.display = 'block';
-            pinArea.insertBefore(tile, pinArea.firstChild);
-            if (!pins[originGridId].includes(id)) {
-              pins[originGridId].push(id);
+                    if (rowTitle.includes(searchTerm)) {
+                        rowHasMatch = true;
+                    }
+
+                    row.querySelectorAll('.video-card').forEach(card => {
+                        const cardTooltip = card.dataset.tooltipSearch.toLowerCase();
+                        if (cardTooltip.includes(searchTerm) || rowTitle.includes(searchTerm)) {
+                            card.style.display = 'block'; 
+                            rowHasMatch = true;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                    
+                    row.querySelectorAll('.tool-card').forEach(card => {
+                        const cardTitle = card.dataset.title.toLowerCase();
+                        if (cardTitle.includes(searchTerm) || rowTitle.includes(searchTerm)) {
+                            card.style.display = 'flex';
+                            rowHasMatch = true;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+
+                    if (rowHasMatch) {
+                        row.style.display = row.classList.contains('grid-row') ? 'grid' : 'block';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+                
+                standardizeCardHeights();
             }
-            setPinButtonState(tile, true);
-          }
+            
+            // --- 5. LÓGICA DE PADRONIZAÇÃO INICIAL ---
+            window.onload = function() {
+                standardizeCardHeights();
+            };
+            
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(standardizeCardHeights, 150);
+            });
 
-          if (pinArea && pinArea.children.length === 0) {
-            pinArea.parentElement.style.display = 'none';
-          }
-
-          savePins(pins);
-        }
-
-        document.querySelector('.main-content').addEventListener('click', e => {
-          const btn = e.target.closest('.qa');
-          if (!btn) return;
-          const tile = e.target.closest('.tile');
-          if (!tile) return;
-          const url = tile.dataset.url;
-          const name = tile.dataset.name || 'Recurso';
-          if (btn.classList.contains('open') && url) {
-            window.open(url, '_blank', 'noopener');
-          } else if (btn.classList.contains('preview') && url) {
-            window.openPreviewPanel(name, url);
-          } else if (btn.classList.contains('pin')) {
-            togglePin(tile);
-          }
         });
+    </script>
 
-        indexTiles();
-        applySavedPins();
-      }
-
-      function initializeFlipMechanism() {
-        let currentFlipped = null;
-        document.querySelectorAll('.tile.tile--flip').forEach(tile => {
-          tile.addEventListener('click', (ev) => {
-            if (ev.target.closest('.qa')) {
-              return;
-            }
-            if (currentFlipped && currentFlipped !== tile) {
-              currentFlipped.classList.remove('flipped');
-            }
-            const isNowFlipped = tile.classList.toggle('flipped');
-            currentFlipped = isNowFlipped ? tile : null;
-          });
-        });
-        document.addEventListener('click', (ev) => {
-          if (currentFlipped && !ev.target.closest('.tile.tile--flip')) {
-            currentFlipped.classList.remove('flipped');
-            currentFlipped = null;
-          }
-        });
-      }
-
-      function updateFooterYear() {
-        const yearSpan = document.getElementById('current-year');
-        if (yearSpan) {
-          yearSpan.textContent = new Date().getFullYear();
-        }
-      }
-
-      initializeApp();
-    });
-  </script>
-
-<div id="recnplay-modal-overlay" class="recnplay-modal-overlay">
-  <div class="recnplay-modal-content" role="dialog" aria-modal="true" aria-labelledby="recnplay-modal-title">
-    <button id="close-recnplay-modal" class="recnplay-modal-close" aria-label="Fechar Modal">&times;</button>
-    
-    <h2 id="recnplay-modal-title">Cobertura Recn' Play 2025</h2>
-    
-    <div class="recnplay-logo-placeholder">
-       <img src="https://images.sympla.com.br/63475fd8ef44c.png" alt="Logo Rec'n Play" style="max-width: 180px; height: auto;">
-    </div>
-    
-    <p>Aqui você pode acompanhar os temas mais importantes do festival.</p>
-    
-    <a href="https://drive.google.com/drive/folders/1hcn50bN6abS3Gbia83svCmFVD21c6brI?usp=sharing" target="_blank" rel="noopener noreferrer" class="recnplay-modal-button">
-      Acessar
-    </a>
-  </div>
-</div>
 </body>
 </html>
