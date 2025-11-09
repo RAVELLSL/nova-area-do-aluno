@@ -1,993 +1,644 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Área do Aluno - Dashboard</title>
-    
-    <style>
-        /* 1. Variáveis de Cor e Reset Global */
-        :root {
-            --bg-main: #141414;
-            --bg-card: #181818;
-            --bg-content-area: #181818;
-            --text-light: #f5f5f5;
-            --text-dark: #b3b3b3;
-            --primary-red: #E50914;
-            --primary-red-hover: #b00710;
-            --border-color: #303030;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Área do Aluno</title>
+  <style>
+    :root{
+      --bg:#141414;--surface:#181818;--muted:#b3b3b3;--text:#ffffff;--accent:#e50914;--border:#2a2a2a
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; background:var(--bg); color:var(--text)}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    .navbar{position:sticky;top:0;z-index:1000;display:flex;gap:1.25rem;align-items:center;justify-content:space-between;padding:1rem 2rem;background:#0f0f0f; border-bottom:1px solid var(--border)}
+    .brand{color:var(--accent);font-weight:800;text-decoration:none;font-size:1.25rem}
+    .tabs{display:flex;gap:.75rem;flex-wrap:wrap}
+    .tab{color:var(--muted);text-decoration:none;font-weight:600;padding:.4rem .7rem;border-radius:.5rem}
+    .tab.active, .tab:hover{color:var(--text);background:#1f1f1f}
+    .search{display:flex;align-items:center;gap:.5rem;background:#1e1e1e;border:1px solid var(--border);padding:.4rem .6rem;border-radius:.5rem}
+    .search input{background:transparent;border:0;outline:none;color:var(--text);min-width:220px}
 
-        html {
-            scroll-behavior: smooth;
-        }
+    .hero{display:flex;flex-direction:column;gap:.75rem;padding:1.2rem 2rem 0 2rem}
+    .hero h1{font-size:clamp(1.6rem,3.5vw,2.2rem)}
+    .hero p{color:var(--muted)}
 
-        /* * >>> MUDANÇA (INÍCIO) <<<
-         * Adicionada imagem de fundo sutil à página
-         */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-main);
-            color: var(--text-light);
-            line-height: 1.5;
-            overflow-x: hidden;
-            counter-reset: section;
+    .section{padding:1rem 2rem 2rem 2rem}
+    .section h2{font-size:1.05rem;color:#e6e6e6;margin:.75rem 0 1rem 0;letter-spacing:.2px}
 
-            /* Imagem de fundo sutil (mesma fonte do Hero) */
-            background-image: linear-gradient(rgba(20, 20, 20, 0.97) 0%, rgba(20, 20, 20, 0.98) 100%), url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80');
-            background-attachment: fixed; /* Fundo não rola com a página */
-            background-size: cover;
-            background-position: center;
-        }
-        /* >>> MUDANÇA (FIM) <<< */
-        
-        body.modal-open {
-            overflow: hidden;
-        }
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
 
-        /* 2. Barra de Navegação Superior (Navbar) */
-        .navbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1rem 2.5rem;
-            /* Fundo levemente transparente para ver o scroll por trás */
-            background-color: rgba(20, 20, 20, 0.85);
-            backdrop-filter: blur(5px); /* Efeito de vidro (opcional) */
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid var(--border-color);
-        }
+    .card{aspect-ratio:16/9;position:relative;border-radius:6px;overflow:hidden;background:var(--surface);border:1px solid var(--border);cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.25);transition:transform .18s ease, box-shadow .18s ease}
+    .card:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 10px 24px rgba(0,0,0,.35)}
+    .card .thumb{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(135deg,rgba(229,9,20,.10),rgba(255,255,255,.03));}
+    .card .thumb h3{font-size:1.02rem;text-align:center;padding:0 1rem}
+    .badge{position:absolute;top:8px;left:8px;font-size:.72rem;background:#00000080;border:1px solid var(--border);padding:.12rem .4rem;border-radius:.25rem}
 
-        .nav-left { display: flex; align-items: center; }
+    .pill{position:absolute;bottom:8px;left:8px;font-size:.7rem;background:#0d0d0d;border:1px solid #333;color:#ddd;padding:.12rem .4rem;border-radius:.25rem}
 
-        .navbar-logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary-red);
-            text-decoration: none;
-            margin-right: 2rem;
-        }
+    .overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.7);backdrop-filter:blur(2px);z-index:2000}
+    .overlay.active{display:flex}
+    .modal{width:min(880px,92vw);max-height:88vh;overflow:auto;background:#141414;border:1px solid var(--border);border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+    .modal header{position:sticky;top:0;background:#0f0f0f;border-bottom:1px solid var(--border);padding:.8rem 1rem;display:flex;align-items:center;justify-content:space-between}
+    .modal header h3{font-size:1rem}
+    .modal header button{appearance:none;border:0;background:#232323;color:#ddd;font-weight:700;border-radius:6px;padding:.4rem .6rem;cursor:pointer}
+    .modal header button:hover{background:#2b2b2b}
 
-        .nav-tabs { display: flex; gap: 1.5rem; }
+    .modal .content{padding:1rem 1rem 1.2rem 1rem;display:flex;flex-direction:column;gap:.6rem}
+    details.item{border-bottom:1px solid var(--border);padding:.6rem 0}
+    details.item>summary{list-style:none;display:flex;align-items:center;gap:.6rem;color:#e6e6e6;font-weight:700;cursor:pointer}
+    details.item>summary::before{content:"▶";font-size:.8rem;color:var(--accent);transition:transform .2s}
+    details[open].item>summary::before{transform:rotate(90deg)}
+    .desc{color:var(--muted);font-size:.92rem;line-height:1.45;margin:.4rem 0 .6rem 1.35rem}
+    .tray{display:flex;flex-wrap:wrap;gap:.45rem;margin:0 0 .7rem 1.35rem}
+    .watch{display:inline-block;background:var(--accent);color:white;text-decoration:none;font-weight:700;padding:.44rem .7rem;border-radius:.35rem}
 
-        .nav-link {
-            text-decoration: none;
-            color: var(--text-dark);
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: color 0.2s;
-            white-space: nowrap;
-        }
-        .nav-link:hover { color: var(--text-light); }
-        .nav-link.active { color: var(--text-light); font-weight: 700; }
+    @media (max-width:768px){
+      .navbar{flex-direction:column;align-items:flex-start;gap:.75rem}
+      .search input{min-width:160px}
+    }
 
-        /* --- Barra de Busca --- */
-        .search-bar {
-            background-color: var(--border-color);
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            padding: 0.35rem 0.75rem;
-            display: flex;
-            align-items: center;
-        }
-        
-        .search-icon { color: var(--text-dark); margin-right: 0.5rem; }
-        
-        .search-input {
-            background: none;
-            border: none;
-            outline: none;
-            color: var(--text-light);
-            font-size: 0.9rem;
-            width: 200px;
-            transition: width 0.3s;
-        }
-        .search-input:focus { width: 300px; }
-
-        /* 3. Conteúdo Principal e Abas */
-        .main-content { padding: 0; }
-        .tab-content { display: none; animation: fadeIn 0.5s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .tab-content.active { display: block; }
-
-        /* 4. Seção "Hero" (Destaque) */
-        .hero-section {
-            height: 50vh;
-            min-height: 300px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 2.5rem;
-            background: linear-gradient(to right, rgba(20, 20, 20, 1) 30%, rgba(20, 20, 20, 0.6)), url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80') center center/cover;
-            margin-bottom: 2.5rem;
-        }
-        .hero-section h1 { font-size: 2.5rem; font-weight: 700; max-width: 50%; }
-        .hero-section p { font-size: 1.1rem; color: var(--text-dark); max-width: 50%; margin-top: 1rem; }
-        .hide-on-search { display: flex; }
-
-        /* 5. Layout de Grade para Seções */
-        .grid-row {
-            display: grid;
-            padding: 0 2.5rem 2.5rem 2.5rem;
-            gap: 2.5rem;
-        }
-        
-        .grid-row-2col { grid-template-columns: 1fr 1fr; }
-        .grid-row-3col { grid-template-columns: 1fr 1fr 1fr; }
-
-        .category-row.standalone {
-            padding: 0 2.5rem 2.5rem 2.5rem;
-        }
-        
-        .category-row {
-            min-width: 0;
-        }
-
-        .category-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            text-align: left;
-        }
-        
-        #videos .category-title::before {
-            counter-increment: section;
-            content: counter(section) ". ";
-            color: var(--primary-red);
-            font-weight: 700;
-        }
-        
-        .card-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-        }
-
-        /* 6. Cards Responsivos (video-card) */
-        .video-card {
-            aspect-ratio: 16 / 9;
-            background-color: var(--bg-card);
-            border-radius: 6px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.25s ease, box-shadow 0.25s ease, border 0.25s ease;
-            position: relative;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            border: 2px solid transparent;
-            flex: 1 1 280px; 
-            min-width: 280px;
-        }
-
-        .video-card:hover {
-            transform: scale(1.04);
-            z-index: 10;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-        }
-        .video-card.active {
-            border: 2px solid var(--primary-red);
-            transform: scale(1.02);
-        }
-
-        .card-thumbnail {
-            width: 100%;
-            height: 100%;
-            filter: brightness(0.9);
-        }
-        
-        /* 7. Estilos do Conteúdo do Modal */
-        .inline-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            /* Ajustes de espaçamento agora controlados pelo padding do .modal-content */
-            padding-bottom: 1rem;
-            margin-bottom: 1rem;
-        }
-        
-        .inline-modal-header h3 { font-size: 1.25rem; }
-        
-        .inline-modal-close-btn {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--text-dark);
-            background: none;
-            border: none;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-        .inline-modal-close-btn:hover { color: var(--text-light); }
-
-        .inline-video-list { display: flex; flex-direction: column; gap: 1rem; }
-
-        .inline-video-list a {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            text-decoration: none;
-            color: var(--text-dark);
-            font-weight: 500;
-            padding: 0.5rem;
-            border-radius: 4px;
-            transition: background-color 0.2s, color 0.2s, transform 0.2s;
-        }
-        .inline-video-list a:hover {
-            background-color: var(--border-color);
-            color: var(--text-light);
-            transform: translateX(5px);
-        }
-        .inline-video-list a::before {
-            content: '▶';
-            font-size: 0.8rem;
-            color: var(--primary-red);
-        }
-        
-        /* 8. Cards de Mídias e Ferramentas (tool-card) */
-        .tool-card {
-            aspect-ratio: 16 / 9; 
-            background: var(--bg-card);
-            border-radius: 6px;
-            overflow: hidden;
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
-            position: relative;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 1rem;
-            text-decoration: none;
-            color: var(--text-light);
-            font-size: 1rem;
-            font-weight: 600;
-            flex: 1 1 280px; 
-            min-width: 280px;
-        }
-        .tool-card span {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-        .tool-card:hover {
-            transform: scale(1.04);
-            z-index: 10;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-            border: 2px solid var(--primary-red);
-        }
-        
-        /* 9. Responsividade */
-        @media (max-width: 1024px) { /* Tablet */
-            .grid-row-3col {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        
-        @media (max-width: 768px) { /* Mobile */
-            .navbar { flex-direction: column; align-items: flex-start; gap: 1rem; padding: 1rem 1.5rem; }
-            .search-input:focus { width: 250px; }
-            .hero-section { padding: 1.5rem; text-align: center; align-items: center; height: 40vh; }
-            .hero-section h1 { font-size: 2rem; max-width: 90%; }
-            .hero-section p { max-width: 90%; }
-            
-            .grid-row-2col, .grid-row-3col {
-                grid-template-columns: 1fr;
-            }
-            .grid-row, .category-row.standalone {
-                padding: 0 1.5rem 1.5rem 1.5rem;
-            }
-        }
-        
-        .hidden-modal-source { display: none; }
-
-
-        /* 10. CSS do Modal Centralizado */
-
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            
-            display: none; /* Alterado por JS para 'flex' */
-            align-items: center;
-            justify-content: center;
-            
-            z-index: 2000;
-            padding: 1.5rem;
-            animation: fadeIn 0.3s ease;
-            overflow: hidden;
-        }
-
-        .modal-overlay::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            z-index: 1;
-            background-image: linear-gradient(rgba(20, 20, 20, 0.7), rgba(20, 20, 20, 0.7)), url('https://images.unsplash.com/photo-1550745165-9bc0b252726c?auto=format&fit=crop&w=1600&q=80');
-            background-size: cover;
-            background-position: center;
-            filter: blur(8px);
-            transform: scale(1.1);
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        /* * >>> MUDANÇA (INÍCIO) <<<
-         * Ajustes no .modal-content para remover barra de rolagem horizontal
-         */
-        .modal-content {
-            background-color: var(--bg-content-area);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            
-            width: 100%;
-            max-width: 700px;
-            max-height: 90vh; /* 90% da altura da tela */
-            
-            overflow-y: auto;   /* Barra de rolagem vertical (Y) se precisar */
-            overflow-x: hidden; /* *** ADICIONADO: Remove a barra horizontal (X) *** */
-            
-            padding: 1.5rem;    /* *** ADICIONADO: Espaçamento interno *** */
-            
-            position: relative;
-            z-index: 2;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            
-            word-break: break-word; /* *** ADICIONADO: Quebra palavras longas *** */
-
-            animation: modalFadeIn 0.3s ease-out; /* Animação de entrada */
-        }
-        /* >>> MUDANÇA (FIM) <<< */
-        
-        @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-    </style>
+    /* VISUAL DOS CARDS DE MÍDIAS E FERRAMENTAS */
+    .board .grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:20px}
+    .board .card{aspect-ratio:auto;min-height:190px;border-radius:12px;background:#121212;border:1px solid #272727;box-shadow:0 8px 22px rgba(0,0,0,.35);transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;overflow:hidden}
+    .board .card:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,0,0,.45);border-color:#3a3a3a}
+    .board .thumb{position:relative;inset:auto;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;background:transparent;padding:12px}
+    .board .ico{font-size:44px;line-height:1;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
+    .board h3{font-size:1.05rem;font-weight:700;letter-spacing:.15px;text-align:center;color:#e9e9e9}
+    .board .pill{position:static;align-self:center;margin-top:-6px;font-size:.76rem;background:#0e0e0e;border:1px solid #2f2f2f;color:#d8d8d8;padding:.18rem .5rem;border-radius:.35rem}
+    .board .card.featured{box-shadow:inset 0 0 0 2px var(--accent), 0 10px 26px rgba(0,0,0,.5);border-color:rgba(229,9,20,.35)}
+  </style>
 </head>
 <body>
-
-    <nav class="navbar">
-        <div class="nav-left">
-            <a href="#" class="navbar-logo">Prof. Ravell</a>
-            <div class="nav-tabs" id="main-tabs">
-                <a href="#videos" class="nav-link active">Vídeos</a>
-                <a href="#midias" class="nav-link">Central de Mídias</a>
-                <a href="#ferramentas" class="nav-link">Ferramentas</a>
-            </div>
-        </div>
-        <div class="search-bar">
-            <span class="search-icon">🔍</span>
-            <input type="search" class="search-input" id="search-input" placeholder="Buscar por tema...">
-        </div>
-    </nav>
-    
-    <main class="main-content">
-
-        <section id="videos" class="tab-content active">
-
-            <header class="hero-section hide-on-search">
-                <h1>Bem-vindo à sua Área de Aluno</h1>
-                <p>Explore a tecnologia no seu momento preferido!</p>
-            </header>
-
-            <div class="grid-row grid-row-2col">
-                <section class="category-row" data-title="Inclusão Digital">
-                    <h2 class="category-title">Inclusão Digital</h2>
-                    <div class="card-container">
-                        <div class="video-card" data-modal-target="modal-inclusao-1" data-tooltip-search="As 4 Revoluções Industriais e seus impactos na sociedade.">
-                            <svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle" dy="-0.5em">Fundamentos</text><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle" dy="0.5em">Históricos</text></svg>
-                        </div>
-                        <div class="video-card" data-modal-target="modal-inclusao-2" data-tooltip-search="A história da informática, tipos de computadores e sistemas operacionais.">
-                            <svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle" dy="-0.5em">Evolução da</text><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle" dy="0.5em">Computação</text></svg>
-                        </div>
-                    </div>
-                </section>
-                <section class="category-row" data-title="Infraestrutura Computacional">
-                    <h2 class="category-title">Infraestrutura Computacional</h2>
-                    <div class="card-container">
-                        <div class="video-card" data-modal-target="modal-infra-1" data-tooltip-search="Componentes internos (CPU, bits), processamento de dados e algoritmos.">
-                            <svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle" dy="-0.5em">Arquitetura de</text><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle" dy="0.5em">Computadores</text></svg>
-                        </div>
-                        <div class="video-card" data-modal-target="modal-infra-2" data-tooltip-search="Entenda Servidores, Data Centers e computação em Nuvem, Névoa e Borda.">
-                            <svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Serviços e Ambientes</text></svg>
-                        </div>
-                        <div class="video-card" data-modal-target="modal-infra-3" data-tooltip-search="A interdisciplinaridade entre Ciência, Tecnologia, Engenharia e Matemática.">
-                            <svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">STEM</text></svg>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <section class="category-row standalone" data-title="Redes e Comunicação Digital">
-                <h2 class="category-title">Redes e Comunicação Digital</h2>
-                <div class="card-container">
-                    <div class="video-card" data-modal-target="modal-redes-1" data-tooltip-search="A evolução das redes de comunicação, do 1G ao 5G e conectividade via satélite."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Gerações de Redes</text></svg></div>
-                    <div class="video-card" data-modal-target="modal-redes-2" data-tooltip-search="Padrões de conexão sem fio como Wi-Fi, Bluetooth, BLE, Li-Fi e mais."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Conexão Sem Fio</text></svg></div>
-                    <div class="video-card" data-modal-target="modal-redes-3" data-tooltip-search="Tecnologias de proximidade: Infravermelho (IrDA), GPS, NFC e RFID."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Comunicação (NFC/GPS)</text></svg></div>
-                    <div class="video-card" data-modal-target="modal-redes-4" data-tooltip-search="Como funcionam os padrões visuais: Código de Barras, QR Code, PDF417 e Data Matrix."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Padrões Visuais (QR)</text></svg></div>
-                    <div class="video-card" data-modal-target="modal-redes-5" data-tooltip-search="A infraestrutura da web: Navegadores, tipos de redes, HTTP/HTTPS e DNS."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Navegação e Protocolos</svg></div>
-                </div>
-            </section>
-
-            <div class="grid-row grid-row-3col">
-                <section class="category-row" data-title="Dispositivos e Equipamentos Digitais">
-                    <h2 class="category-title">Dispositivos e Equipamentos Digitais</h2>
-                    <div class="card-container">
-                        <div class="video-card" data-modal-target="modal-dispositivos-1" data-tooltip-search="Um catálogo de gadgets: de Cartões SD a Smartwatches e Drones."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Catálogo de Dispositivos</svg></div>
-                        <div class="video-card" data-modal-target="modal-dispositivos-2" data-tooltip-search="Os diferentes níveis e conceitos da Automação Residencial (Casa Inteligente)."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Automação Residencial</svg></div>
-                    </div>
-                </section>
-                <section class="category-row" data-title="Expansão Digital">
-                    <h2 class="category-title">Expansão Digital</h2>
-                    <div class="card-container">
-                        <div class="video-card" data-modal-target="modal-expansao-1" data-tooltip-search="O futuro: IoT, Metaverso, IA, Blockchain, Realidade Aumentada e mais."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Tecnologias Emergentes</svg></div>
-                    </div>
-                </section>
-                <section class="category-row" data-title="Economia Digital e Sistemas Financeiros">
-                    <h2 class="category-title">Economia Digital e Sistemas Financeiros</h2>
-                    <div class="card-container">
-                        <div class="video-card" data-modal-target="modal-economia-1" data-tooltip-search="Fundamentos da nova economia: Criptomoedas, Criptografia e Smart Contracts."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Fundamentos da Economia</svg></div>
-                        <div class="video-card" data-modal-target="modal-economia-2" data-tooltip-search="Novos modelos de negócio: Fintechs, Bancos Digitais, Marketplaces e NFTs."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Finanças e Serviços</svg></div>
-                        <div class="video-card" data-modal-target="modal-economia-3" data-tooltip-search="O impacto da automação no trabalho, Gig Economy e as Profissões do Futuro."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Trabalho e Sociedade</svg></div>
-                    </div>
-                </section>
-            </div>
-
-            <div class="grid-row grid-row-3col">
-                <section class="category-row" data-title="Robótica e Fabricação Aditiva">
-                    <h2 class="category-title">Robótica e Fabricação Aditiva</h2>
-                    <div class="card-container">
-                        <div class="video-card" data-modal-target="modal-robotica-1" data-tooltip-search="Conceitos de robótica, IA, Cobots, Sensores e o que é uma 'Dark Factory'."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Robótica e Sistemas</text></svg></div>
-                        <div class="video-card" data-modal-target="modal-fabricacao-1" data-tooltip-search="Conheça a Impressão 3D, seu uso na construção civil e a Impressão 4D."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Fabricação Aditiva</text></svg></div>
-                    </div>
-                </section>
-                <section class="category-row" data-title="Sociedade e Cultura Tech">
-                    <h2 class="category-title">Sociedade e Cultura Tech</h2>
-                    <div class="card-container">
-                        <div class="video-card" data-modal-target="modal-sociedade-1" data-tooltip-search="Os efeitos da tecnologia na sociedade: Bolhas, 'Quinto Poder' e Paradoxo da Conexão."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Tecnologia e Sociedade</text></svg></div>
-                        <div class="video-card" data-modal-target="modal-filosofia-1" data-tooltip-search="Correntes de pensamento como Cyberpunk, Transumanismo, Dataísmo e Neo-Luddismo."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Correntes Filosóficas</text></svg></div>
-                    </div>
-                </section>
-                <section class="category-row" data-title="Saúde e Tecnologia">
-                    <h2 class="category-title">Saúde e Tecnologia</h2>
-                    <div class="card-container">
-                        <div class="video-card" data-modal-target="modal-saude-1" data-tooltip-search="A relação entre tecnologia e saúde: Burnout Digital, Distúrbios do Sono e Saúde Mental."><svg class="card-thumbnail" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 158"><rect width="100%" height="100%" fill="#1f1f1f"/><text x="50%" y="50%" font-family="Arial, sans-serif" font-size="14" fill="#f5f5f5" text-anchor="middle" dominant-baseline="middle">Saúde e Tecnologia</text></svg></div>
-                    </div>
-                </section>
-            </div>
-
-        </section> 
-        <section id="midias" class="tab-content">
-            <section class="category-row standalone" data-title="Central de Mídias">
-                <h2 class="category-title" style="padding-top: 2rem;">Central de Mídias</h2>
-                <div class="card-container">
-                    <a href="https://ravellsl.github.io/podcast/" target="_blank" class="tool-card" data-title="Podcast">
-                        <span>🎙️</span>
-                        Podcast
-                    </a>
-                    <a href="https://ravellsl.github.io/boletim-tecnologico-02-11-2025/" target="_blank" class="tool-card" data-title="Boletim Tech">
-                        <span>📰</span>
-                        Boletim Tech
-                    </a>
-                    <a href="https://ravellsl.github.io/rstech-artigos/" target="_blank" class="tool-card" data-title="Artigos">
-                        <span>📄</span>
-                        Artigos
-                    </a>
-                    <a href="https://ravellsl.github.io/video-aulas/#home" target="_blank" class="tool-card" data-title="Dúvidas em Vídeo">
-                        <span>💬</span>
-                        Dúvidas em Vídeo
-                    </a>
-                </div>
-            </section>
-        </section> 
-        <section id="ferramentas" class="tab-content">
-            <section class="category-row standalone" data-title="Ferramentas Digitais">
-                <h2 class="category-title" style="padding-top: 2rem;">Ferramentas Digitais</h2>
-                <div class="card-container">
-                    <a href="https://ravellsl.github.io/dicionario-tech/" target="_blank" class="tool-card" data-title="Dicionário Tech">
-                        <span>📖</span>
-                        Dicionário Tech
-                    </a>
-                    <a href="https://ravellsl.github.io/rstechaluno-agentes-IA/" target="_blank" class="tool-card" data-title="Agentes de IA">
-                        <span>🤖</span>
-                        Agentes de IA
-                    </a>
-                    <a href="https://ravellsl.github.io/ferramenta-busca-noticias/" target="_blank" class="tool-card" data-title="Diário de Notícias">
-                        <span>🔍</span>
-                        Diário de Notícias
-                    </a>
-                    <a href="https://ravellsl.github.io/IA-plataform/" target="_blank" class="tool-card" data-title="Inteligência Artificial">
-                        <span>🧠</span>
-                        Inteligência Artificial
-                    </a>
-                    <a href="https://ravellsl.github.io/SynTHub-IA/" target="_blank" class="tool-card" data-title="Hub de IA">
-                        <span>💡</span>
-                        Hub de IA
-                    </a>
-                    <a href="https://ravellsl.github.io/bloco-de-notas/" target="_blank" class="tool-card" data-title="Bloco de Notas">
-                        <span>📝</span>
-                        Bloco de Notas
-                    </a>
-                </div>
-            </section>
-        </section> 
-    </main>
-    
-    <div class="hidden-modal-source">
-        <div id="modal-inclusao-1">
-            <div class="inline-modal-header"><h3>Fundamentos Históricos e Tecnológicos</h3><button class="inline-modal-close-btn">&times;</button></div>
-            <div class="inline-video-list">
-                <a href="https://drive.google.com/file/d/1VauRulgLM5oyapz1N1NNOX7zpNT3H0_j/preview" target="_blank">1ª Revolução Industrial</a>
-                <a href="https://drive.google.com/file/d/1P746992E6vM75wuALE-Ixb_HqJ3HFYHw/preview" target="_blank">2ª Revolução Industrial</a>
-                <a href="https://drive.google.com/file/d/1p3kc97rY7cmohcYUapdrCKljjBYrg42p/preview" target="_blank">3ª Revolução Industrial</a>
-                <a href="https://drive.google.com/file/d/1phlnfnpg9vhhups246AWt-GrsUxf_kO5/preview" target="_blank">4ª Revolução Industrial</a>
-            </div>
-        </div>
-        <div id="modal-inclusao-2">
-            <div class="inline-modal-header"><h3>Evolução da Computação e da Informática</h3><button class="inline-modal-close-btn">&times;</button></div>
-            <div class="inline-video-list">
-                <a href="https://drive.google.com/file/d/1PBLGlu7wUe1dW2wB1SzVoTqORZ3b7m2p/preview" target="_blank">Introdução à Informática</a>
-                <a href="https://drive.google.com/file/d/1mUB8hmEeHiplG60F3K0hloCzSh9U83h3/preview" target="_blank">Evolução da Computação</a>
-                <a href="https://drive.google.com/file/d/1_6zOqtFkOzNEiLTmygRPjSfb4OpRQiJW/preview" target="_blank">Tipos de Computadores</a>
-                <a href="https://drive.google.com/file/d/12F__7jibSxK4KRRUOdG2DUWKoWEkHnUc/preview" target="_blank">Sistemas Operacionais</a>
-            </div>
-        </div>
-        <div id="modal-infra-1">
-            <div class="inline-modal-header"><h3>Arquitetura de Computadores</h3><button class="inline-modal-close-btn">&times;</button></div>
-            <div class="inline-video-list">
-                <a href="https://drive.google.com/file/d/1B1EQGiarLYni19P5BmYcLOdPWFwIPH90/preview" target="_blank">Estrutura e Componentes Internos</a>
-                <a href="https://drive.google.com/file/d/1JMlLZpCLv458MG2uSKed9jskctEcIR4a/preview" target="_blank">Os Múltiplos dos Bits</a>
-                <a href="https://drive.google.com/file/d/1NhaQ2tt4FbH-ktqOIlvbwKmvEA8fFimk/preview" target="_blank">Processamento de Dados na CPU</a>
-                <a href="https://drive.google.com/file/d/1jFgW3fiDSjTNOhhIXdUbCJsIPWvYbwab/preview" target="_blank">Algoritmos</a>
-            </div>
-        </div>
-        <div id="modal-infra-2">
-            <div class="inline-modal-header"><h3>Serviços e Ambientes Tecnológicos</h3><button class="inline-modal-close-btn">&times;</button></div>
-            <div class="inline-video-list">
-                <a href="https://drive.google.com/file/d/1CaNCwx1G3BMrHyplThSHTQZI7U9DNNYy/preview" target="_blank">Servidores e Data Centers</a>
-                <a href="https://drive.google.com/file/d/1I8pnJ0ufj_HNMvrulnxtiUIaIUbkWaf6/preview" target="_blank">Cloud Computing</a>
-                <a href="https://drive.google.com/file/d/1i83xaqZFl2egA6B9InrhEAZ5gDPKszHv/preview" target="_blank">Fog Computing</a>
-                <a href="https://drive.google.com/file/d/16h9WQRy6EX4c7ugWQCxaoNztksPVLeHg/preview" target="_blank">Edge Computing</a>
-            </div>
-        </div>
-        <div id="modal-infra-3">
-            <div class="inline-modal-header"><h3>Ciência, Tecnologia, Engenharia e Matemática (STEM)</h3><button class="inline-modal-close-btn">&times;</button></div>
-            <div class="inline-video-list">
-                <a href="https://drive.google.com/file/d/1978-HRY04zxPfI0lsDSJvL3n_Mfyv7YG/preview" target="_blank">STEM</a>
-                <a href="https://drive.google.com/file/d/1c4Y1m9a4cOSP6bxL0v8DMzdabkykbQks/preview" target="_blank">Matemática Essencial</a>
-                <a href="https://drive.google.com/file/d/11e4RJaR3rSWBzoEhosJll92lHkHZNvcD/preview" target="_blank">Transformada de Fourier</a>
-                <a href="https://drive.google.com/file/d/1bmyrpugoSPPF8qJy9X3L86BzKUFdJRmD/preview" target="_blank">Física Clássica vs Quântica</a>
-                <a href="https://drive.google.com/file/d/1cuEmsRofyObN7h7otnZDEn4rY_GJnw5I/preview" target="_blank">Física Quântica</a>
-                <a href="https://drive.google.com/file/d/1V0ymHNMpq1zHGb2TeMNGqCWgXNKP6CIi/preview" target="_blank">Química & Tecnologia</a>
-                <a href="https://drive.google.com/file/d/1ZxSHGOTzeD3Cnw3TdjHk3YaGthsdLswq/preview" target="_blank">Biologia & Tecnologia</a>
-            </div>
-        </div>
-        <div id="modal-redes-1">
-            <div class="inline-modal-header"><h3>História e Gerações de Redes</h3><button class="inline-modal-close-btn">&times;</button></div>
-            <div class="inline-video-list">
-                <a href="https://drive.google.com/file/d/1tdwvsAFD__KU_7qQWcakI_99PP8ivger/preview" target="_blank">Criação e Evolução das Redes</a>
-                <a href="https://drive.google.com/file/d/1r4fIWE67ye4gsNtbhvZbag-gOLpS7fzY/preview" target="_blank">Rede 1G</a>
-                <a href="https://drive.google.com/file/d/1vwhAry-J-TJ0DphCyUC8Jg3rx0wECnqA/preview" target="_blank">Rede 2G</a>
-                <a href="https://drive.google.com/file/d/1sPb6HZaHvpW4wO27WMc5dQ9c0Td59KdV/preview" target="_blank">Rede 3G</a>
-                <a href="https://drive.google.com/file/d/10u7FA5z9aV9Ebl8oYCI26s0RzRmWR2-D/preview" target="_blank">Rede 4G</a>
-                <a href="https://drive.google.com/file/d/1kZxVr4RucQnXT975aZA-0ivPACnDkkPP/preview" target="_blank">Rede 5G</a>
-                <a href="https://drive.google.com/file/d/1M57-ts_ZO7krfOP7LlUgXNZ-CtGp6nBl/preview" target="_blank">Conectividade por Satélites</a>
-            </div>
-        </div>
-        <div id="modal-redes-2">
-            <div class="inline-modal-header"><h3>Padrões de Conexão Sem Fio</h3><button class="inline-modal-close-btn">&times;</button></div>
-            <div class="inline-video-list">
-                <a href="https://drive.google.com/file/d/1G9AP6R2ojcu6xyjz5yacBhcmKs7c7r9v/preview" target="_blank">Wi-Fi</a>
-                <a href="https://drive.google.com/file/d/15mNOJMBpUpXFt6sSbNms5a44Q68na1Xx/preview" target="_blank">Bluetooth</a>
-                <a href="https://drive.google.com/file/d/1VwkQ8Dj1dSao4M8ybrWT2IX3FyYXBPAP/preview" target="_blank">Bluetooth Low Energy</a>
-                <a href="https://drive.google.com/file/d/1_aMjAUGSqvTeCwf5SHmu0Bfo-BNOM5PW/preview" target="_blank">Li-Fi</a>
-                <a href="https://drive.google.com/file/d/1W-EqyxZSOOLaTBtaQfaN1r76qtSFy4EL/preview" target="_blank">Thread</a>
-                <a href="https://drive.google.com/file/d/1m15pxLPwtW2_ledtVXxLTJ6XWog8WnUR/preview" target="_blank">Ultra Wideband</a>
-                <a href="https://drive.google.com/file/d/1w4eHHFpxgl2jh-GjI_LmbCZfWQkI5hl2/preview" target="_blank">Zigbee</a>
-            </div>
-        </div>
-        <div id="modal-redes-3">
-            <div class="inline-modal-header"><h3>Comunicação por Proximidade</h3><button class="inline-modal-close-btn">&times;</button></div>
-            <div class="inline-video-list">
-                <a href="https://drive.google.com/file/d/1J4ZL_r8ZkbzK8F6eC5xIXzDpmyjRa2hd/preview" target="_blank">Infravermelho (IrDA)</a>
-                <a href="https://drive.google.com/file/d/1YGevrVlEwkBTMIuZSYpHStTeF_gAf0wG/preview" target="_blank">GPS</a>
-                <a href="https://drive.google.com/file/d/1GWctg-KtXF3C7XXvbZ8FQogsrNgmQ_eM/preview" target="_blank">NFC</a>
-                <a href="https://drive.google.com/file/d/1QGisW3IBr4nsl0IB3A6qc7pAnLaH_H3w/preview" target="_blank">RFID</a>
-            </div>
-        </div>
-        <div id="modal-redes-4">
-            <div class="inline-modal-header"><h3>Padrões Visuais de Dados</h3><button class="inline-modal-close-btn">&times;</button></div>
-            <div class="inline-video-list">
-                <a href="https://drive.google.com/file/d/1HDNLHecSo4vfw9z_aNoQljAyBzSTIg2V/preview" target="_blank">Código de Barras</a>
-                <a href="https://drive.google.com/file/d/102EDP9L5rHjDZNwZ0Dz4xeVBPMuVbFb0/preview" target="_blank">QR Code</a>
-                <a href="https://drive.google.com/file/d/1RYE4cmxEz_QrvsuqRg7qOuiW04vVR1bM/preview" target="_blank">PDF417</a>
-                <a href="https://drive.google.com/file/d/11tzKRTRCm93ekdAWifnQD1Tmh0LGBqt8/preview" target="_blank">Data Matrix</a>
-            </div>
-        </div>
-        <div id="modal-redes-5">
-            <div class="inline-modal-header"><h3>Ferramentas de Navegação e Protocolos</h3><button class="inline-modal-close-btn">&times;</button></div>
-            <div class="inline-video-list">
-                <a href="https://drive.google.com/file/d/1BgkjxNeahyzceorvjtFJMqMaM3dzMINu/preview" target="_blank">Infraestrutura Global & Tipos de Redes</a>
-                <a href="https://drive.google.com/file/d/1ZHKZ8ys_xX5qtYbGvwIufPpxTUjNUVp3/preview" target="_blank">Navegadores</a>
-                <a href="https://drive.google.com/file/d/1a3tXNpGxJnrjKLRYU85Dn9zxwjvVAExT/preview" target="_blank">HTTP e HTTPS</a>
-                <a href="https://drive.google.com/file/d/1NFbIR1Giud1W727tJboVPFG_N8sAlRLb/preview" target="_blank">DNS</a>
-            </div>
-        </div>
-        <div id="modal-dispositivos-1">
-            <div class="inline-modal-header"><h3>Catálogo de Dispositivos Digitais</h3><button class="inline-modal-close-btn">&times;</button></div>
-            <div class="inline-video-list">
-                <a href="https://drive.google.com/file/d/1rkj1dsKL0pIf6TbynNUaIEVfRNyOkJnS/preview" target="_blank">Cartões SD-MicroSD</a>
-                <a href="https://drive.google.com/file/d/1SitXhHokFqiqqcNU5zFYAggmjlZGvbeQ/preview" target="_blank">Controladores Hápticos</a>
-                <a href="https://drive.google.com/file/d/1TQ_dqF0ARaL9QWqz5RTAXXe6ILkPZcR5/preview" target="_blank">Drones</a>
-                <a href="https://drive.google.com/file/d/1qX8IzfMyJZkFODcSueH-WDSzBdDhUQFJ/preview" target="_blank">HD Externo</a>
-                <a href="https://drive.google.com/file/d/1oCMtZk7O0KeFJdgL59QmszBs5kiNcNjM/preview" target="_blank">Impressoras Multifuncionais</a>
-                <a href="https://drive.google.com/file/d/1Fm54CNSifVjdP2Gd5panQxq3TaorBtx1/preview" target="_blank">Impressoras</a>
-                <a href="https://drive.google.com/file/d/1gJUx0n4pnGN_5A1eQ88zhuGS5GJSa6Zl/preview" target="_blank">Kindle</a>
-                <a href="https://drive.google.com/file/d/1rOW8ufA91Fhxnc6HAZW3S67CMF7LSxbl/preview" target="_blank">Mesa Digitalizadora</a>
-                <a href="https://drive.google.com/file/d/1WPUyAjlTU68c1w6ikC6Nfg7lSwm9PXLG/preview" target="_blank">Óculos de Realidade Virtual</a>
-                <a href="https://drive.google.com/file/d/1tv4h3_7VL4mlj1_it_G7I4e8BZDjd_0x/preview" target="_blank">Pen Drives</a>
-                <a href="https://drive.google.com/file/d/1n7d1gKFbHOsjnjdaWJ4aMCB_PPghJ7br/preview" target="_blank">Projetores Domésticos</a>
-                <a href="https://drive.google.com/file/d/1Gx0VrrzPJqNaXF8kcF-GW188unG2_hOy/preview" target="_blank">Roteador Mesh</a>
-                <a href="https://drive.google.com/file/d/1kaXiD6o41_B3mOGTyRFacFeoqC5bYN3q/preview" target="_blank">Roteadores Wi-Fi</a>
-                <a href="https://drive.google.com/file/d/1bHW2yE0Hltf9YYEh5Gw93SsDWEUNfNUB/preview" target="_blank">Scanners</a>
-                <a href="https://drive.google.com/file/d/1JiGUHjP3-RhfZiCTl9rdtTu0i9FjZt7z/preview" target="_blank">Smart TV</a>
-                <a href="https://drive.google.com/file/d/14HOtTcj7kyUDkyHyqTsf6-5wdkECLr3Q/preview" target="_blank">Smartglasses</a>
-                <a href="https://drive.google.com/file/d/1wTlyITihRcETI3cXUeluirH_47xT1PCt/preview" target="_blank">Smartphones</a>
-                <a href="https://drive.google.com/file/d/1pzjIJnmZmf2yoRebzTsu7IcVhTi5VReD/preview" target="_blank">Smartwatches</a>
-                <a href="https://drive.google.com/file/d/1Ax75h0SIVoO9xGyPhxdT6uD3gsFoBco2/preview" target="_blank">Webcam</a>
-            </div>
-        </div>
-        <div id="modal-dispositivos-2">
-            <div class="inline-modal-header"><h3>Automação Residencial</h3><button class="inline-modal-close-btn">&times;</button></div>
-            <div class="inline-video-list">
-                <a href="https://drive.google.com/file/d/1QXusfEzFKsXa-QE4-ZHKvuUTfTfBcFuN/preview" target="_blank">Nível 1</a>
-                <a href="https://drive.google.com/file/d/17ymBmFPyXtd0CgmIoSDpRCbgX7925ZBi/preview" target="_blank">Nível 2</a>
-                <a href="https://drive.google.com/file/d/1xj28ruyJG8dPWp6azG1e0_qr1w7auFuh/preview" target="_blank">Nível 3</a>
-            </div>
-        </div>
-        <div id="modal-expansao-1">
-            <div class="inline-modal-header"><h3>Tecnologias Emergentes</h3><button class="inline-modal-close-btn">&times;</button></div>
-            <div class="inline-video-list">
-                <a href="https://drive.google.com/file/d/1b1_NcOUefRFADk-zQFKt4RbN6wTA2b6c/preview" target="_blank">Ameaças Virtuais</a>
-                <a href="https://drive.google.com/file/d/1nGGPo3dEwKiY3HTexrWTW6o-HISjGZA6/preview" target="_blank">Automação da Confiança</a>
-                <a href="https://drive.google.com/file/d/1EM06EFRXYVpwpbP0tCnJsLG8XhB-rba3/preview" target="_blank">Blockchain</a>
-                <a href="https://drive.google.com/file/d/1T9R5VNZsy-YAChDqVVC0MFmocArt-jZ0/preview" target="_blank">Cidades Inteligentes</a>
-                <a href="https://drive.google.com/file/d/1LgOE-c6Vsz4uaVxY4ZeIhT71CPQ3__1t/preview" target="_blank">Computação Ubiqua</a>
-                <a href="https://drive.google.com/file/d/13HKgcYTFP94HeTU8rOVm6uuMLol5cUDQ/preview" target="_blank">Gêmeos Digitais</a>
-                <a href="https://drive.google.com/file/d/1AXJGYg52l1lmG0WZtEbehVDuE6DnP6ZH/preview" target="_blank">Inteligência Artificial das Coisas (AloT)</a>
-                <a href="https://drive.google.com/file/d/1TkVaNbygwYAHjqlQDGoenjpTlqeqRK2b/preview" target="_blank">Internet das Coisas (IoT)</a>
-                <a href="https://drive.google.com/file/d/1qLAFGODxMrFHlb6Rud0ZLns1yCm4cNcH/preview" target="_blank">Metamateriais</a>
-                <a href="https://drive.google.com/file/d/1UJVAareS515shr9HjAcX78HvFDppGfMn/preview" target="_blank">Metaverso</a>
-                <a href="https://drive.google.com/file/d/1X266It6pG90aqGr5ZCWQ4XZ3aD3VjBub/preview" target="_blank">Nanotecnologia</a>
-                <a href="https://drive.google.com/file/d/1SGYc6SK2zFwBrjwRltBRGrfVRzyhq4hD/preview" target="_blank">O Paradoxo Ambiental da Economia Digital</a>
-                <a href="https://drive.google.com/file/d/1Ly2I1VY1LlhvS4rCXOAQiP_mjNjJHwM1/preview" target="_blank">Plataformas de Streaming</a>
-                <a href="https://drive.google.com/file/d/1wO1PSV61Awcl0GGEWxGV14ieqD-gTpCB/preview" target="_blank">Realidade Aumentada</a>
-                <a href="https://drive.google.com/file/d/12U4_YL6-XaICraFyhQGiNAS_xFBJVoMh/preview" target="_blank">Realidade Háptica</a>
-                <a href="https://drive.google.com/file/d/1-Bi3XTaKTfiOx28KdVZM5kHQImQIG4me/preview" target="_blank">Realidade Mista</a>
-                <a href="https://drive.google.com/file/d/1g9iDGefEKQm0FX45_MZJMrPFJ2rEPFS_/preview" target="_blank">Realidade Virtual</a>
-                <a href="https://drive.google.com/file/d/17Y0dFBePNFwXEEI3wCi-kZ55VlPW_vVb/preview" target="_blank">Simbiose Homem-Máquina</a>
-                <a href="https://drive.google.com/file/d/1GFxr-FpaGxxroPJ31DCOj-F05fv6bPVG/preview" target="_blank">Smart Rental</a>
-            </div>
-        </div>
-        <div id="modal-economia-1">
-            <div class="inline-modal-header"><h3>Introdução, Contexto e Fundamentos</h3><button class="inline-modal-close-btn">&times;</button></div>
-            <div class="inline-video-list">
-                <a href="https://drive.google.com/file/d/1h57z4PW6enrp_VMgpJFYqB8XMQSL0MWq/preview" target="_blank">Desmaterialização Econômica</a>
-                <a href="https://drive.google.com/file/d/1QAswNzWda1ZE0ktPeOyOVxdJKwin1kV3/preview" target="_blank">PIB Digital</a>
-                <a href="https://drive.google.com/file/d/1z4D_hQ__XXNzlG0rIITqDapvR5u07fvL/preview" target="_blank">Economia do Conhecimento e Cursos Online</a>
-                <a href="https://drive.google.com/file/d/1rV7YwvN-Lz0fnDbhel3mi68UzE3YPdGJ/preview" target="_blank">Economia Digital</a>
-                <a href="https://drive.google.com/file/d/1QxPgzUvgonF7kcQ_TmkPQTKUDZJ3JWxL/preview" target="_blank">Criptografia</a>
-                <a href="https://drive.google.com/file/d/1bO1yAe8lXDgKvMly00Lvbf3tQIfpDa68/preview" target="_blank">Criptomoedas</a>
-                <a href="https://drive.google.com/file/d/13NKKqmZPChqqBbYV34x8gJGawLSwyHig/preview" target="_blank">Tokenização, Stablecoins e a Nova Arquitetura Financeira</a>
-                <a href="https://drive.google.com/file/d/1gUEtLcGXeraNaIsyNv2wkZW3A9USjgYr/preview" target="_blank">Smart Contracts</a>
-            </div>
-        </div>
-        <div id="modal-economia-2">
-            <div class="inline-modal-header"><h3>Finanças, Serviços e Modelos Econômicos</h3><button class="inline-modal-close-btn">&times;</button></div>
-            <div class="inline-video-list">
-                <a href="https://drive.google.com/file/d/1xpM0CUUHAobOxxjaUb94GDLFM1EVTzuF/preview" target="_blank">Fintechs e Bancos Digitais</a>
-                <a href="https://drive.google.com/file/d/1Pub3vlgSmsBXVpMInAWW_67twdqTgEE7/preview" target="_blank">Carteiras Digitais</a>
-                <a href="https://drive.google.com/file/d/1juKdRyqSVxPu939kXNKv-9WxzmuKo8js/preview" target="_blank">SuperApps</a>
-                <a href="https://drive.google.com/file/d/1Cs9oXGyTt_bJKwcwNqqvf-HmMBsgqAtV/preview" target="_blank">Marketplaces</a>
-                <a href="https://drive.google.com/file/d/18KLS5eiqmA5XXmMmbHcFWGIboCjpx3P4/preview" target="_blank">NFTs</a>
-                <a href="https://drive.google.com/file/d/1SjMeBlE4uCB_HmMhhOt69rGCnLeX0n7W/preview" target="_blank">Tokenização</a>
-            </div>
-        </div>
-        <div id="modal-economia-3">
-            <div class="inline-modal-header"><h3>Trabalho, Sociedade e Transformação</h3><button class="inline-modal-close-btn">&times;</button></div>
-            <div class="inline-video-list">
-                <a href="https://drive.google.com/file/d/1pqf5f5wrT2yy3UWsvLZPAD2_V1lflRfA/preview" target="_blank">Gig Economy</a>
-                <a href="https://drive.google.com/file/d/1F0SVSZMWln_iz1uWk_vcwBrOEBIGFm_2/preview" target="_blank">Automação, IA e a Reinvenção do Trabalho</a>
-                <a href="https://drive.google.com/file/d/1HInPyYBTRI8TU81fRSStWXJGU_pjusCs/preview" target="_blank">Automação, Emprego e o Futuro do Trabalho no Brasil</a>
-                <a href="https://drive.google.com/file/d/1VJabxu0dMMVUMV9xEiBXhXeFZNAzp4BJ/preview" target="_blank">AgroTech</a>
-                <a href="https://drive.google.com/file/d/1GOXZ3KlxVvFCJMRB6zxDNhIgziQRJE2j/preview" target="_blank">Inclusão Digital e A Nova Desigualdade de Classes</a>
-                <a href="https://drive.google.com/file/d/18EYqBxNwxnp7qhdXZVaW6i9e5bK1Rt6w/preview" target="_blank">Educação Tecnológica e Requalificação</a>
-                <a href="https://drive.google.com/file/d/1UjDXOUTJAkmU9jgSI10gCcMYYHDRHIXe/preview" target="_blank">Profissões do Futuro</a>
-            </div>
-        </div>
-        <div id="modal-robotica-1">
-            <div class="inline-modal-header"><h3>Robótica e Sistemas Autônomos</h3><button class="inline-modal-close-btn">&times;</button></div>
-            <div class="inline-video-list">
-                <a href="https://drive.google.com/file/d/1xXTPD0vHHb6WxtcA6_2AzZdbcktSaNYW/preview" target="_blank">Robôs - Conceitos Básicos e Aplicações</a>
-                <a href="https://drive.google.com/file/d/1v6VTu6SE3zwFJqdk7KvS9hu8EI4osWZ-/preview" target="_blank">Tipos de robôs</a>
-                <a href="https://drive.google.com/file/d/1rPHdm6_WghFkVUb0Bik_tPQ6Wd5kjKs0/preview" target="_blank">Classificações da Robótica</a>
-                <a href="https://drive.google.com/file/d/1zcbIBCKGDAAB2aYffv2NjeCqwwmIcQjM/preview" target="_blank">Cobots</a>
-                <a href="https://drive.google.com/file/d/15DyEcT16FjHpRYMTRgY-_PDJXH-QccE4/preview" target="_blank">Sensores e Atuadores</a>
-                <a href="https://drive.google.com/file/d/1vS42PZg0_nxBgh9m2VPJN62Af6s2vMvs/preview" target="_blank">Inteligência Artificial na Robótica</a>
-                <a href="https://drive.google.com/file/d/1QxCWgFOM8akSOWM3yrUqH3IKO-mduYj-/preview" target="_blank">Aprendizado de máquina para robôs</a>
-                <a href="https://drive.google.com/file/d/10CqClT8aG46r_kntEgo9-6OnaSfWUAUX/preview" target="_blank">Dark Factory</a>
-            </div>
-        </div>
-        <div id="modal-fabricacao-1">
-            <div class="inline-modal-header"><h3>Fabricação Aditiva</h3><button class="inline-modal-close-btn">&times;</button></div>
-            <div class="inline-video-list">
-                <a href="https://drive.google.com/file/d/1rcLcKKzsttD_MIKOCYlhrqvMUXjsnZOF/preview" target="_blank">Impressão 3D</a>
-                <a href="https://drive.google.com/file/d/14aRw7dsW_gnqU_lHNu0qpuP6WhWJwnmu/preview" target="_blank">Impressão 3D na Construção Civil</a>
-                <a href="https://drive.google.com/file/d/1Cv98qbfkL4fZf2LkLynm0V2cWitB0NSt/preview" target="_blank">Impressão 4D</a>
-            </div>
-        </div>
-        <div id="modal-sociedade-1">
-            <div class="inline-modal-header"><h3>Tecnologia e Sociedade</h3><button class="inline-modal-close-btn">&times;</button></div>
-            <div class="inline-video-list">
-                <a href="https://drive.google.com/file/d/11l87fY9QzukdaQcuALq-HK4nuWSTjjtq/preview" target="_blank">Bolhas Informacionais</a>
-                <a href="https://drive.google.com/file/d/1NiJSR4YXXKIOebwUkIkKkDVEC1Y40vrA/preview" target="_blank">Como a Tecnologia Redefiniu a Percepção do Tempo</a>
-                <a href="https://drive.google.com/file/d/1tPFzn_E8pxE2zcbJxy4QKqU8r3fYQ_bD/preview" target="_blank">Novas Estruturas Sociais na Era Tecnológica</a>
-                <a href="https://drive.google.com/file/d/1snz6eSe3K9FA5KFOkFyNMRP0VhVoamwD/preview" target="_blank">O Quinto Poder</a>
-                <a href="https://drive.google.com/file/d/1TCuouFiBS0akZYYgPn6BmBr_i0cBJV8f/preview" target="_blank">Paradoxo da Conexão</a>
-            </div>
-        </div>
-        <div id="modal-filosofia-1">
-            <div class="inline-modal-header"><h3>Correntes Filosóficas e Culturais</h3><button class="inline-modal-close-btn">&times;</button></div>
-            <div class="inline-video-list">
-                <a href="https://drive.google.com/file/d/1guVBthHG42QPvs-pkEz-K4GIgEPb7Ot2/preview" target="_blank">Tecnoautoritarismo</a>
-                <a href="https://drive.google.com/file/d/1jEpyUwGXTnYjtjjwuTS_SXsuDG8_wqFY/preview" target="_blank">Cyberpunk</a>
-                <a href="https://drive.google.com/file/d/1ovMj2BIfXAUHr77QoO_BkjHtyPInZdCG/preview" target="_blank">Cypherpunk</a>
-                <a href="https://drive.google.com/file/d/1EQ5qH-zY-F5ZT1YSTXqlvLSDUe49a7kU/preview" target="_blank">Dataísmo</a>
-                <a href="https://drive.google.com/file/d/1-jK9Dy9vPBlYGoRNszi3KhZW6KULRvZ7/preview" target="_blank">Transumanismo</a>
-                <a href="https://drive.google.com/file/d/1DF5p-HhzF9cBvSm8OQGZt4wNxUGAh7Px/preview" target="_blank">Biohacking e Nootrópicos</a>
-                <a href="https://drive.google.com/file/d/1rIltUueS2kvzilZr8ibjEzbxLibPuRIQ/preview" target="_blank">Ludologia</a>
-                <a href="https://drive.google.com/file/d/1Rh0XNDMLn5MSDIibd8pJ4R8ElgzewSX8/preview" target="_blank">Anarquismo Digital</a>
-                <a href="https://drive.google.com/file/d/1JXI3nJM7wgEbqhxvwlg9d9sVyrUx9eZq/preview" target="_blank">Neo-Luddismo</a>
-                <a href="https://drive.google.com/file/d/18F14r-yRAkPzZ4Tc4l3kMsJ0jUqKmurW/preview" target="_blank">Tecnofeminismo</a>
-                <a href="https://drive.google.com/file/d/1x1NS7rI1yr5MzdHqXI_UKUIED8W2liEs/preview" target="_blank">Tecnogaianismo</a>
-                <a href="https://drive.google.com/file/d/1WTcpvjgvhxGdHwXOgbbUzE9J1xIz9zlZ/preview" target="_blank">Cibernética</a>
-                <a href="https://drive.google.com/file/d/1fWp6kNJjv_HKST6HRsMzEptHJoSebV8X/preview" target="_blank">Singularidade Tecnológica</a>
-            </div>
-        </div>
-        <div id="modal-saude-1">
-            <div class="inline-modal-header"><h3>Saúde e Tecnologia</h3><button class="inline-modal-close-btn">&times;</button></div>
-            <div class="inline-video-list">
-                <a href="https://drive.google.com/file/d/1CkAU8bvL7gIGwRwzPdK8-dq6kEUY990M/preview" target="_blank">Ansiedade e Estresse no Contexto Tecnológico</a>
-                <a href="https://drive.google.com/file/d/1kxTs_8ndG72NbjalH4M5uJ-9yAOghKL-/preview" target="_blank">Atuação da Computação Quântica nas Vacinas</a>
-                <a href="https://drive.google.com/file/d/1RZfHMbzsH1D_ogKEWxPwLebKUVpCc1Tn/preview" target="_blank">Cansaço Tecnológico</a>
-                <a href="https://drive.google.com/file/d/1VqehNXPr3dq-moOWijL-eQ2yzgplfVEy/preview" target="_blank">Dependência Tecnológica na Era Digital</a>
-                <a href="https://drive.google.com/file/d/1X4zYUuZDnrw-uE5k0LUKsCsHYyMn7oLr/preview" target="_blank">Despersonalização e Isolamento Social</a>
-                <a href="https://drive.google.com/file/d/1P0hJx08ZBWKKkReKdNyFHpHS2mGJKbG7/preview" target="_blank">Distúrbios Auditivos</a>
-                <a href="https://drive.google.com/file/d/1SGuzAZM7kxUzs8_h8GCkdWAQdRwnpTIP/preview" target="_blank">Distúrbios do Sono</a>
-                <a href="https://drive.google.com/file/d/1BvIcbreFJiuRgUJi7amHFFyhSxegwQbv/preview" target="_blank">Distúrbios Visuais</a>
-                <a href="https://drive.google.com/file/d/1mgqP_nhzwqrldagHCXNNq61ouPAUVDfW/preview" target="_blank">Estresse Pós-Traumático</a>
-                <a href="https://drive.google.com/file/d/1YQynUuN-KDV4Qq2idRHkBuCrZUT846HS/preview" target="_blank">Lesão por Esforço Repetitivo</a>
-                <a href="https://drive.google.com/file/d/1OJ9UtnI3BTHvzNGZfs4W-K4VHY23UdTE/preview" target="_blank">Síndrome de Burnout Digital</a>
-                <a href="https://drive.google.com/file/d/1bD2OepN_TwP0dcQR9lnr4fm8p-EfSqBd/preview" target="_blank">Tecnologia e Saúde Mental</a>
-            </div>
-        </div>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a class="brand" href="#">Prof. Ravell</a>
+    <div class="tabs">
+      <a class="tab active" data-tab="videos" href="#videos">Aulas</a>
+      <a class="tab" data-tab="midias" href="#midias">Central de Mídias</a>
+      <a class="tab" data-tab="ferramentas" href="#ferramentas">Ferramentas</a>
     </div>
-    
-    <div class="modal-overlay" id="global-modal-overlay">
-        <div class="modal-content" id="global-modal-content">
-            </div>
+    <label class="search">
+      <span>🔍</span>
+      <input id="q" placeholder="Buscar por tema (ex.: IoT, Blockchain, Wi-Fi)" />
+    </label>
+  </nav>
+
+  <header class="hero" id="hero">
+    <h1>Área do Aluno <—> Trilha de Aprendizado</h1>
+    <p>Todos os cards organizados por grupos pedagógicos.</p>
+  </header>
+
+  <!-- SECTION: VIDEOS -->
+  <main id="videos" class="section">
+    <h2>Trilha principal</h2>
+    <div class="grid" id="cards">
+      <!-- 1 -->
+      <article class="card" data-modal="card-1" data-keywords="fundamentos revoluções industriais conceitos informatica computação tipos sistemas operacionais stem">
+        <div class="thumb"><span class="badge">01</span><h3>Fundamentos da Era Digital</h3><span class="pill">Básico</span></div>
+      </article>
+      <!-- 14 -->
+      <article class="card" data-modal="card-14" data-keywords="stem matemática física química biologia tecnologia">
+        <div class="thumb"><span class="badge">02</span><h3>STEM</h3><span class="pill">Fundamentos</span></div>
+      </article>
+      <!-- 2 -->
+      <article class="card" data-modal="card-2" data-keywords="arquitetura cpu bits bytes algoritmos processamento dados">
+        <div class="thumb"><span class="badge">03</span><h3>Arquitetura e Dados</h3><span class="pill">Básico</span></div>
+      </article>
+      <!-- 3 -->
+      <article class="card" data-modal="card-3" data-keywords="internet web navegadores http https dns tipos de redes infraestrutura web 1.0 web 2.0 web 3.0 open source código aberto">
+        <div class="thumb"><span class="badge">04</span><h3>A Infraestrutura da Web</h3><span class="pill">Internet & Redes</span></div>
+      </article>
+      <!-- 4 -->
+      <article class="card" data-modal="card-4" data-keywords="redes moveis 1g 2g 3g 4g 5g satélite wifi bluetooth ble gps nfc rfid proximidade lifi thread uwb zigbee irda infravermelho">
+        <div class="thumb"><span class="badge">05</span><h3>Tecnologias de Conexão</h3><span class="pill">Internet & Redes</span></div>
+      </article>
+      <!-- 13 -->
+      <article class="card" data-modal="card-13" data-keywords="padrões visuais de dados código de barras qr code pdf417 data matrix">
+        <div class="thumb"><span class="badge">06</span><h3>Padrões Visuais de Dados</h3><span class="pill">Extras</span></div>
+      </article> 
+      <!-- 5 -->
+      <article class="card" data-modal="card-5" data-keywords="armazenamento sd microsd hd externo pendrive kindle projetor impressora scanner mesa digitalizadora">
+        <div class="thumb"><span class="badge">07</span><h3>Dispositivos de Mídia e Armazenamento</h3><span class="pill">Dispositivos</span></div>
+      </article>
+      <!-- 6 -->
+      <article class="card" data-modal="card-6" data-keywords="smartphone smartwatch smart tv webcam roteador wifi mesh automação residencial casa inteligente">
+        <div class="thumb"><span class="badge">08</span><h3>Dispositivos de Comunicação</h3><span class="pill">Dispositivos</span></div>
+      </article>
+      <!-- 7 -->
+      <article class="card" data-modal="card-7" data-keywords="nuvem cloud servidores data centers fog edge plataformas streaming marketplaces superapps">
+        <div class="thumb"><span class="badge">09</span><h3>Serviços e Ambientes Digitais</h3><span class="pill">Plataformas</span></div>
+      </article>
+      <!-- 8 -->
+      <article class="card" data-modal="card-8" data-keywords="iot aiot xr vr ar mr háptica metaverso robótica automação cobots sensores ia drones">
+        <div class="thumb"><span class="badge">10</span><h3>Tecnologias Emergentes & IA</h3><span class="pill">Emergentes</span></div>
+      </article>
+       <!-- 15 -->
+      <article class="card" data-modal="card-15" data-keywords="computação avançada adiabática biológica clássica fotônica neuromórfica quântica supercomputadores">
+        <div class="thumb"><span class="badge">11</span><h3>Computação Avançada</h3><span class="pill">Avançado</span></div>
+      </article>
+      <!-- 9 -->
+      <article class="card" data-modal="card-9" data-keywords="economia digital web3 criptografia blockchain contratos inteligentes smart contracts cripto nft tokenização fintechs carteiras digitais smart rental">
+        <div class="thumb"><span class="badge">12</span><h3>A Nova Economia (Web3)</h3><span class="pill">Economia</span></div>
+      </article>
+      <!-- 10 -->
+      <article class="card" data-modal="card-10" data-keywords="impressão 3d 4d construção nanotecnologia metamateriais computação quântica">
+        <div class="thumb"><span class="badge">13</span><h3>Deep Tech e Fabricação</h3><span class="pill">Deep Tech</span></div>
+      </article>
+      <!-- 11 -->
+      <article class="card" data-modal="card-11" data-keywords="futuro do trabalho gig economy automação profissões do futuro reskilling sociedade agrotech">
+        <div class="thumb"><span class="badge">14</span><h3>Trabalho e Sociedade</h3><span class="pill">Sociedade</span></div>
+      </article>
+      <!-- 12 -->
+      <article class="card" data-modal="card-12" data-keywords="saúde mental burnout zoom fatigue ansiedade distúrbios do sono filosofia cultura digital">
+        <div class="thumb"><span class="badge">15</span><h3>Saúde e Cultura Digital</h3><span class="pill">Sociedade</span></div>
+      </article>                
+    </div>    
+  </main>
+
+  <!-- MIDIAS / FERRAMENTAS -->
+  <section id="midias" class="section board" hidden>
+    <h2>Central de Mídias</h2>
+    <div class="grid">
+      <a class="card" href="https://ravellsl.github.io/podcast/" target="_blank" rel="noopener">
+        <div class="thumb"><span class="ico">🎙️</span><h3>Podcast</h3><span class="pill">áudio</span></div>
+      </a>
+      <a class="card featured" href="https://ravellsl.github.io/boletim-tecnologico-02-11-2025/" target="_blank" rel="noopener">
+        <div class="thumb"><span class="ico">📰</span><h3>Boletim Tech</h3><span class="pill">atualizações</span></div>
+      </a>
+      <a class="card" href="https://ravellsl.github.io/rstech-artigos/" target="_blank" rel="noopener">
+        <div class="thumb"><span class="ico">📄</span><h3>Artigos</h3><span class="pill">leituras</span></div>
+      </a>
+      <a class="card" href="https://ravellsl.github.io/video-aulas/#home" target="_blank" rel="noopener">
+        <div class="thumb"><span class="ico">💬</span><h3>Dúvidas em Vídeo</h3><span class="pill">FAQ</span></div>
+      </a>
     </div>
+  </section>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            // --- Variáveis Globais ---
-            const navLinks = document.querySelectorAll('.nav-link');
-            const tabContents = document.querySelectorAll('.tab-content');
-            const videoCards = document.querySelectorAll('.video-card');
-            const allCards = document.querySelectorAll('.video-card');
-            const searchInput = document.getElementById('search-input');
-            const heroSection = document.querySelector('.hero-section');
+  <section id="ferramentas" class="section board" hidden>
+    <h2>Ferramentas Digitais</h2>
+    <div class="grid">
+      <a class="card" href="https://ravellsl.github.io/dicionario-tech/" target="_blank" rel="noopener">
+        <div class="thumb"><span class="ico">📖</span><h3>Dicionário Tech</h3><span class="pill">conceitos</span></div>
+      </a>
+      <a class="card" href="https://ravellsl.github.io/rstechaluno-agentes-IA/" target="_blank" rel="noopener">
+        <div class="thumb"><span class="ico">🤖</span><h3>Agentes de IA</h3><span class="pill">assistentes</span></div>
+      </a>
+      <a class="card" href="https://ravellsl.github.io/ferramenta-busca-noticias/" target="_blank" rel="noopener">
+        <div class="thumb"><span class="ico">🔍</span><h3>Diário de Notícias</h3><span class="pill">curadoria</span></div>
+      </a>
+      <a class="card" href="https://ravellsl.github.io/IA-plataform/" target="_blank" rel="noopener">
+        <div class="thumb"><span class="ico">🧠</span><h3>Inteligência Artificial</h3><span class="pill">recursos</span></div>
+      </a>
+      <a class="card" href="https://ravellsl.github.io/SynTHub-IA/" target="_blank" rel="noopener">
+        <div class="thumb"><span class="ico">💡</span><h3>Hub de IA</h3><span class="pill">catálogo</span></div>
+      </a>
+      <a class="card" href="https://ravellsl.github.io/bloco-de-notas/" target="_blank" rel="noopener">
+        <div class="thumb"><span class="ico">📝</span><h3>Bloco de Notas</h3><span class="pill">organização</span></div>
+      </a>
+    </div>
+  </section>
 
-            const modalOverlay = document.getElementById('global-modal-overlay');
-            const modalContent = document.getElementById('global-modal-content');
-            const body = document.body;
-            
-            // --- FUNÇÃO: Padronizar Altura dos Cards ---
-            function standardizeCardHeights() {
-                const activeTab = document.querySelector('.tab-content.active');
-                if (!activeTab) return;
-                const cardsInActiveTab = activeTab.querySelectorAll('.video-card, .tool-card');
-                if (cardsInActiveTab.length === 0) return;
-                let maxHeight = 0;
-                cardsInActiveTab.forEach(card => {
-                    card.style.height = 'auto';
-                });
-                setTimeout(() => {
-                    cardsInActiveTab.forEach(card => {
-                        if (card.offsetParent !== null) {
-                            if (card.offsetHeight > maxHeight) {
-                                maxHeight = card.offsetHeight;
-                            }
-                        }
-                    });
-                    if (maxHeight > 0) {
-                        cardsInActiveTab.forEach(card => {
-                            card.style.height = `${maxHeight}px`;
-                        });
-                    }
-                }, 0); 
-            }
+  <!-- OVERLAY/MODAL -->
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
+      <header>
+        <h3 id="modal-title">Título</h3>
+        <button id="close">✕</button>
+      </header>
+      <div class="content" id="modal-content"></div>
+    </div>
+  </div>
 
-            // --- 1. Lógica de Navegação por Abas ---
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    tabContents.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    const targetTab = document.querySelector(this.getAttribute('href'));
-                    if(targetTab) {
-                        targetTab.classList.add('active');
-                    }
-                    searchInput.value = '';
-                    filterContent('');
-                    standardizeCardHeights();
-                });
-            });
+  <!-- TEMPLATES -->
+  <template id="card-1">
+    <details class="item"><summary>Revoluções Industriais</summary>
+      <p class="desc">1ª, 2ª, 3ª e 4ª Revolução Industrial: do vapor à IA. Contexto histórico e impactos na sociedade.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1VauRulgLM5oyapz1N1NNOX7zpNT3H0_j/preview">1ª Revolução</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1P746992E6vM75wuALE-Ixb_HqJ3HFYHw/preview">2ª Revolução</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1p3kc97rY7cmohcYUapdrCKljjBYrg42p/preview">3ª Revolução</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1phlnfnpg9vhhups246AWt-GrsUxf_kO5/preview">4ª Revolução</a>
+      </div>
+    </details>
+    <details class="item"><summary>Conceitos de Informática</summary>
+      <p class="desc">Introdução, evolução da computação, tipos de computadores e sistemas operacionais.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1PBLGlu7wUe1dW2wB1SzVoTqORZ3b7m2p/preview">Introdução à Informática</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1mUB8hmEeHiplG60F3K0hloCzSh9U83h3/preview">Evolução da Computação</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1_6zOqtFkOzNEiLTmygRPjSfb4OpRQiJW/preview">Tipos de Computadores</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/12F__7jibSxK4KRRUOdG2DUWKoWEkHnUc/preview">Sistemas Operacionais</a>
+        <!-- STEM movido para aqui -->
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1978-HRY04zxPfI0lsDSJvL3n_Mfyv7YG/preview">STEM</a>
+      </div>
+    </details>
+  </template>
 
-            
-            // --- 2. Lógica do Modal Centralizado ---
+  <template id="card-2">
+    <details class="item"><summary>Por Dentro do Computador</summary>
+      <p class="desc">Estrutura e componentes, processamento de dados na CPU.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1B1EQGiarLYni19P5BmYcLOdPWFwIPH90/preview">Estrutura e Componentes</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1NhaQ2tt4FbH-ktqOIlvbwKmvEA8fFimk/preview">Processamento na CPU</a>
+      </div>
+    </details>
+    <details class="item"><summary>A Linguagem da Máquina</summary>
+      <p class="desc">Unidades de informação (bits/bytes) e a ideia de algoritmo.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1JMlLZpCLv458MG2uSKed9jskctEcIR4a/preview">Múltiplos dos Bits</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1jFgW3fiDSjTNOhhIXdUbCJsIPWvYbwab/preview">Algoritmos</a>
+      </div>
+    </details>
+  </template>
 
-            function closeModal() {
-                modalOverlay.classList.remove('active');
-                modalContent.innerHTML = '';
-                body.classList.remove('modal-open');
-                allCards.forEach(c => c.classList.remove('active'));
-            }
+  <template id="card-3">
+    <details class="item"><summary>O Que é a Internet?</summary>
+      <p class="desc">Criação e evolução das redes, tipos de redes e infraestrutura global.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1tdwvsAFD__KU_7qQWcakI_99PP8ivger/preview">Criação e Evolução</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1BgkjxNeahyzceorvjtFJMqMaM3dzMINu/preview">Infraestrutura & Tipos de Redes</a>
+      </div>
+    </details>
+    <details class="item"><summary>Como Navegamos</summary>
+      <p class="desc">Navegadores, HTTP/HTTPS e DNS.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1ZHKZ8ys_xX5qtYbGvwIufPpxTUjNUVp3/preview">Browsers</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1a3tXNpGxJnrjKLRYU85Dn9zxwjvVAExT/preview">HTTP & HTTPS</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1NFbIR1Giud1W727tJboVPFG_N8sAlRLb/preview">DNS</a>
+        <!-- Open Source adicionado aqui -->
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1vptf_16aH7pvrZfpLUtlyXnnbWnJrVvq/preview">Open Source (Código Aberto)</a>
+      </div>
+    </details>
+    <!-- Nova subseção: Web -->
+    <details class="item"><summary>Web</summary>
+      <p class="desc">Evolução da Web: 1.0 (estática), 2.0 (social) e 3.0 (semântica/descentralizada).</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1uEsJ6AGXkwGakddDyi14UwN2pSE_nFtm/preview">Web 1.0</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1PQRCScxlEQXSc7ZmHmAiM6Dm2vntEKEq/preview">Web 2.0</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1IsB0KaJcTZX6ScYlYykGeEQVEy85g2ob/preview">Web 3.0</a>
+      </div>
+    </details>
+  </template>
 
-            videoCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    const targetModalId = this.dataset.modalTarget;
-                    const contentSource = document.getElementById(targetModalId);
-                    if (!contentSource) return;
+  <template id="card-4">
+    <details class="item"><summary>Redes Móveis</summary>
+      <p class="desc">1G a 5G e conectividade por satélites.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1r4fIWE67ye4gsNtbhvZbag-gOLpS7fzY/preview">1G</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1vwhAry-J-TJ0DphCyUC8Jg3rx0wECnqA/preview">2G</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1sPb6HZaHvpW4wO27WMc5dQ9c0Td59KdV/preview">3G</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/10u7FA5z9aV9Ebl8oYCI26s0RzRmWR2-D/preview">4G</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1kZxVr4RucQnXT975aZA-0ivPACnDkkPP/preview">5G</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1M57-ts_ZO7krfOP7LlUgXNZ-CtGp6nBl/preview">Satélites</a>
+      </div>
+    </details>
+    <details class="item"><summary>Redes Locais e Proximidade</summary>
+      <p class="desc">Wi-Fi, Bluetooth/BLE, GPS, NFC, RFID + tecnologias de curto alcance.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1G9AP6R2ojcu6xyjz5yacBhcmKs7c7r9v/preview">Wi-Fi</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/15mNOJMBpUpXFt6sSbNms5a44Q68na1Xx/preview">Bluetooth</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1VwkQ8Dj1dSao4M8ybrWT2IX3FyYXBPAP/preview">BLE</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1YGevrVlEwkBTMIuZSYpHStTeF_gAf0wG/preview">GPS</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1GWctg-KtXF3C7XXvbZ8FQogsrNgmQ_eM/preview">NFC</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1QGisW3IBr4nsl0IB3A6qc7pAnLaH_H3w/preview">RFID</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1_aMjAUGSqvTeCwf5SHmu0Bfo-BNOM5PW/preview">Li-Fi</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1W-EqyxZSOOLaTBtaQfaN1r76qtSFy4EL/preview">Thread</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1m15pxLPwtW2_ledtVXxLTJ6XWog8WnUR/preview">UWB</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1w4eHHFpxgl2jh-GjI_LmbCZfWQkI5hl2/preview">Zigbee</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1J4ZL_r8ZkbzK8F6eC5xIXzDpmyjRa2hd/preview">Infravermelho (IrDA)</a>
+      </div>
+    </details>
+  </template>
 
-                    allCards.forEach(c => c.classList.remove('active'));
-                    this.classList.add('active');
+  <template id="card-5">
+    <details class="item"><summary>Armazenamento Pessoal</summary>
+      <p class="desc">Cartões SD/MicroSD, HD Externo e Pen Drives.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1rkj1dsKL0pIf6TbynNUaIEVfRNyOkJnS/preview">Cartões SD/MicroSD</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1qX8IzfMyJZkFODcSueH-WDSzBdDhUQFJ/preview">HD Externo</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1tv4h3_7VL4mlj1_it_G7I4e8BZDjd_0x/preview">Pen Drives</a>
+      </div>
+    </details>
+    <details class="item"><summary>Mídia e Escritório</summary>
+      <p class="desc">Kindle, Projetores, Impressoras/Multifuncionais, Scanners e Mesa Digitalizadora.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1gJUx0n4pnGN_5A1eQ88zhuGS5GJSa6Zl/preview">Kindle</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1n7d1gKFbHOsjnjdaWJ4aMCB_PPghJ7br/preview">Projetores</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1Fm54CNSifVjdP2Gd5panQx3TaorBtx1/preview">Impressoras</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1oCMtZk7O0KeFJdgL59QmszBs5kiNcNjM/preview">Multifuncionais</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1bHW2yE0Hltf9YYEh5Gw93SsDWEUNfNUB/preview">Scanners</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1rOW8ufA91Fhxnc6HAZW3S67CMF7LSxbl/preview">Mesa Digitalizadora</a>
+      </div>
+    </details>
+  </template>
 
-                    modalContent.innerHTML = contentSource.innerHTML;
+  <template id="card-6">
+    <details class="item"><summary>Comunicação Pessoal</summary>
+      <p class="desc">Smartphones, Smartwatches, Smart TV e Webcam.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1wTlyITihRcETI3cXUeluirH_47xT1PCt/preview">Smartphones</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1pzjIJnmZmf2yoRebzTsu7IcVhTi5VReD/preview">Smartwatches</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1JiGUHjP3-RhfZiCTl9rdtTu0i9FjZt7z/preview">Smart TV</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1WPUyAjlTU68c1w6ikC6Nfg7lSwm9PXLG/preview">Óculos VR</a>
+      </div>
+    </details>
+    <details class="item"><summary>Conectividade Residencial</summary>
+      <p class="desc">Roteadores Wi-Fi e sistemas Mesh.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1kaXiD6o41_B3mOGTyRFacFeoqC5bYN3q/preview">Roteadores Wi-Fi</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1Gx0VrrzPJqNaXF8kcF-GW188unG2_hOy/preview">Roteador Mesh</a>
+      </div>
+    </details>
+    <details class="item"><summary>Automação Residencial</summary>
+      <p class="desc">Três níveis para guiar a jornada de casa inteligente.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1QXusfEzFKsXa-QE4-ZHKvuUTfTfBcFuN/preview">Nível 1</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/17ymBmFPyXtd0CgmIoSDpRCbgX7925ZBi/preview">Nível 2</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1xj28ruyJG8dPWp6azG1e0_qr1w7auFuh/preview">Nível 3</a>
+      </div>
+    </details>
+  </template>
 
-                    modalOverlay.classList.add('active');
-                    body.classList.add('modal-open');
+  <template id="card-7">
+    <details class="item"><summary>Serviços em Nuvem (Cloud)</summary>
+      <p class="desc">Servidores, Data Centers, Cloud, Fog e Edge Computing.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1CaNCwx1G3BMrHyplThSHTQZI7U9DNNYy/preview">Servidores & Data Centers</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1I8pnJ0ufj_HNMvrulnxtiUIaIUbkWaf6/preview">Cloud Computing</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1i83xaqZFl2egA6B9InrhEAZ5gDPKszHv/preview">Fog Computing</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/16h9WQRy6EX4c7ugWQCxaoNztksPVLeHg/preview">Edge Computing</a>
+      </div>
+    </details>
+    <details class="item"><summary>Plataformas Digitais</summary>
+      <p class="desc">Streaming, Marketplaces e SuperApps.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1Ly2I1VY1LlhvS4rCXOAQiP_mjNjJHwM1/preview">Plataformas de Streaming</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1Cs9oXGyTt_bJKwcwNqqvf-HmMBsgqAtV/preview">Marketplaces</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1juKdRyqSVxPu939kXNKv-9WxzmuKo8js/preview">SuperApps</a>
+      </div>
+    </details>
+  </template>
 
-                    const closeBtn = modalContent.querySelector('.inline-modal-close-btn');
-                    if (closeBtn) {
-                        closeBtn.addEventListener('click', (e) => {
-                            e.stopPropagation();
-                            closeModal();
-                        });
-                    }
-                });
-            });
+  <template id="card-8">
+    <details class="item"><summary>Internet das Coisas (IoT)</summary>
+      <p class="desc">IoT e AIoT como extensão sensorial da computação.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1TkVaNbygwYAHjqlQDGoenjpTlqeqRK2b/preview">IoT</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1AXJGYg52l1lmG0WZtEbehVDuE6DnP6ZH/preview">AIoT</a>
+      </div>
+    </details>
+    <details class="item"><summary>Realidades Imersivas (XR)</summary>
+      <p class="desc">VR, AR, MR, Háptica e Metaverso.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1WPUyAjlTU68c1w6ikC6Nfg7lSwm9PXLG/preview">Óculos VR</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1SitXhHokFqiqqcNU5zFYAggmjlZGvbeQ/preview">Controladores Hápticos</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1g9iDGefEKQm0FX45_MZJMrPFJ2rEPFS_/preview">Realidade Virtual (VR)</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1wO1PSV61Awcl0GGEWxGV14ieqD-gTpCB/preview">Realidade Aumentada (AR)</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1-Bi3XTaKTfiOx28KdVZM5kHQImQIG4me/preview">Realidade Mista (MR)</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/12U4_YL6-XaICraFyhQGiNAS_xFBJVoMh/preview">Realidade Háptica</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1UJVAareS515shr9HjAcX78HvFDppGfMn/preview">Metaverso</a>
+      </div>
+    </details>
+    <details class="item"><summary>Robótica e Automação</summary>
+      <p class="desc">Conceitos, tipos, classificações, cobots, sensores, IA e dark factory.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1xXTPD0vHHb6WxtcA6_2AzZdbcktSaNYW/preview">Conceitos</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1v6VTu6SE3zwFJqdk7KvS9hu8EI4osWZ-/preview">Tipos & Classificações</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1zcbIBCKGDAAB2aYffv2NjeCqwwmIcQjM/preview">Cobots</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/15DyEcT16FjHpRYMTRgY-_PDJXH-QccE4/preview">Sensores e Atuadores</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1vS42PZg0_nxBgh9m2VPJN62Af6s2vMvs/preview">IA na Robótica</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1QxCWgFOM8akSOWM3yrUqH3IKO-mduYj-/preview">Aprendizado de Máquina</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/10CqClT8aG46r_kntEgo9-6OnaSfWUAUX/preview">Dark Factory</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1TQ_dqF0ARaL9QWqz5RTAXXe6ILkPZcR5/preview">Drones</a>
+      </div>
+    </details>
+  </template>
 
-            modalOverlay.addEventListener('click', (e) => {
-                if (e.target === modalOverlay) {
-                    closeModal();
-                }
-            });
-            
-            document.addEventListener('keydown', (e) => {
-                if (e.key === "Escape" && modalOverlay.classList.contains('active')) {
-                    closeModal();
-                }
-            });
-            
-            // --- 3. Lógica de Busca ---
-            searchInput.addEventListener('input', (e) => {
-                const searchTerm = e.target.value.toLowerCase().trim();
-                filterContent(searchTerm);
-            });
+  <template id="card-9">
+    <details class="item"><summary>Fundamentos da Economia Digital</summary>
+      <p class="desc">Desmaterialização, PIB Digital e pilares da economia digital.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1h57z4PW6enrp_VMgpJFYqB8XMQSL0MWq/preview">Desmaterialização Econômica</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1QAswNzWda1ZE0ktPeOyOVxdJKwin1kV3/preview">PIB Digital</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1rV7YwvN-Lz0fnDbhel3mi68UzE3YPdGJ/preview">Economia Digital</a>
+        <a class="watch" target="_blank" href="#">Smart Rental</a>
+      </div>
+    </details>
+    <details class="item"><summary>Criptografia e Blockchain</summary>
+      <p class="desc">Criptografia, Blockchain, Automação da Confiança e Smart Contracts.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1QxPgzUvgonF7kcQ_TmkPQTKUDZJ3JWxL/preview">Criptografia</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1EM06EFRXYVpwpbP0tCnJsLG8XhB-rba3/preview">Blockchain</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1nGGPo3dEwKiY3HTexrWTW6o-HISjGZA6/preview">Automação da Confiança</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1gUEtLcGXeraNaIsyNv2wkZW3A9USjgYr/preview">Smart Contracts</a>
+      </div>
+    </details>
+    <details class="item"><summary>Ativos Digitais (Web3)</summary>
+      <p class="desc">Criptomoedas, Tokenização/Stablecoins e NFTs.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1bO1yAe8lXDgKvMly00Lvbf3tQIfpDa68/preview">Criptomoedas</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/13NKKqmZPChqqBbYV34x8gJGawLSwyHig/preview">Tokenização / Stablecoins</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/18KLS5eiqmA5XXmMmbHcFWGIboCjpx3P4/preview">NFTs</a>
+      </div>
+    </details>
+    <details class="item"><summary>Fintechs e Serviços</summary>
+      <p class="desc">Fintechs & Bancos Digitais e Carteiras Digitais (e-Wallets).</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1xpM0CUUHAobOxxjaUb94GDLFM1EVTzuF/preview">Fintechs e Bancos Digitais</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1Pub3vlgSmsBXVpMInAWW_67twdqTgEE7/preview">Carteiras Digitais</a>
+      </div>
+    </details>
+  </template>
 
-            function filterContent(searchTerm) {
-                if (searchTerm) {
-                    heroSection.style.display = 'none';
-                } else {
-                    heroSection.style.display = 'flex';
-                }
+  <template id="card-10">
+    <details class="item"><summary>Fabricação Aditiva</summary>
+      <p class="desc">Impressão 3D (incl. construção) e Impressão 4D.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1rcLcKKzsttD_MIKOCYlhrqvMUXjsnZOF/preview">Impressão 3D</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/14aRw7dsW_gnqU_lHNu0qpuP6WhWJwnmu/preview">Impressão 3D na Construção</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1Cv98qbfkL4fZf2LkLynm0V2cWitB0NSt/preview">Impressão 4D</a>
+      </div>
+    </details>
+    <details class="item"><summary>A Fronteira da Ciência</summary>
+      <p class="desc">Nanotecnologia e Metamateriais.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1X266It6pG90aqGr5ZCWQ4XZ3aD3VjBub/preview">Nanotecnologia</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1qLAFGODxMrFHlb6Rud0ZLns1yCm4cNcH/preview">Metamateriais</a>
+      </div>
+    </details>
+    <details class="item"><summary>Computação Avançada</summary>
+      <p class="desc">Física Clássica vs Quântica, Física Quântica, aplicação em vacinas.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1bmyrpugoSPPF8qJy9X3L86BzKUFdJRmD/preview">Física Clássica vs Quântica</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1cuEmsRofyObN7h7otnZDEn4rY_GJnw5I/preview">Física Quântica</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1kxTs_8ndG72NbjalH4M5uJ-9yAOghKL-/preview">Atuação da Computação Quântica nas Vacinas</a>
+      </div>
+    </details>
+  </template>
 
-                const allRows = document.querySelectorAll('.grid-row, .category-row.standalone');
-                
-                allRows.forEach(row => {
-                    let rowHasMatch = false;
-                    const rowTitle = row.dataset.title?.toLowerCase() || '';
+  <template id="card-11">
+    <details class="item"><summary>O Futuro do Trabalho</summary>
+      <p class="desc">Gig Economy, Automação/IA e Reinvenção, Automação/Emprego no Brasil, Profissões do Futuro, Reskilling.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1pqf5f5wrT2yy3UWsvLZPAD2_V1lflRfA/preview">Gig Economy</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1F0SVSZMWln_iz1uWk_vcwBrOEBIGFm_2/preview">Automação & IA</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1HInPyYBTRI8TU81fRSStWXJGU_pjusCs/preview">Automação & Emprego</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1UjDXOUTJAkmU9jgSI10gCcMYYHDRHIXe/preview">Profissões do Futuro</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/18EYqBxNwxnp7qhdXZVaW6i9e5bK1Rt6w/preview">Reskilling</a>
+        <a class="watch" target="_blank" href="#">AgroTech</a>
+      </div>
+    </details>
+    <details class="item"><summary>Tecnologia e Sociedade</summary>
+      <p class="desc">Bolhas Informacionais, Percepção do Tempo, Novas Estruturas, Quinto Poder, Paradoxo da Conexão, Inclusão Digital & Desigualdade.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/11l87fY9QzukdaQcuALq-HK4nuWSTjjtq/preview">Bolhas Informacionais</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1NiJSR4YXXKIOebwUkIkKkDVEC1Y40vrA/preview">Percepção do Tempo</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1tPFzn_E8pxE2zcbJxy4QKqU8r3fYQ_bD/preview">Novas Estruturas Sociais</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1snz6eSe3K9FA5KFOkFyNMRP0VhVoamwD/preview">O Quinto Poder</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1TCuouFiBS0akZYYgPn6BmBr_i0cBJV8f/preview">Paradoxo da Conexão</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1GOXZ3KlxVvFCJMRB6zxDNhIgziQRJE2j/preview">Inclusão Digital e Desigualdade</a>
+      </div>
+    </details>
+    <details class="item"><summary>Riscos e Desafios</summary>
+      <p class="desc">Ameaças Virtuais e Paradoxo Ambiental.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1b1_NcOUefRFADk-zQFKt4RbN6wTA2b6c/preview">Ameaças Virtuais</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1SGYc6SK2zFwBrjwRltBRGrfVRzyhq4hD/preview">Paradoxo Ambiental</a>
+      </div>
+    </details>
+  </template>
 
-                    if (rowTitle.includes(searchTerm)) {
-                        rowHasMatch = true;
-                    }
+  <template id="card-12">
+    <details class="item"><summary>Saúde na Era Digital</summary>
+      <p class="desc">Ansiedade, Zoom Fatigue, Dependência, Despersonalização, Distúrbios Auditivos/Visuais, Sono, TEPT, LER/DORT, Burnout, Saúde Mental.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1CkAU8bvL7gIGwRwzPdK8-dq6kEUY990M/preview">Ansiedade</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1RZfHMbzsH1D_ogKEWxPwLebKUVpCc1Tn/preview">Cansaço Tecnológico</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1VqehNXPr3dq-moOWijL-eQ2yzgplfVEy/preview">Dependência Tecnológica</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1X4zYUuZDnrw-uE5k0LUKsCsHYyMn7oLr/preview">Despersonalização e Isolamento Social</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1P0hJx08ZBWKKkReKdNyFHpHS2mGJKbG7/preview">Distúrbios Auditivos</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1BvIcbreFJiuRgUJi7amHFFyhSxegwQbv/preview">Distúrbios Visuais</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1SGuzAZM7kxUzs8_h8GCkdWAQdRwnpTIP/preview">Distúrbios do Sono</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1mgqP_nhzwqrldagHCXNNq61ouPAUVDfW/preview">Estresse Pós-Traumático na Tecnologia</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1YQynUuN-KDV4Qq2idRHkBuCrZUT846HS/preview">LER/DORT</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1OJ9UtnI3BTHvzNGZfs4W-K4VHY23UdTE/preview">Síndrome de Burnout Digital</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1bD2OepN_TwP0dcQR9lnr4fm8p-EfSqBd/preview">Saúde Mental</a>
+      </div>
+    </details>
+    <details class="item"><summary>Filosofia e Cultura Tech</summary>
+      <p class="desc">Tecnoautoritarismo, Cyberpunk, Cypherpunk, Dataísmo, Transumanismo, Biohacking, Ludologia, Anarquismo Digital, Neo-Luddismo, Tecnofeminismo, Tecnogaianismo, Cibernética, Singularidade, Simbiose.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1guVBthHG42QPvs-pkEz-K4GIgEPb7Ot2/preview">Tecnoautoritarismo</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1jEpyUwGXTnYjtjjwuTS_SXsuDG8_wqFY/preview">Cyberpunk</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1ovMj2BIfXAUHr77QoO_BkjHtyPInZdCG/preview">Cypherpunk</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1EQ5qH-zY-F5ZT1YSTXqlvLSDUe49a7kU/preview">Dataísmo</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1-jK9Dy9vPBlYGoRNszi3KhZW6KULRvZ7/preview">Transumanismo</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1DF5p-HhzF9cBvSm8OQGZt4wNxUGAh7Px/preview">Biohacking</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1rIltUueS2kvzilZr8ibjEzbxLibPuRIQ/preview">Ludologia</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1Rh0XNDMLn5MSDIibd8pJ4R8ElgzewSX8/preview">Anarquismo Digital</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1JXI3nJM7wgEbqhxvwlg9d9sVyrUx9eZq/preview">Neo-Luddismo</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/18F14r-yRAkPzZ4Tc4l3kMsJ0jUqKmurW/preview">Tecnofeminismo</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1x1NS7rI1yr5MzdHqXI_UKUIED8W2liEs/preview">Tecnogaianismo</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1WTcpvjgvhxGdHwXOgbbUzE9J1xIz9zlZ/preview">Cibernética</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1fWp6kNJjv_HKST6HRsMzEptHJoSebV8X/preview">Singularidade</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/17Y0dFBePNFwXEEI3wCi-kZ55VlPW_vVb/preview">Simbiose Homem-Máquina</a>
+      </div>
+    </details>
+  </template>
 
-                    row.querySelectorAll('.video-card').forEach(card => {
-                        const cardTooltip = card.dataset.tooltipSearch.toLowerCase();
-                        if (cardTooltip.includes(searchTerm) || rowTitle.includes(searchTerm)) {
-                            card.style.display = 'block'; 
-                            rowHasMatch = true;
-                        } else {
-                            card.style.display = 'none';
-                        }
-                    });
-                    
-                    row.querySelectorAll('.tool-card').forEach(card => {
-                        const cardTitle = card.dataset.title.toLowerCase();
-                        if (cardTitle.includes(searchTerm) || rowTitle.includes(searchTerm)) {
-                            card.style.display = 'flex';
-                            rowHasMatch = true;
-                        } else {
-                            card.style.display = 'none';
-                        }
-                    });
+  <!-- Padrões Visuais de Dados -->
+  <template id="card-13">
+    <details class="item"><summary>Padrões Visuais de Dados</summary>
+      <p class="desc">Representações codificadas para leitura por máquinas e humanos.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1HDNLHecSo4vfw9z_aNoQljAyBzSTIg2V/preview">Código de Barras</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/102EDP9L5rHjDZNwZ0Dz4xeVBPMuVbFb0/preview">QR Code</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1RYE4cmxEz_QrvsuqRg7qOuiW04vVR1bM/preview">PDF417</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/11tzKRTRCm93ekdAWifnQD1Tmh0LGBqt8/preview">Data Matrix</a>
+      </div>
+    </details>
+  </template>
 
-                    if (rowHasMatch) {
-                        row.style.display = row.classList.contains('grid-row') ? 'grid' : 'block';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-                
-                standardizeCardHeights();
-            }
-            
-            // --- 5. LÓGICA DE PADRONIZAÇÃO INICIAL ---
-            window.onload = function() {
-                standardizeCardHeights();
-            };
-            
-            let resizeTimer;
-            window.addEventListener('resize', () => {
-                clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(standardizeCardHeights, 150);
-            });
+  <!-- STEM (sem o link STEM movido) -->
+  <template id="card-14">
+    <details class="item"><summary>Fundamentos STEM</summary>
+      <p class="desc">Conceitos de Matemática, Física, Química e Biologia aplicados à tecnologia.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1c4Y1m9a4cOSP6bxL0v8DMzdabkykbQks/preview">Matemática Essencial</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/11e4RJaR3rSWBzoEhosJll92lHkHZNvcD/preview">Transformada de Fourier</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1V0ymHNMpq1zHGb2TeMNGqCWgXNKP6CIi/preview">Química & Tecnologia</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1ZxSHGOTzeD3Cnw3TdjHk3YaGthsdLswq/preview">Biologia & Tecnologia</a>
+      </div>
+    </details>
+  </template>
 
-        });
-    </script>
+  <template id="card-15">
+    <details class="item" open><summary>Computação Avançada</summary>
+      <p class="desc">Paradigmas computacionais organizados em ordem crescente de complexidade e importância futura.</p>
+      <div class="tray">
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1t7XIZzs5GFBz79L7SWPQBEKmzj_Jn2SQ/preview">Computação Clássica</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1K1jRFncOAnXPsiA9cyG7akU5h83qQ3h9/preview">Supercomputadores</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1RkInhcKxbphXQYCK4r-oLCJQZGp7NLh9/preview">Computação Fotônica</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/14Se5MmxDJiDHdl0B5ODg7MM6mAXI5XxB/preview">Computação Neuromórfica</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1Fca4OaOhJRrwZbcC-eCCFdVZHKCYu6yo/preview">Computação Biológica</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/15DFKhTLM9dYSbywXPK3Ka3Pt2z3BEyBk/preview">Computação Adiabática</a>
+        <a class="watch" target="_blank" href="https://drive.google.com/file/d/14sESaRBH1Mmu436u7Fe1i9KVzE3wFoZX/preview">Computação Quântica</a>
+      </div>
+    </details>
+  </template>
 
+  
+
+  <script>
+  // Tabs
+  const tabs = document.querySelectorAll('.tab');
+  tabs.forEach(t => t.addEventListener('click', e => {
+    e.preventDefault();
+    tabs.forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    const id = t.getAttribute('data-tab');
+    document.querySelectorAll('main.section, section.section, #videos').forEach(s => s.hidden = true);
+    document.getElementById(id).hidden = false;
+    if(id === 'videos') document.getElementById('hero').style.display = '';
+  }));
+
+  // Busca
+  const q = document.getElementById('q');
+  const cards = [...document.querySelectorAll('#cards .card')];
+  const hero = document.getElementById('hero');
+  q.addEventListener('input', () => {
+    const term = q.value.trim().toLowerCase();
+    cards.forEach(c => {
+      const hay = (c.dataset.keywords + ' ' + c.textContent).toLowerCase();
+      const show = !term || hay.includes(term);
+      c.style.display = show ? '' : 'none';
+    });
+    hero.style.display = term ? 'none' : '';
+  });
+
+  // Modal
+  const overlay = document.getElementById('overlay');
+  const closeBtn = document.getElementById('close');
+  const modalTitle = document.getElementById('modal-title');
+  const modalContent = document.getElementById('modal-content');
+
+  document.getElementById('cards').addEventListener('click', e => {
+    const card = e.target.closest('.card');
+    if(!card) return;
+    const tpl = document.getElementById(card.dataset.modal);
+    if(!tpl) return;
+    modalTitle.textContent = card.querySelector('h3').textContent;
+    modalContent.replaceChildren(tpl.content.cloneNode(true));
+    overlay.classList.add('active');
+    overlay.setAttribute('aria-hidden','false');
+  });
+  closeBtn.addEventListener('click', () => {
+    overlay.classList.remove('active');
+    overlay.setAttribute('aria-hidden','true');
+  });
+  overlay.addEventListener('click', e => { if(e.target === overlay) closeBtn.click(); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && overlay.classList.contains('active')) closeBtn.click(); });
+  </script>
 </body>
 </html>
