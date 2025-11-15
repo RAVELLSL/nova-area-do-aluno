@@ -5,84 +5,664 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Área do Aluno</title>
   <style>
-    :root{
-      --bg:#141414;--surface:#181818;--muted:#b3b3b3;--text:#ffffff;--accent:#e50914;--border:#2a2a2a
+    :root {
+      --bg: #141414;
+      --surface: #181818;
+      --muted: #b3b3b3;
+      --text: #ffffff;
+      --accent: #e50914;
+      --border: #2a2a2a;
+      /* Variáveis adicionadas para cores fixas */
+      --bg-deep: #0f0f0f;
+      --surface-hover: #1f1f1f;
+      --border-hover: #3a3a3a;
+      --button-bg: #232323;
+      --button-bg-hover: #2b2b2b;
+      --badge-bg: #00000080;
+      --thumb-gradient: linear-gradient(135deg, rgba(229, 9, 20, .10), rgba(255, 255, 255, .03));
+      --board-card-bg: #121212;
+      --board-card-border: #272727;
+      --board-pill-bg: #0e0e0e;
+      --board-pill-border: #2f2f2f;
+      --board-pill-text: #d8d8d8;
     }
-    *{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; background:var(--bg); color:var(--text)}
 
-    .navbar{position:sticky;top:0;z-index:1000;display:flex;gap:1.25rem;align-items:center;justify-content:space-between;padding:1rem 2rem;background:#0f0f0f; border-bottom:1px solid var(--border)}
-    .brand{color:var(--accent);font-weight:800;text-decoration:none;font-size:1.25rem}
-    .tabs{display:flex;gap:.75rem;flex-wrap:wrap}
-    .tab{color:var(--muted);text-decoration:none;font-weight:600;padding:.4rem .7rem;border-radius:.5rem}
-    .tab.active, .tab:hover{color:var(--text);background:#1f1f1f}
-    .search{display:flex;align-items:center;gap:.5rem;background:#1e1e1e;border:1px solid var(--border);padding:.4rem .6rem;border-radius:.5rem}
-    .search input{background:transparent;border:0;outline:none;color:var(--text);min-width:220px}
+    body.light-theme {
+      --bg: #f4f4f4;
+      --surface: #ffffff;
+      --muted: #5a5a5a;
+      --text: #111111;
+      --border: #e0e0e0;
+      --bg-deep: #ffffff;
+      --surface-hover: #f0f0f0;
+      --border-hover: #cccccc;
+      --button-bg: #e5e5e5;
+      --button-bg-hover: #dcdcdc;
+      --badge-bg: #ffffffc0;
+      --thumb-gradient: linear-gradient(135deg, rgba(229, 9, 20, 0.08), rgba(0, 0, 0, 0.02));
+      --board-card-bg: #ffffff;
+      --board-card-border: #e0e0e0;
+      --board-pill-bg: #f0f0f0;
+      --board-pill-border: #e0e0e0;
+      --board-pill-text: #5a5a5a;
+    }
 
-    .hero{display:flex;flex-direction:column;gap:.75rem;padding:1.2rem 2rem 0 2rem}
-    .hero h1{font-size:clamp(1.6rem,3.5vw,2.2rem)}
-    .hero p{color:var(--muted)}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
 
-    .section{padding:1rem 2rem 2rem 2rem}
-    .section h2{font-size:1.05rem;color:#e6e6e6;margin:.75rem 0 1rem 0;letter-spacing:.2px}
+    html {
+      scroll-behavior: smooth
+    }
 
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: var(--bg);
+      color: var(--text)
+    }
 
-    .card{aspect-ratio:16/9;position:relative;border-radius:6px;overflow:hidden;background:var(--surface);border:1px solid var(--border);cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.25);transition:transform .18s ease, box-shadow .18s ease}
-    .card:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 10px 24px rgba(0,0,0,.35)}
-    .card .thumb{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(135deg,rgba(229,9,20,.10),rgba(255,255,255,.03));}
-    .card .thumb h3{font-size:1.02rem;text-align:center;padding:0 1rem}
-    .badge{position:absolute;top:8px;left:8px;font-size:.72rem;background:#00000080;border:1px solid var(--border);padding:.12rem .4rem;border-radius:.25rem}
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: var(--bg-deep);
+      border-bottom: 1px solid var(--border)
+    }
 
-    .pill{position:absolute;bottom:8px;left:8px;font-size:.7rem;background:#0d0d0d;border:1px solid #333;color:#ddd;padding:.12rem .4rem;border-radius:.25rem}
+    .brand {
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+      font-size: 1.25rem
+    }
 
-    .overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.7);backdrop-filter:blur(2px);z-index:2000}
-    .overlay.active{display:flex}
-    .modal{width:min(880px,92vw);max-height:88vh;overflow:auto;background:#141414;border:1px solid var(--border);border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
-    .modal header{position:sticky;top:0;background:#0f0f0f;border-bottom:1px solid var(--border);padding:.8rem 1rem;display:flex;align-items:center;justify-content:space-between}
-    .modal header h3{font-size:1rem}
-    .modal header button{appearance:none;border:0;background:#232323;color:#ddd;font-weight:700;border-radius:6px;padding:.4rem .6rem;cursor:pointer}
-    .modal header button:hover{background:#2b2b2b}
+    .tabs {
+      display: flex;
+      gap: .75rem;
+      flex-wrap: wrap
+    }
 
-    .modal .content{padding:1rem 1rem 1.2rem 1rem;display:flex;flex-direction:column;gap:.6rem}
-    details.item{border-bottom:1px solid var(--border);padding:.6rem 0}
-    details.item>summary{list-style:none;display:flex;align-items:center;gap:.6rem;color:#e6e6e6;font-weight:700;cursor:pointer}
-    details.item>summary::before{content:"▶";font-size:.8rem;color:var(--accent);transition:transform .2s}
-    details[open].item>summary::before{transform:rotate(90deg)}
-    .desc{color:var(--muted);font-size:.92rem;line-height:1.45;margin:.4rem 0 .6rem 1.35rem}
-    .tray{display:flex;flex-wrap:wrap;gap:.45rem;margin:0 0 .7rem 1.35rem}
-    .watch{display:inline-block;background:var(--accent);color:white;text-decoration:none;font-weight:700;padding:.44rem .7rem;border-radius:.35rem}
+    .tab {
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 600;
+      padding: .4rem .7rem;
+      border-radius: .5rem
+    }
 
-    @media (max-width:768px){
-      .navbar{flex-direction:column;align-items:flex-start;gap:.75rem}
-      .search input{min-width:160px}
+    .tab.active,
+    .tab:hover {
+      color: var(--text);
+      background: var(--surface-hover)
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: .75rem
+    }
+
+    .search {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      background: var(--surface-hover);
+      border: 1px solid var(--border);
+      padding: .4rem .6rem;
+      border-radius: .5rem
+    }
+
+    .search input {
+      background: transparent;
+      border: 0;
+      outline: none;
+      color: var(--text);
+      min-width: 220px
+    }
+
+    .theme-btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--surface-hover);
+      color: var(--text);
+      font-size: .85rem;
+      font-weight: 600;
+      padding: .4rem .7rem;
+      border-radius: .5rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background .2s ease
+    }
+
+    .theme-btn:hover {
+      background: var(--surface);
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+      padding: 1.2rem 2rem 0 2rem
+    }
+
+    .hero h1 {
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem)
+    }
+
+    .hero p {
+      color: var(--muted)
+    }
+
+    .section {
+      padding: 1rem 2rem 2rem 2rem
+    }
+
+    .section h2 {
+      font-size: 1.05rem;
+      color: var(--text);
+      opacity: .9;
+      margin: .75rem 0 1rem 0;
+      letter-spacing: .2px
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px
+    }
+
+    .card {
+      aspect-ratio: 16/9;
+      position: relative;
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, .25);
+      transition: transform .18s ease, box-shadow .18s ease
+    }
+
+    .card:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, .35)
+    }
+
+    .card .thumb {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: var(--thumb-gradient);
+    }
+
+    .card .thumb h3 {
+      font-size: 1.02rem;
+      text-align: center;
+      padding: 0 1rem
+    }
+
+    .badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      font-size: .72rem;
+      background: var(--badge-bg);
+      border: 1px solid var(--border);
+      padding: .12rem .4rem;
+      border-radius: .25rem
+    }
+
+    .pill {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      font-size: .7rem;
+      background: var(--bg-deep);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: .12rem .4rem;
+      border-radius: .25rem
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, .7);
+      backdrop-filter: blur(2px);
+      z-index: 2000
+    }
+
+    .overlay.active {
+      display: flex
+    }
+
+    .modal {
+      width: min(880px, 92vw);
+      max-height: 88vh;
+      overflow: auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .6)
+    }
+
+    .modal header {
+      position: sticky;
+      top: 0;
+      background: var(--bg-deep);
+      border-bottom: 1px solid var(--border);
+      padding: .8rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .modal header h3 {
+      font-size: 1rem
+    }
+
+    .modal header button {
+      appearance: none;
+      border: 0;
+      background: var(--button-bg);
+      color: var(--text);
+      font-weight: 700;
+      border-radius: 6px;
+      padding: .4rem .6rem;
+      cursor: pointer
+    }
+
+    .modal header button:hover {
+      background: var(--button-bg-hover)
+    }
+
+    .modal .content {
+      padding: 1rem 1rem 1.2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: .6rem
+    }
+
+    .desc {
+      color: var(--muted);
+      font-size: .92rem;
+      line-height: 1.45;
+      margin-bottom: .75rem;
+    }
+
+    /* Layout vídeo + lista */
+    .video-layout {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .video-player {
+      flex: 2 1 60%;
+      min-width: 260px;
+    }
+
+    .video-player iframe.video-frame {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border: 0;
+      border-radius: 8px;
+      background: #000;
+    }
+
+    .video-list {
+      flex: 1 1 250px;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+
+    .video-list h4 {
+      font-size: .95rem;
+      margin-bottom: .25rem;
+    }
+
+    .video-list ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+    }
+
+    .video-item {
+      width: 100%;
+      text-align: left;
+      background: var(--button-bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: .4rem;
+      padding: .4rem .6rem;
+      cursor: pointer;
+      font-size: .9rem;
+    }
+
+    .video-item:hover {
+      background: var(--button-bg-hover);
+      border-color: var(--border-hover);
+    }
+
+    .video-item.active {
+      border-color: var(--accent);
+    }
+
+    /* Área de destaque da trilha */
+    .highlight-section {
+      border-radius: 12px;
+      padding: 1.2rem 1.4rem 1.4rem;
+      background: linear-gradient(135deg, rgba(229, 9, 20, 0.14), rgba(0, 0, 0, 0.4));
+      border: 1px solid rgba(229, 9, 20, 0.35);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+      margin-bottom: 1.8rem;
+    }
+
+    .highlight-subtitle-main {
+      font-size: .98rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    /* Quadro de Avisos */
+    .notice-board {
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+    }
+
+    .notice-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: .2rem;
+    }
+
+    .notice-text {
+      font-size: .92rem;
+      color: var(--muted);
+    }
+
+    .notice-list {
+      list-style: disc;
+      margin-left: 1.2rem;
+      font-size: .9rem;
+      display: flex;
+      flex-direction: column;
+      gap: .25rem;
+    }
+
+    @media (max-width:768px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: .75rem
+      }
+      .nav-right {
+        width: 100%;
+        justify-content: space-between;
+        gap: .5rem
+      }
+      .search {
+        flex: 1;
+      }
+      .search input {
+        min-width: 0;
+        width: 100%;
+      }
     }
 
     /* VISUAL DOS CARDS DE MÍDIAS E FERRAMENTAS */
-    .board .grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:20px}
-    .board .card{aspect-ratio:auto;min-height:190px;border-radius:12px;background:#121212;border:1px solid #272727;box-shadow:0 8px 22px rgba(0,0,0,.35);transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;overflow:hidden}
-    .board .card:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,0,0,.45);border-color:#3a3a3a}
-    .board .thumb{position:relative;inset:auto;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;background:transparent;padding:12px}
-    .board .ico{font-size:44px;line-height:1;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
-    .board h3{font-size:1.05rem;font-weight:700;letter-spacing:.15px;text-align:center;color:#e9e9e9}
-    .board .pill{position:static;align-self:center;margin-top:-6px;font-size:.76rem;background:#0e0e0e;border:1px solid #2f2f2f;color:#d8d8d8;padding:.18rem .5rem;border-radius:.35rem}
-    .board .card.featured{box-shadow:inset 0 0 0 2px var(--accent), 0 10px 26px rgba(0,0,0,.5);border-color:rgba(229,9,20,.35)}
+    .board .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px
+    }
+
+    .board .card {
+      aspect-ratio: auto;
+      min-height: 190px;
+      border-radius: 12px;
+      background: var(--board-card-bg);
+      border: 1px solid var(--board-card-border);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, .35);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      overflow: hidden
+    }
+
+    .board .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, .45);
+      border-color: var(--border-hover)
+    }
+
+    .board .thumb {
+      position: relative;
+      inset: auto;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 18px;
+      background: transparent;
+      padding: 12px
+    }
+
+    .board .ico {
+      font-size: 44px;
+      line-height: 1;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, .35))
+    }
+
+    .board h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: .15px;
+      text-align: center;
+      color: var(--text);
+      opacity: .95;
+    }
+
+    .board .pill {
+      position: static;
+      align-self: center;
+      margin-top: -6px;
+      font-size: .76rem;
+      background: var(--board-pill-bg);
+      border: 1px solid var(--board-pill-border);
+      color: var(--board-pill-text);
+      padding: .18rem .5rem;
+      border-radius: .35rem
+    }
+
+    .board .card.featured {
+      box-shadow: inset 0 0 0 2px var(--accent), 0 10px 26px rgba(0, 0, 0, .5);
+      border-color: rgba(229, 9, 20, .35)
+    }
+
+    /* TRILHA DE APRENDIZAGEM E ETAPAS (ABA AULAS) */
+    .learning-path {
+      margin: 1rem 0 2rem;
+      padding: 1rem 1.2rem 1.2rem;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(229, 9, 20, 0.16), rgba(0, 0, 0, 0.5));
+      border: 1px solid rgba(229, 9, 20, 0.45);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+    }
+
+    .learning-path-title {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .learning-path-text {
+      font-size: .9rem;
+      color: var(--muted);
+      max-width: 640px;
+    }
+
+    .step-track {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .45rem;
+      margin-top: .2rem;
+    }
+
+    .step-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .25rem .7rem;
+      border-radius: 999px;
+      background: var(--board-pill-bg);
+      border: 1px solid var(--board-pill-border);
+      color: var(--board-pill-text);
+      font-size: .8rem;
+      white-space: nowrap;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .step-pill:focus-visible {
+      box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.8);
+    }
+
+    .step-index {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.15rem;
+      height: 1.15rem;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #fff;
+      font-size: .7rem;
+      font-weight: 700;
+    }
+
+    .stage {
+      margin-bottom: 2.2rem;
+      position: relative;
+      padding: .3rem .2rem;
+      transition: box-shadow .25s ease, outline .25s ease, background .25s ease;
+    }
+
+    /* Destaque Netflix-like ao clicar na trilha */
+    .stage-highlight {
+      outline: 2px solid var(--accent);
+      box-shadow:
+        0 0 0 1px rgba(229, 9, 20, 0.9),
+        0 0 26px rgba(229, 9, 20, 0.85);
+      border-radius: 16px;
+      background: radial-gradient(circle at top left,
+        rgba(229, 9, 20, 0.16),
+        transparent 55%);
+    }
+
+    .stage-header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: .25rem;
+      margin-bottom: .6rem;
+    }
+
+    .stage-header-left {
+      display: flex;
+      flex-direction: column;
+      gap: .1rem;
+    }
+
+    .stage-kicker {
+      font-size: .78rem;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--muted);
+    }
+
+    .stage-title {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .stage-subtitle {
+      font-size: .82rem;
+      color: var(--muted);
+      max-width: 720px;
+      line-height: 1.4;
+      text-align: left;
+    }
+
+    .stage-scroller {
+      display: flex;
+      gap: .75rem;
+      overflow-x: auto;
+      padding: .2rem 0 .3rem;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .stage-scroller::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .stage-scroller::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .stage-scroller::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 999px;
+    }
+
+    .stage-scroller .card {
+      flex: 0 0 260px;
+      max-width: 260px;
+      scroll-snap-align: start;
+    }
+
+    @media (max-width: 768px) {
+      .stage-scroller .card {
+        flex: 0 0 82vw;
+        max-width: 82vw;
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- NAVBAR -->
   <nav class="navbar">
     <a class="brand" href="#">Prof. Ravell</a>
     <div class="tabs">
-      <a class="tab active" data-tab="videos" href="#videos">Aulas</a>
+      <a class="tab active" data-tab="inicio" href="#inicio">Início</a>
+      <a class="tab" data-tab="videos" href="#videos">Aulas</a>
       <a class="tab" data-tab="midias" href="#midias">Central de Mídias</a>
       <a class="tab" data-tab="ferramentas" href="#ferramentas">Ferramentas</a>
     </div>
-    <label class="search">
-      <span>🔍</span>
-      <input id="q" placeholder="Buscar por tema (ex.: IoT, Blockchain, Wi-Fi)" />
-    </label>
+    <div class="nav-right">
+      <label class="search">
+        <span>🔍</span>
+        <input id="q" placeholder="Buscar por tema (ex.: IoT, Blockchain, Wi-Fi)" />
+      </label>
+      <button id="theme-toggle" class="theme-btn"></button>
+    </div>
   </nav>
 
   <header class="hero" id="hero">
@@ -90,88 +670,483 @@
     <p>Todo o conteúdo foi organizado em grupos pedagógicos e trilhas de aprendizado.</p>
   </header>
 
-  <!-- SECTION: VIDEOS -->
-  <main id="videos" class="section">
-    <h2>Trilha principal</h2>
-    <div class="grid" id="cards">
-      <!-- 1 -->
-      <article class="card" data-modal="card-1" data-keywords="fundamentos revoluções industriais conceitos informatica computação tipos sistemas operacionais stem">
-        <div class="thumb"><span class="badge">01</span><h3>Fundamentos da Era Digital</h3><span class="pill">Básico</span></div>
-      </article>
-      <!-- 14 -->
-      <article class="card" data-modal="card-14" data-keywords="stem matemática física química biologia tecnologia">
-        <div class="thumb"><span class="badge">02</span><h3>STEM</h3><span class="pill">Fundamentos</span></div>
-      </article>
-      <!-- 2 -->
-      <article class="card" data-modal="card-2" data-keywords="arquitetura cpu bits bytes algoritmos processamento dados">
-        <div class="thumb"><span class="badge">03</span><h3>Arquitetura e Dados</h3><span class="pill">Básico</span></div>
-      </article>
-      <!-- 3 -->
-      <article class="card" data-modal="card-3" data-keywords="internet web navegadores http https dns tipos de redes infraestrutura web 1.0 web 2.0 web 3.0 open source código aberto">
-        <div class="thumb"><span class="badge">04</span><h3>A Infraestrutura da Web</h3><span class="pill">Internet & Redes</span></div>
-      </article>
-      <!-- 4 -->
-      <article class="card" data-modal="card-4" data-keywords="redes moveis 1g 2g 3g 4g 5g satélite wifi bluetooth ble gps nfc rfid proximidade lifi thread uwb zigbee irda infravermelho">
-        <div class="thumb"><span class="badge">05</span><h3>Tecnologias de Conexão</h3><span class="pill">Internet & Redes</span></div>
-      </article>
-      <!-- 13 -->
-      <article class="card" data-modal="card-13" data-keywords="padrões visuais de dados código de barras qr code pdf417 data matrix">
-        <div class="thumb"><span class="badge">06</span><h3>Padrões Visuais de Dados</h3><span class="pill">Extras</span></div>
-      </article> 
-      <!-- 5 -->
-      <article class="card" data-modal="card-5" data-keywords="armazenamento sd microsd hd externo pendrive kindle projetor impressora scanner mesa digitalizadora">
-        <div class="thumb"><span class="badge">07</span><h3>Dispositivos de Mídia e Armazenamento</h3><span class="pill">Dispositivos</span></div>
-      </article>
-      <!-- 6 -->
-      <article class="card" data-modal="card-6" data-keywords="smartphone smartwatch smart tv webcam roteador wifi mesh automação residencial casa inteligente">
-        <div class="thumb"><span class="badge">08</span><h3>Dispositivos de Comunicação</h3><span class="pill">Dispositivos</span></div>
-      </article>
-      <!-- 7 -->
-      <article class="card" data-modal="card-7" data-keywords="nuvem cloud servidores data centers fog edge plataformas streaming marketplaces superapps">
-        <div class="thumb"><span class="badge">09</span><h3>Serviços e Ambientes Digitais</h3><span class="pill">Plataformas</span></div>
-      </article>
-      <!-- 8 -->
-      <article class="card" data-modal="card-8" data-keywords="iot aiot xr vr ar mr háptica metaverso robótica automação cobots sensores ia drones">
-        <div class="thumb"><span class="badge">10</span><h3>Tecnologias Emergentes & IA</h3><span class="pill">Emergentes</span></div>
-      </article>
-       <!-- 15 -->
-      <article class="card" data-modal="card-15" data-keywords="computação avançada adiabática biológica clássica fotônica neuromórfica quântica supercomputadores">
-        <div class="thumb"><span class="badge">11</span><h3>Computação Avançada</h3><span class="pill">Avançado</span></div>
-      </article>
-      <!-- 9 -->
-      <article class="card" data-modal="card-9" data-keywords="economia digital web3 criptografia blockchain contratos inteligentes smart contracts cripto nft tokenização fintechs carteiras digitais smart rental">
-        <div class="thumb"><span class="badge">12</span><h3>A Nova Economia (Web3)</h3><span class="pill">Economia</span></div>
-      </article>
-      <!-- 10 -->
-      <article class="card" data-modal="card-10" data-keywords="impressão 3d 4d construção nanotecnologia metamateriais computação quântica">
-        <div class="thumb"><span class="badge">13</span><h3>Deep Tech e Fabricação</h3><span class="pill">Deep Tech</span></div>
-      </article>
-      <!-- 11 -->
-      <article class="card" data-modal="card-11" data-keywords="futuro do trabalho gig economy automação profissões do futuro reskilling sociedade agrotech">
-        <div class="thumb"><span class="badge">14</span><h3>Trabalho e Sociedade</h3><span class="pill">Sociedade</span></div>
-      </article>
-      <!-- 12 -->
-      <article class="card" data-modal="card-12" data-keywords="saúde mental burnout zoom fatigue ansiedade distúrbios do sono filosofia cultura digital">
-        <div class="thumb"><span class="badge">15</span><h3>Saúde e Cultura Digital</h3><span class="pill">Sociedade</span></div>
-      </article>                
-    </div>    
+  <!-- ABA INÍCIO (PÁGINA INICIAL) -->
+  <section id="inicio" class="section">
+    <h2>Início</h2>
+    <div class="highlight-section notice-board">
+      <h3 class="notice-title">Quadro de Avisos</h3>
+      <p class="notice-text">
+        Aqui você acompanha os avisos importantes sobre aulas, materiais e atualizações da área do aluno.
+      </p>
+      <ul class="notice-list">
+        <li>✅ Plataforma em fase de testes – reporte qualquer problema ao professor.</li>
+        <li>📅 Novas aulas de Redes e Comunicação Digital foram adicionadas à aba <strong>Aulas</strong>.</li>
+        <li>📰 Para se atualizar com notícias de tecnologia, acesse a aba <strong>Central de Mídias &gt; Boletim Tech</strong>.</li>
+        <li>🧠 Use a aba <strong>Ferramentas</strong> para acessar dicionário, agentes de IA e outros recursos de apoio ao estudo.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ABA AULAS (TRILHAS EM ETAPAS) -->
+  <main id="videos" class="section" hidden>
+    <h2>Aulas Disponíveis</h2>
+
+    <!-- TRILHA DE APRENDIZAGEM -->
+    <section class="learning-path" aria-label="Trilha de Aprendizagem em Tecnologia">
+      <div class="learning-path-title">Trilha de Aprendizagem em Tecnologia</div>
+      <p class="learning-path-text">
+        As aulas foram organizadas em uma sequência pedagógica. Você começa pelos fundamentos históricos,
+        passa pela infraestrutura e redes, explora os dispositivos, entra na computação contemporânea
+        e chega às tecnologias emergentes e aos módulos especiais de economia digital e sociedade tech.
+      </p>
+      <div class="step-track">
+        <button class="step-pill" type="button" data-stage="1">
+          <span class="step-index">1</span>
+          <span>Fundamentos Históricos e Tecnológicos</span>
+        </button>
+        <button class="step-pill" type="button" data-stage="2">
+          <span class="step-index">2</span>
+          <span>Infraestrutura Computacional</span>
+        </button>
+        <button class="step-pill" type="button" data-stage="3">
+          <span class="step-index">3</span>
+          <span>Redes e Comunicação Digital</span>
+        </button>
+        <button class="step-pill" type="button" data-stage="4">
+          <span class="step-index">4</span>
+          <span>Dispositivos e Equipamentos Digitais</span>
+        </button>
+        <button class="step-pill" type="button" data-stage="5">
+          <span class="step-index">5</span>
+          <span>Computação Contemporânea</span>
+        </button>
+        <button class="step-pill" type="button" data-stage="6">
+          <span class="step-index">6</span>
+          <span>Tecnologias Emergentes</span>
+        </button>
+        <button class="step-pill" type="button" data-stage="7">
+          <span class="step-index">7</span>
+          <span>Economia Digital e Sistemas Financeiros</span>
+        </button>
+        <button class="step-pill" type="button" data-stage="8">
+          <span class="step-index">8</span>
+          <span>Tecnologia, Sociedade e Cultura Tech</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ETAPA 1 -->
+    <section class="stage" data-stage="1">
+      <div class="stage-header">
+        <div class="stage-header-left">
+          <span class="stage-kicker">Etapa 1 · Base conceitual</span>
+          <h3 class="stage-title">Fundamentos Históricos e Tecnológicos</h3>
+        </div>
+        <p class="stage-subtitle">
+          Trilha introdutória que conecta história, sociedade e evolução tecnológica, preparando o terreno para a inclusão digital.
+        </p>
+      </div>
+      <div class="stage-scroller">
+        <article class="card" data-modal="card-1"
+          data-keywords="revoluções industriais 1a 2a 3a 4a revolucao era industrial inclusão digital fundamentos históricos tecnologia">
+          <div class="thumb">
+            <span class="badge">01</span>
+            <h3>Revoluções Industriais</h3>
+            <span class="pill">História & Sociedade</span>
+          </div>
+        </article>
+
+        <article class="card" data-modal="card-2"
+          data-keywords="evolução da computação informática computadores sistemas operacionais inclusão digital fundamentos tecnológicos">
+          <div class="thumb">
+            <span class="badge">02</span>
+            <h3>Evolução da Computação e da Informática</h3>
+            <span class="pill">Fundamentos Tecnológicos</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ETAPA 2 -->
+    <section class="stage" data-stage="2">
+      <div class="stage-header">
+        <div class="stage-header-left">
+          <span class="stage-kicker">Etapa 2 · Infraestrutura</span>
+          <h3 class="stage-title">Infraestrutura Computacional</h3>
+        </div>
+        <p class="stage-subtitle">
+          Base física e lógica da computação: arquitetura de computadores, servidores, data centers, nuvem
+          e o papel das ciências exatas na era digital.
+        </p>
+      </div>
+      <div class="stage-scroller">
+        <article class="card" data-modal="card-3"
+          data-keywords="arquitetura de computadores cpu memória barramentos hardware infraestrutura computacional">
+          <div class="thumb">
+            <span class="badge">03</span>
+            <h3>1 - Arquitetura de Computadores</h3>
+            <span class="pill">Infraestrutura</span>
+          </div>
+        </article>
+
+        <article class="card" data-modal="card-4"
+          data-keywords="serviços e ambientes tecnológicos servidores data centers cloud fog edge infraestrutura computacional">
+          <div class="thumb">
+            <span class="badge">04</span>
+            <h3>2 - Serviços e Ambientes Tecnológicos</h3>
+            <span class="pill">Infraestrutura</span>
+          </div>
+        </article>
+
+        <article class="card" data-modal="card-5"
+          data-keywords="stem ciência tecnologia engenharia matemática fundamentos infraestrutura computacional">
+          <div class="thumb">
+            <span class="badge">05</span>
+            <h3>3 - Ciência, Tecnologia, Engenharia e Matemática (STEM)</h3>
+            <span class="pill">Fundamentos STEM</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ETAPA 3 -->
+    <section class="stage" data-stage="3">
+      <div class="stage-header">
+        <div class="stage-header-left">
+          <span class="stage-kicker">Etapa 3 · Conectividade</span>
+          <h3 class="stage-title">Redes e Comunicação Digital</h3>
+        </div>
+        <p class="stage-subtitle">
+          Trilhas focadas em conectividade, padrões de comunicação, navegação na web e integração de dispositivos conectados.
+        </p>
+      </div>
+      <div class="stage-scroller">
+        <article class="card" data-modal="card-6"
+          data-keywords="história das redes gerações de redes 1g 2g 3g 4g 5g redes de computadores evolução das redes comunicação digital">
+          <div class="thumb">
+            <span class="badge">06</span>
+            <h3>1 - História e Gerações de Redes</h3>
+            <span class="pill">Redes & Evolução</span>
+          </div>
+        </article>
+
+        <article class="card" data-modal="card-7"
+          data-keywords="padrões de conexão sem fio wi-fi wifi 2.4ghz 5ghz 6ghz redes sem fio wireless comunicação digital roteador">
+          <div class="thumb">
+            <span class="badge">07</span>
+            <h3>2 - Padrões de Conexão Sem Fio</h3>
+            <span class="pill">Wi-Fi & Wireless</span>
+          </div>
+        </article>
+
+        <article class="card" data-modal="card-8"
+          data-keywords="padrões de comunicação por proximidade bluetooth nfc beacons comunicação de curto alcance iot">
+          <div class="thumb">
+            <span class="badge">08</span>
+            <h3>3 - Padrões de Comunicação por Proximidade</h3>
+            <span class="pill">Bluetooth & NFC</span>
+          </div>
+        </article>
+
+        <article class="card" data-modal="card-9"
+          data-keywords="padrões visuais de dados dashboards gráficos visualização de dados infográficos interpretação de dados">
+          <div class="thumb">
+            <span class="badge">09</span>
+            <h3>4 - Padrões Visuais de Dados</h3>
+            <span class="pill">Visualização</span>
+          </div>
+        </article>
+
+        <article class="card" data-modal="card-10"
+          data-keywords="ferramentas de navegação protocolos http https dns navegador browser url endereçamento">
+          <div class="thumb">
+            <span class="badge">10</span>
+            <h3>5 - Ferramentas de Navegação e Protocolos</h3>
+            <span class="pill">Web & Protocolos</span>
+          </div>
+        </article>
+
+        <article class="card" data-modal="card-11"
+          data-keywords="automação residencial casas inteligentes iot dispositivos conectados assistentes virtuais redes domésticas">
+          <div class="thumb">
+            <span class="badge">11</span>
+            <h3>6 - Automação Residencial</h3>
+            <span class="pill">Casa Conectada</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ETAPA 4 -->
+    <section class="stage" data-stage="4">
+      <div class="stage-header">
+        <div class="stage-header-left">
+          <span class="stage-kicker">Etapa 4 · Ecossistema de dispositivos</span>
+          <h3 class="stage-title">Dispositivos e Equipamentos Digitais</h3>
+        </div>
+        <p class="stage-subtitle">
+          Meios de armazenamento, equipamentos de rede, soluções para home office, dispositivos smart
+          e uma variedade de gadgets contemporâneos.
+        </p>
+      </div>
+      <div class="stage-scroller">
+        <article class="card" data-modal="card-12"
+          data-keywords="armazenamento de dados hd ssd pen drive cartões sd microsd nuvem backup dispositivos digitais">
+          <div class="thumb">
+            <span class="badge">12</span>
+            <h3>1 - Armazenamento de Dados</h3>
+            <span class="pill">Memória & Backup</span>
+          </div>
+        </article>
+
+        <article class="card" data-modal="card-13"
+          data-keywords="dispositivos de rede roteador switch modem access point firewall equipamentos de rede">
+          <div class="thumb">
+            <span class="badge">13</span>
+            <h3>2 - Dispositivos de Rede</h3>
+            <span class="pill">Conectividade</span>
+          </div>
+        </article>
+
+        <article class="card" data-modal="card-14"
+          data-keywords="home office impressoras multifuncionais projetores scanners webcam mesa digitalizadora escritório em casa">
+          <div class="thumb">
+            <span class="badge">14</span>
+            <h3>3 - Dispositivos Home Office</h3>
+            <span class="pill">Trabalho Remoto</span>
+          </div>
+        </article>
+
+        <article class="card" data-modal="card-15"
+          data-keywords="dispositivos smart smart tv smartglasses smartphones smartwatches iot wearables">
+          <div class="thumb">
+            <span class="badge">15</span>
+            <h3>4 - Dispositivos Smart</h3>
+            <span class="pill">Smart Devices</span>
+          </div>
+        </article>
+
+        <article class="card" data-modal="card-16"
+          data-keywords="gadgets controladores hápticos drones kindle óculos de realidade virtual vr acessórios tecnológicos">
+          <div class="thumb">
+            <span class="badge">16</span>
+            <h3>5 - Gadgets</h3>
+            <span class="pill">Gadgets & Acessórios</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ETAPA 5 -->
+    <section class="stage" data-stage="5">
+      <div class="stage-header">
+        <div class="stage-header-left">
+          <span class="stage-kicker">Etapa 5 · Computação contemporânea</span>
+          <h3 class="stage-title">Computação Contemporânea</h3>
+        </div>
+        <p class="stage-subtitle">
+          Conceitos modernos de computação: classificações computacionais, evolução da web e da internet,
+          e uma visão ampla da Inteligência Artificial.
+        </p>
+      </div>
+      <div class="stage-scroller">
+        <article class="card" data-modal="card-17"
+          data-keywords="classificações computacionais computação clássica supercomputadores computação fotônica computação neuromórfica computação biológica computação adiabática computação quântica computação contemporânea">
+          <div class="thumb">
+            <span class="badge">17</span>
+            <h3>1 - Classificações Computacionais</h3>
+            <span class="pill">Computação</span>
+          </div>
+        </article>
+
+        <article class="card" data-modal="card-18"
+          data-keywords="web 1.0 web 2.0 web 3.0 open source código aberto internet www tcp ip http https dns servidores navegadores cliente servidor">
+          <div class="thumb">
+            <span class="badge">18</span>
+            <h3>2 - Web e Internet</h3>
+            <span class="pill">Web & Redes</span>
+          </div>
+        </article>
+
+        <article class="card" data-modal="card-19"
+          data-keywords="inteligência artificial ia generativa agêntica empatia artificial computação preditiva riscos da ia machine learning deep learning">
+          <div class="thumb">
+            <span class="badge">19</span>
+            <h3>3 - Inteligência Artificial</h3>
+            <span class="pill">IA & Futuro</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ETAPA 6 -->
+    <section class="stage" data-stage="6">
+      <div class="stage-header">
+        <div class="stage-header-left">
+          <span class="stage-kicker">Etapa 6 · Fronteiras emergentes</span>
+          <h3 class="stage-title">Tecnologias Emergentes</h3>
+        </div>
+        <p class="stage-subtitle">
+          Inovações em fase de consolidação: experiências imersivas, novas arquiteturas, biotecnologia,
+          cidades inteligentes e tendências que redesenham o futuro.
+        </p>
+      </div>
+      <div class="stage-scroller">
+        <article class="card" data-modal="card-20"
+          data-keywords="tecnologias emergentes inovação disrupção futuro da tecnologia blockchain gêmeos digitais internet das coisas iot aiot metamateriais nanotecnologia plataformas de streaming">
+          <div class="thumb">
+            <span class="badge">20</span>
+            <h3>1 - Tecnologias Emergentes</h3>
+            <span class="pill">Inovação</span>
+          </div>
+        </article>
+
+        <article class="card" data-modal="card-21"
+          data-keywords="tecnologias imersivas realidade virtual realidade aumentada realidade háptica realidade mista metaverso experiências imersivas">
+          <div class="thumb">
+            <span class="badge">21</span>
+            <h3>2 - Tecnologias Imersivas</h3>
+            <span class="pill">XR & Imersão</span>
+          </div>
+        </article>
+
+        <article class="card" data-modal="card-22"
+          data-keywords="tendências tendências tecnológicas futuro do trabalho automação ia economia digital cidades inteligentes computação ubíqua aluguel inteligente automação da confiança">
+          <div class="thumb">
+            <span class="badge">22</span>
+            <h3>3 - Tendências</h3>
+            <span class="pill">Futuro & Sociedade</span>
+          </div>
+        </article>
+
+        <article class="card" data-modal="card-23"
+          data-keywords="robótica robos sistemas autonomos automação cobots sensores atuadores inteligencia artificial na robotica aprendizado de maquina dark factory">
+          <div class="thumb">
+            <span class="badge">23</span>
+            <h3>4 - Robótica e Sistemas Autônomos</h3>
+            <span class="pill">Robótica</span>
+          </div>
+        </article>
+
+        <article class="card" data-modal="card-27"
+          data-keywords="fabricação aditiva impressão 3d impressão 4d manufatura aditiva construção civil indústria 4.0">
+          <div class="thumb">
+            <span class="badge">24</span>
+            <h3>5 - Fabricação Aditiva</h3>
+            <span class="pill">Manufatura 3D</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- MÓDULO ESPECIAL – ECONOMIA DIGITAL -->
+    <section class="stage" data-stage="7">
+      <div class="stage-header">
+        <div class="stage-header-left">
+          <span class="stage-kicker">Módulo Especial · Economia Digital</span>
+          <h3 class="stage-title">Economia Digital e Sistemas Financeiros Tecnológicos</h3>
+        </div>
+        <p class="stage-subtitle">
+          Trilha dedicada à transformação econômica impulsionada pela digitalização, criptografia,
+          novos sistemas financeiros, modelos de negócio emergentes e os impactos no trabalho,
+          na sociedade e na qualificação profissional.
+        </p>
+      </div>
+      <div class="stage-scroller">
+        <article class="card" data-modal="card-24"
+          data-keywords="economia digital desmaterialização econômica pib digital economia do conhecimento criptografia criptomoedas stablecoins smart contracts tokenização fundamentos">
+          <div class="thumb">
+            <span class="badge">25</span>
+            <h3>1 - Introdução, Contexto e Fundamentos da Economia Digital</h3>
+            <span class="pill">Fundamentos</span>
+          </div>
+        </article>
+
+        <article class="card" data-modal="card-25"
+          data-keywords="finanças digitais fintechs bancos digitais carteiras digitais superapps marketplaces nfts tokenização serviços financeiros modelos econômicos emergentes">
+          <div class="thumb">
+            <span class="badge">26</span>
+            <h3>2 - Finanças, Serviços, Mercados e Modelos Econômicos Emergentes</h3>
+            <span class="pill">Mercados</span>
+          </div>
+        </article>
+
+        <article class="card" data-modal="card-26"
+          data-keywords="gig economy automação ia trabalho futuro emprego brasil inclusão digital desigualdade educação tecnológica requalificação profissões do futuro agrotech">
+          <div class="thumb">
+            <span class="badge">27</span>
+            <h3>3 - Trabalho, Sociedade, Transformação, Educação e Qualificação</h3>
+            <span class="pill">Trabalho & Sociedade</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- NOVA SEÇÃO: TECNOLOGIA, SOCIEDADE, FILOSOFIAS TECH E MOVIMENTOS CULTURAIS -->
+    <section class="stage" data-stage="8">
+      <div class="stage-header">
+        <div class="stage-header-left">
+          <span class="stage-kicker">Módulo Especial · Sociedade e Cultura Tech</span>
+          <h3 class="stage-title">Tecnologia, Sociedade, Filosofias Tech e Movimentos Culturais</h3>
+        </div>
+        <p class="stage-subtitle">
+          Um mergulho nas dimensões sociais, filosóficas e culturais da tecnologia: como ela reconfigura tempo,
+          poder, subjetividades, movimentos sociais e imaginários sobre o futuro.
+        </p>
+      </div>
+      <div class="stage-scroller">
+        <article class="card" data-modal="card-28"
+          data-keywords="tecnologia e sociedade bolhas informacionais tempo moderno estruturas sociais quinto poder paradoxo da conexão paradoxo ambiental economia digital cultura digital redes sociais">
+          <div class="thumb">
+            <span class="badge">28</span>
+            <h3>1 - Tecnologia e Sociedade</h3>
+            <span class="pill">Sociedade & Poder</span>
+          </div>
+        </article>
+
+        <article class="card" data-modal="card-29"
+          data-keywords="correntes filosóficas da tecnologia tecnoautoritarismo cyberpunk cypherpunk dataísmo transumanismo anarquismo digital neo-luddismo tecnogaianismo cibernética singularidade">
+          <div class="thumb">
+            <span class="badge">29</span>
+            <h3>2 - Correntes Filosóficas da Tecnologia</h3>
+            <span class="pill">Filosofias Tech</span>
+          </div>
+        </article>
+
+        <article class="card" data-modal="card-30"
+          data-keywords="movimentos culturais da tecnologia biohacking nootrópicos ludologia tecnofeminismo simbiose homem-máquina cultura gamer corpos tecnologia">
+          <div class="thumb">
+            <span class="badge">30</span>
+            <h3>3 - Movimentos Culturais da Tecnologia</h3>
+            <span class="pill">Cultura Digital</span>
+          </div>
+        </article>
+      </div>
+    </section>
   </main>
 
-  <!-- MIDIAS / FERRAMENTAS -->
   <section id="midias" class="section board" hidden>
     <h2>Central de Mídias</h2>
     <div class="grid">
       <a class="card" href="https://ravellsl.github.io/podcast/" target="_blank" rel="noopener">
-        <div class="thumb"><span class="ico">🎙️</span><h3>Podcast</h3><span class="pill">áudio</span></div>
+        <div class="thumb"><span class="ico">🎙️</span>
+          <h3>Podcast</h3><span class="pill">áudio</span>
+        </div>
       </a>
-      <a class="card featured" href="https://ravellsl.github.io/boletim-tech/" target="_blank" rel="noopener">
-        <div class="thumb"><span class="ico">📰</span><h3>Boletim Tech</h3><span class="pill">atualizações</span></div>
+      <a class="card" href="https://ravellsl.github.io/boletim-tech/" target="_blank" rel="noopener">
+        <div class="thumb"><span class="ico">📰</span>
+          <h3>Boletim Tech</h3><span class="pill">atualizações</span>
+        </div>
       </a>
       <a class="card" href="https://ravellsl.github.io/rstech-artigos/" target="_blank" rel="noopener">
-        <div class="thumb"><span class="ico">📄</span><h3>Artigos</h3><span class="pill">leituras</span></div>
+        <div class="thumb"><span class="ico">📄</span>
+          <h3>Artigos</h3><span class="pill">leituras</span>
+        </div>
       </a>
       <a class="card" href="https://ravellsl.github.io/video-aulas/#home" target="_blank" rel="noopener">
-        <div class="thumb"><span class="ico">💬</span><h3>Dúvidas em Vídeo</h3><span class="pill">FAQ</span></div>
+        <div class="thumb"><span class="ico">💬</span>
+          <h3>Dúvidas em Vídeo</h3><span class="pill">FAQ</span>
+        </div>
       </a>
     </div>
   </section>
@@ -180,27 +1155,38 @@
     <h2>Ferramentas Digitais</h2>
     <div class="grid">
       <a class="card" href="https://ravellsl.github.io/dicionario-tech/" target="_blank" rel="noopener">
-        <div class="thumb"><span class="ico">📖</span><h3>Dicionário Tech</h3><span class="pill">conceitos</span></div>
+        <div class="thumb"><span class="ico">📖</span>
+          <h3>Dicionário Tech</h3><span class="pill">conceitos</span>
+        </div>
       </a>
       <a class="card" href="https://ravellsl.github.io/rstechaluno-agentes-IA/" target="_blank" rel="noopener">
-        <div class="thumb"><span class="ico">🤖</span><h3>Agentes de IA</h3><span class="pill">assistentes</span></div>
+        <div class="thumb"><span class="ico">🤖</span>
+          <h3>Agentes de IA</h3><span class="pill">assistentes</span>
+        </div>
       </a>
       <a class="card" href="https://ravellsl.github.io/ferramenta-busca-noticias/" target="_blank" rel="noopener">
-        <div class="thumb"><span class="ico">🔍</span><h3>Diário de Notícias</h3><span class="pill">curadoria</span></div>
+        <div class="thumb"><span class="ico">🔍</span>
+          <h3>Diário de Notícias</h3><span class="pill">curadoria</span>
+        </div>
       </a>
       <a class="card" href="https://ravellsl.github.io/IA-plataform/" target="_blank" rel="noopener">
-        <div class="thumb"><span class="ico">🧠</span><h3>Inteligência Artificial</h3><span class="pill">recursos</span></div>
+        <div class="thumb"><span class="ico">🧠</span>
+          <h3>Inteligência Artificial</h3><span class="pill">recursos</span>
+        </div>
       </a>
       <a class="card" href="https://ravellsl.github.io/SynTHub-IA/" target="_blank" rel="noopener">
-        <div class="thumb"><span class="ico">💡</span><h3>Hub de IA</h3><span class="pill">catálogo</span></div>
+        <div class="thumb"><span class="ico">💡</span>
+          <h3>Hub de IA</h3><span class="pill">catálogo</span>
+        </div>
       </a>
       <a class="card" href="https://ravellsl.github.io/bloco-de-notas/" target="_blank" rel="noopener">
-        <div class="thumb"><span class="ico">📝</span><h3>Bloco de Notas</h3><span class="pill">organização</span></div>
+        <div class="thumb"><span class="ico">📝</span>
+          <h3>Bloco de Notas</h3><span class="pill">organização</span>
+        </div>
       </a>
     </div>
   </section>
 
-  <!-- OVERLAY/MODAL -->
   <div class="overlay" id="overlay" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true">
       <header>
@@ -211,434 +1197,1894 @@
     </div>
   </div>
 
-  <!-- TEMPLATES -->
+  <!-- CARD 1: Revoluções Industriais -->
   <template id="card-1">
-    <details class="item"><summary>Revoluções Industriais</summary>
-      <p class="desc">1ª, 2ª, 3ª e 4ª Revolução Industrial: do vapor à IA. Contexto histórico e impactos na sociedade.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1VauRulgLM5oyapz1N1NNOX7zpNT3H0_j/preview">1ª Revolução</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1P746992E6vM75wuALE-Ixb_HqJ3HFYHw/preview">2ª Revolução</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1p3kc97rY7cmohcYUapdrCKljjBYrg42p/preview">3ª Revolução</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1phlnfnpg9vhhups246AWt-GrsUxf_kO5/preview">4ª Revolução</a>
+    <p class="desc">
+      Série de aulas que apresenta a 1ª, 2ª, 3ª e 4ª Revolução Industrial, conectando contexto histórico,
+      tecnologias-chave e os principais impactos sociais e econômicos de cada fase.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
-    </details>
-    <details class="item"><summary>Conceitos de Informática</summary>
-      <p class="desc">Introdução, evolução da computação, tipos de computadores e sistemas operacionais.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1PBLGlu7wUe1dW2wB1SzVoTqORZ3b7m2p/preview">Introdução à Informática</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1mUB8hmEeHiplG60F3K0hloCzSh9U83h3/preview">Evolução da Computação</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1_6zOqtFkOzNEiLTmygRPjSfb4OpRQiJW/preview">Tipos de Computadores</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/12F__7jibSxK4KRRUOdG2DUWKoWEkHnUc/preview">Sistemas Operacionais</a>
-        <!-- STEM movido para aqui -->
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1978-HRY04zxPfI0lsDSJvL3n_Mfyv7YG/preview">STEM</a>
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button
+              type="button"
+              class="video-item active"
+              data-src="https://mega.nz/embed/a7hmETTb#1q7x_mvDsHq5FJ8SniGY8mAJUG8u-ZomIFuCpswFkBg">
+              1ª Revolução Industrial
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/DuxlFAab#1rdVy2E29gYbu_MvuWeir-MfFNMlUSyWccIZCENv4k8">
+              2ª Revolução Industrial
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/K7ZAURZK#eMUb5IC1GdxJJBWmbF2LdqSFnLjyxDYgQjcxggKRvAo">
+              3ª Revolução Industrial
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/njwlTBxI#YLSn7yyMOzfppRJPBDIm03kXqOMftYLR_xy9FGOEVBM">
+              4ª Revolução Industrial
+            </button>
+          </li>
+        </ul>
       </div>
-    </details>
+    </div>
   </template>
 
+  <!-- CARD 2: Evolução da Computação e da Informática -->
   <template id="card-2">
-    <details class="item"><summary>Por Dentro do Computador</summary>
-      <p class="desc">Estrutura e componentes, processamento de dados na CPU.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1B1EQGiarLYni19P5BmYcLOdPWFwIPH90/preview">Estrutura e Componentes</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1NhaQ2tt4FbH-ktqOIlvbwKmvEA8fFimk/preview">Processamento na CPU</a>
+    <p class="desc">
+      Sequência de aulas que introduz a informática, apresenta a evolução da computação, diferencia tipos de
+      computadores e explora os principais sistemas operacionais usados no dia a dia.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
-    </details>
-    <details class="item"><summary>A Linguagem da Máquina</summary>
-      <p class="desc">Unidades de informação (bits/bytes) e a ideia de algoritmo.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1JMlLZpCLv458MG2uSKed9jskctEcIR4a/preview">Múltiplos dos Bits</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1jFgW3fiDSjTNOhhIXdUbCJsIPWvYbwab/preview">Algoritmos</a>
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button
+              type="button"
+              class="video-item active"
+              data-src="https://mega.nz/embed/u2wSFIzS#BLFXOunW3e5khzavtQ7vG3gedSIcvHR2Bw19C5w2PP4">
+              Introdução à Informática
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/brRxHCxL#iQaRnRna9WRiZfiozFGmivQZTxL0NbJElzJqDOWIpJc">
+              Evolução da Computação
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/XnwnWbQD#pTtcxFcd49aQCNvTI09ftI5lFrg1TErKz-Ag9CM_czU">
+              Tipos de Computadores
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/zu5Txarb#p2Y1E58_hGSGVXvkiFB507Qne7Z3SAyZjKte_zFtQzc">
+              Sistemas Operacionais
+            </button>
+          </li>
+        </ul>
       </div>
-    </details>
+    </div>
   </template>
 
+  <!-- CARD 3: 1 - Arquitetura de Computadores -->
   <template id="card-3">
-    <details class="item"><summary>O Que é a Internet?</summary>
-      <p class="desc">Criação e evolução das redes, tipos de redes e infraestrutura global.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1tdwvsAFD__KU_7qQWcakI_99PP8ivger/preview">Criação e Evolução</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1BgkjxNeahyzceorvjtFJMqMaM3dzMINu/preview">Infraestrutura & Tipos de Redes</a>
+    <p class="desc">
+      Trilha focada na Arquitetura de Computadores, apresentando a estrutura interna,
+      componentes básicos, a lógica dos múltiplos dos bits e como a CPU processa dados por meio de algoritmos.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
-    </details>
-    <details class="item"><summary>Como Navegamos</summary>
-      <p class="desc">Navegadores, HTTP/HTTPS e DNS.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1ZHKZ8ys_xX5qtYbGvwIufPpxTUjNUVp3/preview">Browsers</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1a3tXNpGxJnrjKLRYU85Dn9zxwjvVAExT/preview">HTTP & HTTPS</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1NFbIR1Giud1W727tJboVPFG_N8sAlRLb/preview">DNS</a>
-        <!-- Open Source adicionado aqui -->
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1vptf_16aH7pvrZfpLUtlyXnnbWnJrVvq/preview">Open Source (Código Aberto)</a>
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button
+              type="button"
+              class="video-item active"
+              data-src="https://mega.nz/embed/LuJw0SQB#aUNV7dd4E4Hn9oBSSNFRwe7wt-SJl0Yohh3-l_Dhwxo">
+              Estrutura e Componentes Internos do Computador
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/i2hX3ayZ#etIM1FYKa63rYY-oq4nDeSsKqeYsI28bmbcsluTZATE">
+              Os múltiplos dos bits
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/LnQ1gQqL#gRp0ntHbrOWeLFsf1OXxxNNOjanuubj4PX_hfNBXbuE">
+              Como é o Processamento de Dados na CPU
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/qr5iSI5b#FdFTxKsDtr3GCSkMP0U-Dh3QbaObO0l3YY_7GriiqQA">
+              Algoritmos
+            </button>
+          </li>
+        </ul>
       </div>
-    </details>
-    <!-- Nova subseção: Web -->
-    <details class="item"><summary>Web</summary>
-      <p class="desc">Evolução da Web: 1.0 (estática), 2.0 (social) e 3.0 (semântica/descentralizada).</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1uEsJ6AGXkwGakddDyi14UwN2pSE_nFtm/preview">Web 1.0</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1PQRCScxlEQXSc7ZmHmAiM6Dm2vntEKEq/preview">Web 2.0</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1IsB0KaJcTZX6ScYlYykGeEQVEy85g2ob/preview">Web 3.0</a>
-      </div>
-    </details>
+    </div>
   </template>
 
+  <!-- CARD 4: 2 - Serviços e Ambientes Tecnológicos -->
   <template id="card-4">
-    <details class="item"><summary>Redes Móveis</summary>
-      <p class="desc">1G a 5G e conectividade por satélites.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1r4fIWE67ye4gsNtbhvZbag-gOLpS7fzY/preview">1G</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1vwhAry-J-TJ0DphCyUC8Jg3rx0wECnqA/preview">2G</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1sPb6HZaHvpW4wO27WMc5dQ9c0Td59KdV/preview">3G</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/10u7FA5z9aV9Ebl8oYCI26s0RzRmWR2-D/preview">4G</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1kZxVr4RucQnXT975aZA-0ivPACnDkkPP/preview">5G</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1M57-ts_ZO7krfOP7LlUgXNZ-CtGp6nBl/preview">Satélites</a>
+    <p class="desc">
+      Conjunto de aulas sobre Serviços e Ambientes Tecnológicos, explorando servidores, data centers
+      e os modelos de computação em nuvem que sustentam a infraestrutura digital moderna (cloud, fog e edge).
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
-    </details>
-    <details class="item"><summary>Redes Locais e Proximidade</summary>
-      <p class="desc">Wi-Fi, Bluetooth/BLE, GPS, NFC, RFID + tecnologias de curto alcance.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1G9AP6R2ojcu6xyjz5yacBhcmKs7c7r9v/preview">Wi-Fi</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/15mNOJMBpUpXFt6sSbNms5a44Q68na1Xx/preview">Bluetooth</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1VwkQ8Dj1dSao4M8ybrWT2IX3FyYXBPAP/preview">BLE</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1YGevrVlEwkBTMIuZSYpHStTeF_gAf0wG/preview">GPS</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1GWctg-KtXF3C7XXvbZ8FQogsrNgmQ_eM/preview">NFC</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1QGisW3IBr4nsl0IB3A6qc7pAnLaH_H3w/preview">RFID</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1_aMjAUGSqvTeCwf5SHmu0Bfo-BNOM5PW/preview">Li-Fi</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1W-EqyxZSOOLaTBtaQfaN1r76qtSFy4EL/preview">Thread</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1m15pxLPwtW2_ledtVXxLTJ6XWog8WnUR/preview">UWB</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1w4eHHFpxgl2jh-GjI_LmbCZfWQkI5hl2/preview">Zigbee</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1J4ZL_r8ZkbzK8F6eC5xIXzDpmyjRa2hd/preview">Infravermelho (IrDA)</a>
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button
+              type="button"
+              class="video-item active"
+              data-src="https://mega.nz/embed/TjpTRA4S#NaSVBP0i73xp6apK3wJYCEeoOI8izjUlSQgpEsVuYrw">
+              Servidores e Data Centers
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/Hy5EFQBa#-pi36Fj2NRBRljjtOLH_9eq1x9zuWbMv6wwPUyCtuAg">
+              Cloud Computing
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/KmAkQagI#l6-6eXdjufTiW_La9XZPAfwqJxTJ46QKZ68oUmwiXlM">
+              Fog Computing
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/riAlTB7D#20YaCJj09vb2zHlOqg_WZBzxt9nXYYxbTTfcnvU0aEA">
+              Edge Computing
+            </button>
+          </li>
+        </ul>
       </div>
-    </details>
+    </div>
   </template>
 
+  <!-- CARD 5: 3 - Ciência, Tecnologia, Engenharia e Matemática (STEM) -->
   <template id="card-5">
-    <details class="item"><summary>Armazenamento Pessoal</summary>
-      <p class="desc">Cartões SD/MicroSD, HD Externo e Pen Drives.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1rkj1dsKL0pIf6TbynNUaIEVfRNyOkJnS/preview">Cartões SD/MicroSD</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1qX8IzfMyJZkFODcSueH-WDSzBdDhUQFJ/preview">HD Externo</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1tv4h3_7VL4mlj1_it_G7I4e8BZDjd_0x/preview">Pen Drives</a>
+    <p class="desc">
+      Trilha interdisciplinar de STEM que conecta matemática, física, química e biologia à tecnologia,
+      mostrando como esses conhecimentos fundamentam a era digital e suas inovações.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
-    </details>
-    <details class="item"><summary>Mídia e Escritório</summary>
-      <p class="desc">Kindle, Projetores, Impressoras/Multifuncionais, Scanners e Mesa Digitalizadora.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1gJUx0n4pnGN_5A1eQ88zhuGS5GJSa6Zl/preview">Kindle</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1n7d1gKFbHOsjnjdaWJ4aMCB_PPghJ7br/preview">Projetores</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1Fm54CNSifVjdP2Gd5panQx3TaorBtx1/preview">Impressoras</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1oCMtZk7O0KeFJdgL59QmszBs5kiNcNjM/preview">Multifuncionais</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1bHW2yE0Hltf9YYEh5Gw93SsDWEUNfNUB/preview">Scanners</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1rOW8ufA91Fhxnc6HAZW3S67CMF7LSxbl/preview">Mesa Digitalizadora</a>
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button
+              type="button"
+              class="video-item active"
+              data-src="https://mega.nz/embed/iv4RmCRC#6bfRkZbFhBRKHz-xOfmRDLEVLdavSFZwse8PCoMMSVo">
+              STEM
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/rmAynDgT#WJXsQf0PKj2jbVyMYIMdOLGZKpQCJN_Vg49N0GBw7Nw">
+              Matemática Essencial da Era Digital
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/LyIgGD5A#fbIG7oM6w1fmI8wjwwalks24-a40nOlVkrfkS4rX_Bk">
+              A Transformada de Fourier na Era Digital
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/j7RjkSrL#kLsKN3V09r7kkDAcZntahHx-3RpGvqWr1Rvc1XnxsY8">
+              Diferenças entre Física Clássica e Quântica
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/f2whlb6C#6Y5fHCBlWiZkZIUQXBBaVO7j_f2-EXCM-_0g_s2M4bE">
+              Física Quântica
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/f7I33YwL#IJGGpINI3N6B8TbO1XVxoU4qhfWyrZA1hHyyHnSR76o">
+              A Relação Entre a Química e a Tecnologia
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/2yolALhI#b4A1q4MhN2vY1OYVd40Mt1716vLgx3JwHXHnZALEhWU">
+              A Relação Entre a Biologia e a Tecnologia
+            </button>
+          </li>
+        </ul>
       </div>
-    </details>
+    </div>
   </template>
 
+  <!-- CARD 6: 1 - História e Gerações de Redes -->
   <template id="card-6">
-    <details class="item"><summary>Comunicação Pessoal</summary>
-      <p class="desc">Smartphones, Smartwatches, Smart TV e Webcam.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1wTlyITihRcETI3cXUeluirH_47xT1PCt/preview">Smartphones</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1pzjIJnmZmf2yoRebzTsu7IcVhTi5VReD/preview">Smartwatches</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1JiGUHjP3-RhfZiCTl9rdtTu0i9FjZt7z/preview">Smart TV</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1WPUyAjlTU68c1w6ikC6Nfg7lSwm9PXLG/preview">Óculos VR</a>
+    <p class="desc">
+      Introdução à história das redes de comunicação, das primeiras conexões cabeadas às gerações móveis (1G, 2G, 3G, 4G e 5G),
+      mostrando como a conectividade moldou a sociedade digital.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
-    </details>
-    <details class="item"><summary>Conectividade Residencial</summary>
-      <p class="desc">Roteadores Wi-Fi e sistemas Mesh.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1kaXiD6o41_B3mOGTyRFacFeoqC5bYN3q/preview">Roteadores Wi-Fi</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1Gx0VrrzPJqNaXF8kcF-GW188unG2_hOy/preview">Roteador Mesh</a>
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button
+              type="button"
+              class="video-item active"
+              data-src="https://mega.nz/embed/vjonQYja#aJNe3Yo3fQIUbMCvA7JTiR4_yGGHEXNeILsTUSKPm-0">
+              Criação e Evolução das Redes de Internet
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/2jRQQRhZ#qETYZyRvo_-vVTS-Pcc4nP-_0_gQADsqeSPw5ipLCQA">
+              Rede 1G
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/2nomzIJQ#32uqcO-EJjOYNmQhFv9dUmvD77XHVXo14ytAzha1_es">
+              Rede 2G
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/O7pnUKzJ#841egxqQON1217_8aUCvRnzQ-ZcG_gcKqTLXLG_W_x0">
+              Rede 3G
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/CjxnjB7K#5Lt2eyJGEQ1R68ysZcBy08pVZiz2mldbMxaeGZObTks">
+              Rede 4G
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/OrYnnBKS#rBM0NHvBjoYUaA103sGM1pJz4mj5KdyGyHL2ctW3avI">
+              Rede 5G
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/DqJizDrD#GNDwqFh16SXZOWG6VhG06D1uhXvvuJQGBT7TZeXV00o">
+              Conectividade Global por Satélites
+            </button>
+          </li>
+        </ul>
       </div>
-    </details>
-    <details class="item"><summary>Automação Residencial</summary>
-      <p class="desc">Três níveis para guiar a jornada de casa inteligente.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1QXusfEzFKsXa-QE4-ZHKvuUTfTfBcFuN/preview">Nível 1</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/17ymBmFPyXtd0CgmIoSDpRCbgX7925ZBi/preview">Nível 2</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1xj28ruyJG8dPWp6azG1e0_qr1w7auFuh/preview">Nível 3</a>
-      </div>
-    </details>
+    </div>
   </template>
 
+  <!-- CARD 7: 2 - Padrões de Conexão Sem Fio -->
   <template id="card-7">
-    <details class="item"><summary>Serviços em Nuvem (Cloud)</summary>
-      <p class="desc">Servidores, Data Centers, Cloud, Fog e Edge Computing.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1CaNCwx1G3BMrHyplThSHTQZI7U9DNNYy/preview">Servidores & Data Centers</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1I8pnJ0ufj_HNMvrulnxtiUIaIUbkWaf6/preview">Cloud Computing</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1i83xaqZFl2egA6B9InrhEAZ5gDPKszHv/preview">Fog Computing</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/16h9WQRy6EX4c7ugWQCxaoNztksPVLeHg/preview">Edge Computing</a>
+    <p class="desc">
+      Visão geral sobre padrões de conexão sem fio, como Wi-Fi, Bluetooth e outras tecnologias wireless, explorando frequências,
+      alcance, desempenho e aplicações em redes domésticas e ambientes inteligentes.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
-    </details>
-    <details class="item"><summary>Plataformas Digitais</summary>
-      <p class="desc">Streaming, Marketplaces e SuperApps.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1Ly2I1VY1LlhvS4rCXOAQiP_mjNjJHwM1/preview">Plataformas de Streaming</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1Cs9oXGyTt_bJKwcwNqqvf-HmMBsgqAtV/preview">Marketplaces</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1juKdRyqSVxPu939kXNKv-9WxzmuKo8js/preview">SuperApps</a>
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button
+              type="button"
+              class="video-item active"
+              data-src="https://mega.nz/embed/T3ZEwTYK#i6YhtAoZHlYALXPTe6FaHegxjJ-xPqnwjrXd7-ATWmU">
+              Wi-Fi
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/PuAEnIwa#lnttHHck-_4YRbqNEHnVnlcNl8y5WNhLagiTlvY5xWg">
+              Bluetooth
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/XnYw3RST#XTCz_Ew5NMd_uZ09XDKpyyhp3TR-K8V-gdqlYSkxnaE">
+              Bluetooth Low Energy (BLE)
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/HjJF1RpT#tdvBgJKuKH8zYpREMoBohFXkwVzfY0kDJ2QDIXzUjXY">
+              Li-Fi
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/6rBVXZaD#ppm6-RwBMG5LvfZS2uVvQEFiSLvRNe8sVxSjRIIJSKo">
+              Thread
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/X2xUhYjK#Rg69BDpUk3XH4kC_oczmEgVBPtT-WJ8BqO_doV7UhD0">
+              Ultra Wideband (UWB)
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/ejok2bgB#H0TfrHzR88JQ7qKYEKrSgmYU1t2E4Ne6g7fRYmR1Si8">
+              Zigbee
+            </button>
+          </li>
+        </ul>
       </div>
-    </details>
+    </div>
   </template>
 
+  <!-- CARD 8: 3 - Padrões de Comunicação por Proximidade -->
   <template id="card-8">
-    <details class="item"><summary>Internet das Coisas (IoT)</summary>
-      <p class="desc">IoT e AIoT como extensão sensorial da computação.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1TkVaNbygwYAHjqlQDGoenjpTlqeqRK2b/preview">IoT</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1AXJGYg52l1lmG0WZtEbehVDuE6DnP6ZH/preview">AIoT</a>
+    <p class="desc">
+      Panorama de padrões de comunicação por proximidade, como infravermelho, GPS, NFC e RFID, destacando uso em localização,
+      pagamentos, identificação e Internet das Coisas.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
-    </details>
-    <details class="item"><summary>Realidades Imersivas (XR)</summary>
-      <p class="desc">VR, AR, MR, Háptica e Metaverso.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1WPUyAjlTU68c1w6ikC6Nfg7lSwm9PXLG/preview">Óculos VR</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1SitXhHokFqiqqcNU5zFYAggmjlZGvbeQ/preview">Controladores Hápticos</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1g9iDGefEKQm0FX45_MZJMrPFJ2rEPFS_/preview">Realidade Virtual (VR)</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1wO1PSV61Awcl0GGEWxGV14ieqD-gTpCB/preview">Realidade Aumentada (AR)</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1-Bi3XTaKTfiOx28KdVZM5kHQImQIG4me/preview">Realidade Mista (MR)</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/12U4_YL6-XaICraFyhQGiNAS_xFBJVoMh/preview">Realidade Háptica</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1UJVAareS515shr9HjAcX78HvFDppGfMn/preview">Metaverso</a>
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button
+              type="button"
+              class="video-item active"
+              data-src="https://mega.nz/embed/vzxU3QaQ#Tsduf73KCZlliCYBtC60pASlcXjJe9m1MyqF6YPCQMo">
+              Infravermelho (IrDA)
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/um4B2JCC#Aqegw4wftruEleS2qpGfWyNyZ8SmzORYa7cwQnbateQ">
+              GPS
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/Oi5HBQwS#_K3CWTnaXTaec35g5ZERYk2RpyoEs3ny78vMWmRKe7c">
+              NFC
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/KjQ3hRwB#Xm9HDpn8q169TlwvUCp8eMRRwshNJwousRCeNvk8RCM">
+              RFID
+            </button>
+          </li>
+        </ul>
       </div>
-    </details>
-    <details class="item"><summary>Robótica e Automação</summary>
-      <p class="desc">Conceitos, tipos, classificações, cobots, sensores, IA e dark factory.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1xXTPD0vHHb6WxtcA6_2AzZdbcktSaNYW/preview">Conceitos</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1v6VTu6SE3zwFJqdk7KvS9hu8EI4osWZ-/preview">Tipos & Classificações</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1zcbIBCKGDAAB2aYffv2NjeCqwwmIcQjM/preview">Cobots</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/15DyEcT16FjHpRYMTRgY-_PDJXH-QccE4/preview">Sensores e Atuadores</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1vS42PZg0_nxBgh9m2VPJN62Af6s2vMvs/preview">IA na Robótica</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1QxCWgFOM8akSOWM3yrUqH3IKO-mduYj-/preview">Aprendizado de Máquina</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/10CqClT8aG46r_kntEgo9-6OnaSfWUAUX/preview">Dark Factory</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1TQ_dqF0ARaL9QWqz5RTAXXe6ILkPZcR5/preview">Drones</a>
-      </div>
-    </details>
+    </div>
   </template>
 
+  <!-- CARD 9: 4 - Padrões Visuais de Dados -->
   <template id="card-9">
-    <details class="item"><summary>Fundamentos da Economia Digital</summary>
-      <p class="desc">Desmaterialização, PIB Digital e pilares da economia digital.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1h57z4PW6enrp_VMgpJFYqB8XMQSL0MWq/preview">Desmaterialização Econômica</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1QAswNzWda1ZE0ktPeOyOVxdJKwin1kV3/preview">PIB Digital</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1rV7YwvN-Lz0fnDbhel3mi68UzE3YPdGJ/preview">Economia Digital</a>
-        <a class="watch" target="_blank" href="#">Smart Rental</a>
+    <p class="desc">
+      Estudo dos principais padrões visuais de dados como códigos de barras e códigos bidimensionais, analisando usos,
+      vantagens e leitura em sistemas digitais.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
-    </details>
-    <details class="item"><summary>Criptografia e Blockchain</summary>
-      <p class="desc">Criptografia, Blockchain, Automação da Confiança e Smart Contracts.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1QxPgzUvgonF7kcQ_TmkPQTKUDZJ3JWxL/preview">Criptografia</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1EM06EFRXYVpwpbP0tCnJsLG8XhB-rba3/preview">Blockchain</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1nGGPo3dEwKiY3HTexrWTW6o-HISjGZA6/preview">Automação da Confiança</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1gUEtLcGXeraNaIsyNv2wkZW3A9USjgYr/preview">Smart Contracts</a>
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button
+              type="button"
+              class="video-item active"
+              data-src="https://mega.nz/embed/qnJkyRQb#QRJSaUzL56quGTWAgHYukmEitUfCRMSgVX8OQ4rMAAg">
+              Código de Barras
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/ujoD3STI#vGHp-oGsyHm3SRBKh-dlEKmC6IMJKj6sLcrsfNXx8PM">
+              QR Code
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/ProhyayY#gChqsR3XOdT0FKi1vjLAenpDZlpTbSuLirOLmBighlI">
+              PDF417
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/3roiBTRR#xnwAoDNypD-3Npi8aKsXHp0CTTfblJZQOSYferIm5yQ">
+              Data Matrix
+            </button>
+          </li>
+        </ul>
       </div>
-    </details>
-    <details class="item"><summary>Ativos Digitais (Web3)</summary>
-      <p class="desc">Criptomoedas, Tokenização/Stablecoins e NFTs.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1bO1yAe8lXDgKvMly00Lvbf3tQIfpDa68/preview">Criptomoedas</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/13NKKqmZPChqqBbYV34x8gJGawLSwyHig/preview">Tokenização / Stablecoins</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/18KLS5eiqmA5XXmMmbHcFWGIboCjpx3P4/preview">NFTs</a>
-      </div>
-    </details>
-    <details class="item"><summary>Fintechs e Serviços</summary>
-      <p class="desc">Fintechs & Bancos Digitais e Carteiras Digitais (e-Wallets).</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1xpM0CUUHAobOxxjaUb94GDLFM1EVTzuF/preview">Fintechs e Bancos Digitais</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1Pub3vlgSmsBXVpMInAWW_67twdqTgEE7/preview">Carteiras Digitais</a>
-      </div>
-    </details>
+    </div>
   </template>
 
+  <!-- CARD 10: 5 - Ferramentas de Navegação e Protocolos -->
   <template id="card-10">
-    <details class="item"><summary>Fabricação Aditiva</summary>
-      <p class="desc">Impressão 3D (incl. construção) e Impressão 4D.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1rcLcKKzsttD_MIKOCYlhrqvMUXjsnZOF/preview">Impressão 3D</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/14aRw7dsW_gnqU_lHNu0qpuP6WhWJwnmu/preview">Impressão 3D na Construção</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1Cv98qbfkL4fZf2LkLynm0V2cWitB0NSt/preview">Impressão 4D</a>
+    <p class="desc">
+      Trilha sobre navegadores, infraestrutura global de redes digitais, HTTP/HTTPS e DNS, explicando o que acontece
+      “por trás do clique” ao acessar sites e serviços online.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
-    </details>
-    <details class="item"><summary>A Fronteira da Ciência</summary>
-      <p class="desc">Nanotecnologia e Metamateriais.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1X266It6pG90aqGr5ZCWQ4XZ3aD3VjBub/preview">Nanotecnologia</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1qLAFGODxMrFHlb6Rud0ZLns1yCm4cNcH/preview">Metamateriais</a>
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button
+              type="button"
+              class="video-item active"
+              data-src="https://mega.nz/embed/LqBlkQSb#UEQb5QdkSyBVFr5HsYA3CLj6daPoj4eWvVQ_rbVkJyw">
+              Infraestrutura Global e Tipos de Redes Digitais
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/nzBTQTrT#mOm2PlUhPEou4Jz8bkcy_V61UNy1pP7-ID1ixmgLND4">
+              Navegadores de Internet (browsers)
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/GuwUjA7L#rWn93Mhp2CYqroIpta3sVBCuQoY5D15BP18BUSApzQc">
+              HTTP e HTTPS
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/LmJTHYYI#LtwYZMwMSXXWkzbmjURWVqPYe4kUZRMe1M5ztHw-17c">
+              DNS
+            </button>
+          </li>
+        </ul>
       </div>
-    </details>
-    <details class="item"><summary>Computação Avançada</summary>
-      <p class="desc">Física Clássica vs Quântica, Física Quântica, aplicação em vacinas.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1bmyrpugoSPPF8qJy9X3L86BzKUFdJRmD/preview">Física Clássica vs Quântica</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1cuEmsRofyObN7h7otnZDEn4rY_GJnw5I/preview">Física Quântica</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1kxTs_8ndG72NbjalH4M5uJ-9yAOghKL-/preview">Atuação da Computação Quântica nas Vacinas</a>
-      </div>
-    </details>
+    </div>
   </template>
 
+  <!-- CARD 11: 6 - Automação Residencial -->
   <template id="card-11">
-    <details class="item"><summary>O Futuro do Trabalho</summary>
-      <p class="desc">Gig Economy, Automação/IA e Reinvenção, Automação/Emprego no Brasil, Profissões do Futuro, Reskilling.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1pqf5f5wrT2yy3UWsvLZPAD2_V1lflRfA/preview">Gig Economy</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1F0SVSZMWln_iz1uWk_vcwBrOEBIGFm_2/preview">Automação & IA</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1HInPyYBTRI8TU81fRSStWXJGU_pjusCs/preview">Automação & Emprego</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1UjDXOUTJAkmU9jgSI10gCcMYYHDRHIXe/preview">Profissões do Futuro</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/18EYqBxNwxnp7qhdXZVaW6i9e5bK1Rt6w/preview">Reskilling</a>
-        <a class="watch" target="_blank" href="#">AgroTech</a>
+    <p class="desc">
+      Introdução à automação residencial e casas inteligentes, abordando dispositivos conectados, assistentes virtuais,
+      hubs de automação e o papel das redes domésticas na integração de tudo isso.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
-    </details>
-    <details class="item"><summary>Tecnologia e Sociedade</summary>
-      <p class="desc">Bolhas Informacionais, Percepção do Tempo, Novas Estruturas, Quinto Poder, Paradoxo da Conexão, Inclusão Digital & Desigualdade.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/11l87fY9QzukdaQcuALq-HK4nuWSTjjtq/preview">Bolhas Informacionais</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1NiJSR4YXXKIOebwUkIkKkDVEC1Y40vrA/preview">Percepção do Tempo</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1tPFzn_E8pxE2zcbJxy4QKqU8r3fYQ_bD/preview">Novas Estruturas Sociais</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1snz6eSe3K9FA5KFOkFyNMRP0VhVoamwD/preview">O Quinto Poder</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1TCuouFiBS0akZYYgPn6BmBr_i0cBJV8f/preview">Paradoxo da Conexão</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1GOXZ3KlxVvFCJMRB6zxDNhIgziQRJE2j/preview">Inclusão Digital e Desigualdade</a>
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button
+              type="button"
+              class="video-item active"
+              data-src="https://mega.nz/embed/XiZmDAYJ#E01DrTrlLBeubXTpxo8pGioCFeB727-M7mtv8sPsNFw">
+              Automação Residencial - Nível 1
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/C3oXkSLD#7Ux26Ellh8dy9x1u7VYjyypMmLOgsnI5ANcydrkRKrs">
+              Automação Residencial - Nível 2
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/2z4SmazT#zkHllU7czVfJy65elX6n_3Zert6qRNz7v_pfxYvRTsM">
+              Automação Residencial - Nível 3
+            </button>
+          </li>
+        </ul>
       </div>
-    </details>
-    <details class="item"><summary>Riscos e Desafios</summary>
-      <p class="desc">Ameaças Virtuais e Paradoxo Ambiental.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1b1_NcOUefRFADk-zQFKt4RbN6wTA2b6c/preview">Ameaças Virtuais</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1SGYc6SK2zFwBrjwRltBRGrfVRzyhq4hD/preview">Paradoxo Ambiental</a>
-      </div>
-    </details>
+    </div>
   </template>
 
+  <!-- CARD 12: 1 - Armazenamento de Dados -->
   <template id="card-12">
-    <details class="item"><summary>Saúde na Era Digital</summary>
-      <p class="desc">Ansiedade, Zoom Fatigue, Dependência, Despersonalização, Distúrbios Auditivos/Visuais, Sono, TEPT, LER/DORT, Burnout, Saúde Mental.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1CkAU8bvL7gIGwRwzPdK8-dq6kEUY990M/preview">Ansiedade</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1RZfHMbzsH1D_ogKEWxPwLebKUVpCc1Tn/preview">Cansaço Tecnológico</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1VqehNXPr3dq-moOWijL-eQ2yzgplfVEy/preview">Dependência Tecnológica</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1X4zYUuZDnrw-uE5k0LUKsCsHYyMn7oLr/preview">Despersonalização e Isolamento Social</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1P0hJx08ZBWKKkReKdNyFHpHS2mGJKbG7/preview">Distúrbios Auditivos</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1BvIcbreFJiuRgUJi7amHFFyhSxegwQbv/preview">Distúrbios Visuais</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1SGuzAZM7kxUzs8_h8GCkdWAQdRwnpTIP/preview">Distúrbios do Sono</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1mgqP_nhzwqrldagHCXNNq61ouPAUVDfW/preview">Estresse Pós-Traumático na Tecnologia</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1YQynUuN-KDV4Qq2idRHkBuCrZUT846HS/preview">LER/DORT</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1OJ9UtnI3BTHvzNGZfs4W-K4VHY23UdTE/preview">Síndrome de Burnout Digital</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1bD2OepN_TwP0dcQR9lnr4fm8p-EfSqBd/preview">Saúde Mental</a>
+    <p class="desc">
+      Trilha focada em meios de armazenamento de dados, abordando HDs, SSDs, pen drives, cartões de memória
+      e soluções em nuvem, destacando conceitos de capacidade, velocidade, segurança e backup.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
-    </details>
-    <details class="item"><summary>Filosofia e Cultura Tech</summary>
-      <p class="desc">Tecnoautoritarismo, Cyberpunk, Cypherpunk, Dataísmo, Transumanismo, Biohacking, Ludologia, Anarquismo Digital, Neo-Luddismo, Tecnofeminismo, Tecnogaianismo, Cibernética, Singularidade, Simbiose.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1guVBthHG42QPvs-pkEz-K4GIgEPb7Ot2/preview">Tecnoautoritarismo</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1jEpyUwGXTnYjtjjwuTS_SXsuDG8_wqFY/preview">Cyberpunk</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1ovMj2BIfXAUHr77QoO_BkjHtyPInZdCG/preview">Cypherpunk</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1EQ5qH-zY-F5ZT1YSTXqlvLSDUe49a7kU/preview">Dataísmo</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1-jK9Dy9vPBlYGoRNszi3KhZW6KULRvZ7/preview">Transumanismo</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1DF5p-HhzF9cBvSm8OQGZt4wNxUGAh7Px/preview">Biohacking</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1rIltUueS2kvzilZr8ibjEzbxLibPuRIQ/preview">Ludologia</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1Rh0XNDMLn5MSDIibd8pJ4R8ElgzewSX8/preview">Anarquismo Digital</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1JXI3nJM7wgEbqhxvwlg9d9sVyrUx9eZq/preview">Neo-Luddismo</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/18F14r-yRAkPzZ4Tc4l3kMsJ0jUqKmurW/preview">Tecnofeminismo</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1x1NS7rI1yr5MzdHqXI_UKUIED8W2liEs/preview">Tecnogaianismo</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1WTcpvjgvhxGdHwXOgbbUzE9J1xIz9zlZ/preview">Cibernética</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1fWp6kNJjv_HKST6HRsMzEptHJoSebV8X/preview">Singularidade</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/17Y0dFBePNFwXEEI3wCi-kZ55VlPW_vVb/preview">Simbiose Homem-Máquina</a>
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button
+              type="button"
+              class="video-item active"
+              data-src="https://mega.nz/embed/m2ZHATha#kTjnkIaEm2nolDJUAIbFXRQsq6lQgcwi_MWh3Ac7hGY">
+              Cartões SD-MicroSD
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/7roHgDAR#WLe4B7m5XMHQJa5xjPCoyCOaZTFwT6shjvU0jyeD_wQ">
+              HD Externo
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/234hwDCT#T4XNCYpnQ1aj7UujwzUDArAG62kX0DrIsx13xwUTHow">
+              Pen Drives
+            </button>
+          </li>
+        </ul>
       </div>
-    </details>
+    </div>
   </template>
 
-  <!-- Padrões Visuais de Dados -->
+  <!-- CARD 13: 2 - Dispositivos de Rede -->
   <template id="card-13">
-    <details class="item"><summary>Padrões Visuais de Dados</summary>
-      <p class="desc">Representações codificadas para leitura por máquinas e humanos.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1HDNLHecSo4vfw9z_aNoQljAyBzSTIg2V/preview">Código de Barras</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/102EDP9L5rHjDZNwZ0Dz4xeVBPMuVbFb0/preview">QR Code</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1RYE4cmxEz_QrvsuqRg7qOuiW04vVR1bM/preview">PDF417</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/11tzKRTRCm93ekdAWifnQD1Tmh0LGBqt8/preview">Data Matrix</a>
+    <p class="desc">
+      Trilha dedicada aos principais dispositivos de rede, como modems, roteadores, switches, access points
+      e firewalls, explicando o papel de cada um na construção de uma infraestrutura conectada.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
-    </details>
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button
+              type="button"
+              class="video-item active"
+              data-src="https://mega.nz/embed/K3wTEIiD#1WX16slzTErWlq5PH4oVoNqTJAjwG4k95lBxWT-wGLE">
+              Roteadores Wi-Fi
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/Tio3wRzA#PIU22merctcdS0vB4HJI6hu7iSdGsc0R8BH2w5CieBk">
+              Roteador Mesh
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
   </template>
 
-  <!-- STEM (sem o link STEM movido) -->
+  <!-- CARD 14: 3 - Dispositivos Home Office -->
   <template id="card-14">
-    <details class="item"><summary>Fundamentos STEM</summary>
-      <p class="desc">Conceitos de Matemática, Física, Química e Biologia aplicados à tecnologia.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1c4Y1m9a4cOSP6bxL0v8DMzdabkykbQks/preview">Matemática Essencial</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/11e4RJaR3rSWBzoEhosJll92lHkHZNvcD/preview">Transformada de Fourier</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1V0ymHNMpq1zHGb2TeMNGqCWgXNKP6CIi/preview">Química & Tecnologia</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1ZxSHGOTzeD3Cnw3TdjHk3YaGthsdLswq/preview">Biologia & Tecnologia</a>
+    <p class="desc">
+      Trilha que apresenta o conjunto de equipamentos usados em ambientes de home office, incluindo computadores,
+      monitores, periféricos, webcams, headsets e impressoras, com foco em ergonomia e produtividade.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
-    </details>
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button
+              type="button"
+              class="video-item active"
+              data-src="https://mega.nz/embed/LuBx2A6C#Z-scQotvly7arpwju9fP7EIimJCQ4plekZgNq7KD41E">
+              Impressoras
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/mu5WSRaJ#TzOVpmiPl34wXenFcBNmjvHd0LTEP1t6Ka35mzxZoKI">
+              Impressoras Multifuncionais
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/HyRx0ayZ#Ot_U-ZEPidltKOHyCPVKAHKxpenFiOpr-eORGFpHn-4">
+              Projetores Domésticos
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/3ngiFAJC#8CluEUZu3V6_7rNVOUri4dp6T7V1Ki2opBmS2s5_uDs">
+              Mesa Digitalizadora
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/rvAjlQxT#NQUzeVDjynL85xiOvsM97uQuuVB-iy6iqZv0t2BfYG0">
+              Scanners
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/anRgzYqK#D0RlaqEz40D85zeSAqdJGwo_NAHGw0pm4AyBU7-82qQ">
+              Webcam
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
   </template>
 
+  <!-- CARD 15: 4 - Dispositivos Smart -->
   <template id="card-15">
-    <details class="item" open><summary>Computação Avançada</summary>
-      <p class="desc">Paradigmas computacionais organizados em ordem crescente de complexidade e importância futura.</p>
-      <div class="tray">
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1t7XIZzs5GFBz79L7SWPQBEKmzj_Jn2SQ/preview">Computação Clássica</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1K1jRFncOAnXPsiA9cyG7akU5h83qQ3h9/preview">Supercomputadores</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1RkInhcKxbphXQYCK4r-oLCJQZGp7NLh9/preview">Computação Fotônica</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/14Se5MmxDJiDHdl0B5ODg7MM6mAXI5XxB/preview">Computação Neuromórfica</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/1Fca4OaOhJRrwZbcC-eCCFdVZHKCYu6yo/preview">Computação Biológica</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/15DFKhTLM9dYSbywXPK3Ka3Pt2z3BEyBk/preview">Computação Adiabática</a>
-        <a class="watch" target="_blank" href="https://drive.google.com/file/d/14sESaRBH1Mmu436u7Fe1i9KVzE3wFoZX/preview">Computação Quântica</a>
+    <p class="desc">
+      Trilha voltada para o universo dos dispositivos smart, como Smart TVs, smartglasses, smartphones
+      e smartwatches, explorando conectividade, recursos inteligentes e integração com outros dispositivos.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
-    </details>
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button
+              type="button"
+              class="video-item active"
+              data-src="https://mega.nz/embed/ProDVQhA#LoBTqzvk_hoJ7xoTaowVsxItS0tOBmvYPUn7cV5zvP8">
+              Smart TV
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/OzpU0CQA#gPCE4sYUuh9-GcF8LIiypN8xuTfV4FS_RCHq2BSSLm4">
+              Smartglasses
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/uuRADK6K#Ru9mUwRpup7ImlD2QAefb4sciA3ZAHC8oouZy_F-luQ">
+              Smartphones
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/K2pCEJqB#Y5K1Pj6fh-MsQnzzFeJYXhpDqYqItqtNR45rjLLknVU">
+              Smartwatches
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
   </template>
 
-  
+  <!-- CARD 16: 5 - Gadgets -->
+  <template id="card-16">
+    <p class="desc">
+      Trilha voltada para gadgets e acessórios tecnológicos, como controladores hápticos, drones, leitores digitais
+      e óculos de realidade virtual, que ampliam a experiência digital e imersiva do usuário.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+      </div>
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button
+              type="button"
+              class="video-item active"
+              data-src="https://mega.nz/embed/q2JDkZgY#oFo0X49Q0H8QSipNfgmutSxh6sDtjyOppwmvT16yE70">
+              Controladores Hápticos
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/q25U0SYD#Z4jiZqxvqwQoNSexgTBbjJFnsKv9dShwvMGTgRodazk">
+              Drones
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/OvJRkbqD#6qeoGm0lb73DW0356MIa7J3xeTmAija0HmxBqpUuCqQ">
+              Kindle
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="video-item"
+              data-src="https://mega.nz/embed/biYmjKiQ#D9AYfVvaXq-C0GPeKNvAw9rRrgpH1FgCgwMRlhTt2vQ">
+              Óculos de Realidade Virtual
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </template>
+
+  <!-- CARD 17: 1 - Classificações Computacionais -->
+  <template id="card-17">
+    <p class="desc">
+      Trilha que explora diferentes paradigmas e escalas de computação: da computação clássica e supercomputadores
+      às abordagens fotônica, neuromórfica, biológica, adiabática e quântica, destacando usos, potencialidades
+      e limites de cada modelo.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+      </div>
+
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button type="button" class="video-item active"
+              data-src="https://mega.nz/embed/rqJzDaxa#vSvzZFOHaE_ViSp4uGJNGmujKcWrg1iRSTPEwF5K270">
+              Computação Clássica
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/qy4B3D4R#NTU6GC3-uyH1JDD-G3iirpVZ_QKkWa6cYT9p7sIYStc">
+              Supercomputadores
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/O352SLJI#zihR2l89yWkh8UXKfYp_kZSE64O7AG29KYRVFmBhNck">
+              Computação Fotônica
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/rr5W3BJL#CPTlgx0QzSi7ZiftEyJaEjekX2W1aCFiB8iVSdbKZg4">
+              Computação Neuromórfica
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/XzJS3C7Y#OsTdeSy0OyDJFwZGgGHGy4LBS3XFElnDpFQF3bhe0Ag">
+              Computação Biológica
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/quRlBIIQ#bp8PjoxkOiD0TwLksujGgwAoBffpkFAazLG8DB_RYNE">
+              Computação Adiabática
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/fz5Cna6Y#mFBLCOeoSqpYidqZmzDBvCP7aO3CDtz2xh8cFVflVyM">
+              Computação Quântica
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </template>
+
+  <!-- CARD 18: 2 - Web e Internet -->
+  <template id="card-18">
+    <p class="desc">
+      Trilha que apresenta a evolução da Web e da Internet, passando pelas fases Web 1.0, 2.0 e 3.0,
+      e discutindo o papel do movimento Open Source (Código Aberto) na construção da infraestrutura digital
+      colaborativa que sustenta a web contemporânea.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+      </div>
+
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button type="button" class="video-item active"
+              data-src="https://mega.nz/embed/yzIHCBLK#zT115ltjIQeBywhF0BYkvzQc-IKg6tn5G7WlRcT73HE">
+              Web 1.0
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/X7wi3JLL#6j6n0vKs1ghKPvIhrC191P9W7DIC7rdlsqRH_b3UaOo">
+              Web 2.0
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/vzpzSIrR#gaLgGrXwZZU-LvIRrG-e-Bidm7Hyt5CPjJIh8I0bmeY">
+              Web 3.0
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/72J33RgQ#4kbZEGKmwtu7KKlslxQhqrlpGzZWIxyG_vjlOmGK5pM">
+              Open Source (Código Aberto)
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/ezomySRK#u7_uI6E2Nrd5i4FMqfULdWu0ED5dVcuaPmAZNv27ujo">
+              Ameaças Virtuais
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </template>
+
+  <!-- CARD 19: 3 - Inteligência Artificial -->
+  <template id="card-19">
+    <p class="desc">
+      Trilha dedicada ao estudo da Inteligência Artificial contemporânea em suas diferentes manifestações:
+      fundamentos técnicos, estruturas, empatia simulada, computação preditiva, riscos reais, IA generativa 
+      e o novo paradigma da IA Agêntica. Uma visão ampla e moderna da tecnologia que está redefinindo 
+      o futuro da computação.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+      </div>
+
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button type="button" class="video-item active"
+              data-src="https://mega.nz/embed/uvYGBQZQ#c-I5MNRpXLePt6COsgmbWFixEirQTyzgZkpAQxsLFQs">
+              Inteligência Artificial
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/WuQHTIAL#EM7Vo0aigE4lXtM4g7sGTemh1jB-LklmPMfCP9F6zYs">
+              Tipos e Estrutura da Inteligência Artificial
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/zrggmabS#mU6Twossh1M6vkTaYLf3PGaDzPqgK9Y6BYKPM2OhjFY">
+              Empatia Artificial
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/7v4XSZhA#FM4NqYByJ_p5bUyGTTxCjudZuSl0jBEK0GXhzfRYA4M">
+              Computação Preditiva
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/GrRhgABD#VP7vvk-rW3pXUDCpgUl23srExHo07dlWPEC_5E3itJk">
+              Perigos Reais da Inteligência Artificial
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/zypBnYaQ#5cGul0HjM83mBaWmIVoaUtf7zLne6dyycwiWooB55lo">
+              Inteligência Artificial Generativa
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/7vpC3ZZQ#Hh5ninSUzsYzcrKBF4u9zicgb2Llu9mqxIYrTOOmPks">
+              Inteligência Artificial Agêntica
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </template>
+
+  <!-- CARD 20: 1 - Tecnologias Emergentes -->
+  <template id="card-20">
+    <p class="desc">
+      Visão panorâmica das tecnologias emergentes que estão ganhando espaço na economia digital, como novas arquiteturas
+      de computação, biotecnologia, sistemas autônomos, novas interfaces e soluções que ainda estão saindo do laboratório
+      para o mundo real.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+      </div>
+
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button type="button" class="video-item active"
+              data-src="https://mega.nz/embed/vzIAUDZS#uGTVCPn-rA4pFUKk1mYYInkGBFQqCR4pUhzf7yYXeOA">
+              Blockchain
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/C3ZXjQjA#OCgT9kzjFgCUjhregRJ0v2n0rvH9_oyclPdwKTGpCsY">
+              Gêmeos Digitais
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/niYQFIAY#mvPkrf9iwFgvsvVpek4jGpxib0PH0fADGH4qWFkH468">
+              Internet das Coisas (IoT)
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/DqoQWTAK#uLDPzuNX9m5T2B6FqKnf25hQZHOb3XtB5lo6SS6L-JQ">
+              Inteligência Artificial das Coisas (AIoT)
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/zjB1xJoR#3syCA3LnvPF0MbOsRSHpm4X99jpKakUYyaYq1-ZpzDg">
+              Metamateriais
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/3yZRjQiT#Npcbb9EBzUU_gnxXSCQLB04B7eLb3_VVGciOCZ5pD9M">
+              Nanotecnologia
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/myx0HDZZ#5rSowQJmLj8GuJES992QvdNEw237AzCdFBWzAUQcuUU">
+              Plataformas de Streaming
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </template>
+
+  <!-- CARD 21: 2 - Tecnologias Imersivas -->
+  <template id="card-21">
+    <p class="desc">
+      Introdução às tecnologias imersivas, como Realidade Virtual (VR), Realidade Aumentada (AR), Realidade Háptica e Realidade Mista (MR),
+      explorando aplicações em educação, entretenimento, indústria, treinamento e simulações, além do debate sobre metaverso.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+      </div>
+
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button type="button" class="video-item active"
+              data-src="https://mega.nz/embed/anR2HYpa#zfaJp3teSKW6eBIord_HyTagRuUpi-9wHRlVs71ccrw">
+              Realidade Virtual (VR)
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/nmZgAYBI#dqW64nA8qsjEAhH_dwfNqxCnKbY27rgfLXWuCsIBAz8">
+              Realidade Aumentada (AR)
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/vjZWwTQb#uLlWbBz4FIwe1v19A_6fu20PR-A_zHCYR34nKc9H-8E">
+              Realidade Háptica
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/PnJlXKYS#x99vXO6mw_9Frvw837OGvV5ePYbvLwqjC3ViNTyfrtY">
+              Realidade Mista (MR)
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/Wj5lRAaK#86xqeg4oaNDltFR48M6ddte83o6kUqSG9-xtoM5muTA">
+              Metaverso
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </template>
+
+  <!-- CARD 22: 3 - Tendências -->
+  <template id="card-22">
+    <p class="desc">
+      Trilha voltada para o estudo de tendências tecnológicas e socioculturais: futuro do trabalho, automação,
+      impacto da IA em diferentes setores, economia de dados, plataformas digitais, mudanças de comportamento
+      e cenários possíveis para as próximas décadas.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+      </div>
+
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button type="button" class="video-item active"
+              data-src="https://mega.nz/embed/KzxEUIrQ#vvuoQURltN7Uv1Eq_GaBY2kugx9sN3i9dngg7_iTmFc">
+              Aluguel Inteligente
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/KqZwCTSI#5kEmT_vhdI3MGn_cPQwBPf7JjWjmqN58jKH-jNZjiuI">
+              Automação da Confiança
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/665mEQxK#DefF3FjtaHBj6hfeEoJVCuvKPExqy0IxFnXmHzq_SvE">
+              Computação Ubíqua
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/Pz4j3QwB#kdjf2A-q5IybmnxQ3frQ1jYG7N1q2La52_a0df1cb-I">
+              Cidades Inteligentes
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </template>
+
+  <!-- CARD 23: Robótica e Sistemas Autônomos -->
+  <template id="card-23">
+    <p class="desc">
+      Trilha dedicada à Robótica e aos Sistemas Autônomos, explorando desde conceitos fundamentais, tipos de robôs e sensores
+      até aplicações avançadas com Inteligência Artificial, Aprendizado de Máquina e ambientes totalmente automatizados
+      como as Dark Factories.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+      </div>
+
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+
+          <li>
+            <button type="button" class="video-item active"
+              data-src="https://mega.nz/embed/bvgjkS6S#uMOSwAiax8en_YIfDsQpPNQxDvwj_-7jRa1cYQvo1VM">
+              Robôs - Conceitos Básicos e Aplicações
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/j7AmGAJJ#W8KUMArONcnS315_Uq_Y_MJexrKiAPSYAwLgFqYiE_4">
+              Tipos de Robôs
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/Drog2IqD#iKbsz8kXRBYQZd5xLAY97szwDxyAGQNNbvjrUVmc_Pc">
+              Classificações da Robótica
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/Ou4GEbqL#vpfQHx2K5-h1zaDc9lJg_cmJSKFsDoilNWpN3-lAVoA">
+              Cobots
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/yzRTAIzR#7-kLgZOc3Oovk8fM6rZUW2ZXcPQ1xZ730CpLrlXdyhw">
+              Sensores e Atuadores
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/y3Y13TBB#xzvNNWsvZBzzZGk7lBR-6eQJu8ZZqmErlWwB5bR38ZI">
+              Inteligência Artificial na Robótica
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/PiABhApJ#XWk9TVdmMS-1jNRVI4UL3jwwO3UmVk4Y7jY65XtKZ_0">
+              Aprendizado de Máquina para Robôs
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/2voAhTIa#5NQ-ijqnF1xJhhBHciVWUMvkMdRskpm_7YnvVGM6AkE">
+              Dark Factory
+            </button>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </template>
+
+  <!-- CARD 24: Economia Digital - Fundamentos -->
+  <template id="card-24">
+    <p class="desc">
+      Trilha que introduz os fundamentos da Economia Digital, abordando a desmaterialização econômica, o PIB Digital,
+      a economia do conhecimento, cursos online, criptografia, criptomoedas e a nova arquitetura financeira baseada
+      em tokenização, stablecoins e smart contracts.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+      </div>
+
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button type="button" class="video-item active"
+              data-src="https://mega.nz/embed/emomDDgK#QqWkLXF_wTykqapOnY1buLz18p5K8Cm3kYiGWlINMaE">
+              Desmaterialização Econômica
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/Wy410AbD#lcQiDgyVVdlcH5218FFLCOBuJYm-G5LUqHmMYxmFozQ">
+              PIB Digital
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/mr5lkQrK#mcC2jR-02ZydfSIeu0NGwy4YkyNnGlnp4EheBPZj7eY">
+              Economia do Conhecimento e Cursos Online
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/GuZkhbZY#34IHQopn9KtHHvdvuicCECNf5sfPSeNnPPHiZB73gPY">
+              Economia Digital
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/HuRBnBhA#ZngXlWrGLBFdegjhGY9OenwoRanzBemwl2TI1yBiw14">
+              Criptografia
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/2mZHmRzS#blZt0h3CFr6tERnfbtj35cVPMCWTNZ8_HOZx_PXruFg">
+              Criptomoedas
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/KjYnjJ6b#EEOtolgFLkj2crVbFaFJRDl3XkyhaFCfYHhbGwF2QuM">
+              Tokenização, Stablecoins e a Nova Arquitetura Financeira
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/eqpn2LbZ#SMJQJuAEs7K0Z_XCpEMsZKSHAzUFeVMXYKNLUr1wLSg">
+              Smart Contracts
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </template>
+
+  <!-- CARD 25: Finanças, Serviços, Mercados e Modelos Econômicos Emergentes -->
+  <template id="card-25">
+    <p class="desc">
+      Trilha focada nas novas formas de finanças e serviços digitais: fintechs, bancos digitais,
+      carteiras digitais, superapps, marketplaces, NFTs e tokenização como base de novos modelos
+      econômicos emergentes e ecossistemas de plataforma.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+      </div>
+
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button type="button" class="video-item active"
+              data-src="https://mega.nz/embed/fuhwHTaT#oEYwcQ1QWwP359cRIh9fCHUVvahV9Y4ZZvu5173Rszw">
+              Fintechs e Bancos Digitais
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/azRFiCoA#GA0StZpIbXjhXbnRPbM5ix6deIXm2vEPTK-tMEQGPiQ">
+              Carteiras Digitais
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/7uY3BJ4Y#n9t9RReM94aQHcaiyKSGf6PKeZ5hNKGZAWwnqk1ayNA">
+              SuperApps
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/uzhUnCQC#_8koL8pX4Rh85yJep-aUbq1UV34CP19glg9mhMYrgAI">
+              Marketplaces
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/W2ITFThK#C1oOArhRVXhhHyzux0Hojg5XBBoqga33Bk3sStdTAOE">
+              NFTs
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/v3xWhIJR#8_o8g3hiYli2NMpy-Y9b_BSlLQctLfpWUAaTNG8oK8s">
+              Tokenização
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </template>
+
+  <!-- CARD 26: Trabalho, Sociedade, Transformação, Educação e Qualificação -->
+  <template id="card-26">
+    <p class="desc">
+      Trilha que discute os impactos da Economia Digital e da automação no mercado de trabalho, na sociedade
+      e na educação, explorando temas como Gig Economy, futuro do trabalho, inclusão digital, novas desigualdades,
+      requalificação profissional e profissões do futuro.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+      </div>
+
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button type="button" class="video-item active"
+              data-src="https://mega.nz/embed/umhR0aAB#E-DA1l1H76EvZXjWvTBlmmAgBReDmbPgGF5SB_fPtsk">
+              Gig Economy
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/yvYUCJqI#ZHK1Cc5gDeEUaz-yo8ZQIdl3Wjsp5HJD2jj5cVMDvtY">
+              Automação, IA e a Reinvenção do Trabalho
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/r6h13JwR#Fm-HrfCehiG-X0rLybPSwne-9XYIYc9gkQoiEZkKVdk">
+              Automação, Emprego e o Futuro do Trabalho no Brasil
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/S6hzDRRZ#pTMkwJ9zmgw7D0mGk96EXUbU7rqFYtUxo1nx-1ISoAY">
+              Inclusão Digital e A Nova Desigualdade de Classes
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/e6gnFYpR#DNlAXnsPsLbJ9SfI4lJt6cyXk4RUaF7vnW6d84Yk-uQ">
+              Educação Tecnológica e Requalificação na Era Digital
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/Oz4RiAKQ#64kjfan575QVOvIAcBzwOT9TjU01jipUHB9YGRl-4ek">
+              Profissões do Futuro
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/irhEkaIZ#Z2LEKrDS9_CyEnVkv6KDjAlSjF-Sl7lmHa43s3vrxtw">
+              Agrotech
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </template>
+
+  <!-- CARD 27: Fabricação Aditiva -->
+  <template id="card-27">
+    <p class="desc">
+      Trilha dedicada à Fabricação Aditiva, explorando os princípios da impressão 3D, suas aplicações na construção civil
+      e os avanços rumo à chamada impressão 4D, em que materiais e estruturas podem responder dinamicamente ao ambiente.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+      </div>
+
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+
+          <li>
+            <button type="button" class="video-item active"
+              data-src="https://mega.nz/embed/2rgTRCrK#UY1ULD5WrdgX6SFXrFr_sedhQjlbXCrQPBJK63GVv-k">
+              Impressão 3D
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/TrxSWYAR#MpX4UdWyUtCUbqSITbfEdgzEgCLdTX-LNsyW5rBSiTE">
+              Impressão 3D na Construção Civil
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/u3g0xQSa#51-ZjmDrgkeWsYnOqEdylYMpC7vl6754PZPsEcoNoNQ">
+              Impressão 4D
+            </button>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </template>
+
+  <!-- CARD 28: Tecnologia e Sociedade -->
+  <template id="card-28">
+    <p class="desc">
+      Trilha que discute o impacto da tecnologia nas formas de perceber o tempo, nas estruturas sociais,
+      nas dinâmicas de poder e nas relações humanas mediadas por redes digitais e plataformas.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+      </div>
+
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+
+          <li>
+            <button type="button" class="video-item active"
+              data-src="https://mega.nz/embed/P2QDSb5I#yRid8L9-WnkLTb-nHb2lV4Yyi1xLN086NyOyjxDnwYg">
+              Bolhas Informacionais
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/yqpiASoJ#AZ2U5MsespV2DzvinLNrZVkVnPT0S41TS2AgBjtwH_k">
+              Como a Tecnologia Redefiniu a Percepção do Tempo Moderno
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/miQjFBIZ#mBPPNxWMxExAqnLvYUsU9JpqoL3dakZFVgrt57BEoKo">
+              Novas Estruturas Sociais na Era Tecnológica
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/zjwV0R5J#KtM5FHG2twsKnHAK-Y-X_zOpss4v_UDN9VsGyD2joAQ">
+              O Quinto Poder
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/y34llQYT#WhMO6PiRKVOsF50ZGhjLnomhn3qiBrsqUmV_-D9bABQ">
+              Paradoxo da Conexão
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/6zAG0ZQI#LOt4GoqrGeSxupWgKWRxkJyg5AbOA3vzbSZtnVwE4tU">
+              O Paradoxo Ambiental da Economia Digital
+            </button>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </template>
+
+  <!-- CARD 29: Correntes Filosóficas da Tecnologia -->
+  <template id="card-29">
+    <p class="desc">
+      Trilha que apresenta diferentes correntes filosóficas e político-culturais relacionadas à tecnologia,
+      explorando visões críticas, utópicas, distópicas e alternativas sobre o papel dos sistemas digitais
+      na organização da vida contemporânea.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+      </div>
+
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+
+          <li>
+            <button type="button" class="video-item active"
+              data-src="https://mega.nz/embed/GzQxUSZZ#CGUFJ_1oX5k5zRu1rXL3ZD5VMgmBHjns2Q-BQjyfDyU">
+              Tecnoautoritarismo
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/3uZwXTQB#38W4X4dVOxKTp9iri_ILicBTGuaXqTAXSCiUYBfsFLk">
+              Cyberpunk
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/uuxhARKb#TShQs5U72elpKrCTPegIZtZinjhx0knN-JzP1feBaME">
+              Cypherpunk
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/fqRk1LIQ#9WFvmlP0JNpNwzZiqNnEYU6nGlW-rnlqo1wTVKUY9II">
+              Dataísmo
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/b3AC3YYD#-AyMdSP2Z9XjzEFvXBwuyPqVwQOLdI-IRJHxSPE2oTc">
+              Transumanismo
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/ij5C1RyS#XkZt8XaMdkO6tRMtXdYPO0pBPn8AWdT7LMPxqtFMEBE">
+              Anarquismo Digital
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/SzBTSI4J#LdFJv7VqUoKyXyaL9HhR1uXeYkaruibiRrKEfP1xM6w">
+              Neo-Luddismo
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/LvwXlawK#_qsfH6H8YGrE1p3hVzUojnsy7yjukxKrHRojEx_xRDg">
+              Tecnogaianismo
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/Gy4ARKqI#5b-K_KpFRYmaAtuisPpJJaymIO2TxzurINhk3oMGoqU">
+              Cibernética
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/fyhk2bxY#V1uDLtGlLCuskKQGEDmgUJyNn2uFkV3L0KKhzh24-Rg">
+              Singularidade Tecnológica
+            </button>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </template>
+
+  <!-- CARD 30: Movimentos Culturais da Tecnologia -->
+  <template id="card-30">
+    <p class="desc">
+      Trilha sobre movimentos culturais que emergem na interseção entre tecnologia, corpo, jogos, gênero e performance:
+      práticas de biohacking, cultura gamer, ludologia e tecnofeminismo como formas de reimaginar a relação humano-máquina.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+      </div>
+
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+
+          <li>
+            <button type="button" class="video-item active"
+              data-src="https://mega.nz/embed/H24zRaiD#GeLPXlgg7JsoXUQ6E1-k1ZbBARIdXs0FdCZxGnAX9fs">
+              Biohacking e Nootrópicos
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/7zgSHL6Q#QknoXPwlDFDpsLckGt13jyoC-a41YNKAlnKr_1c3VcQ">
+              Ludologia
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/aq5yEZxT#KHoKC_gh3wENTLWxqTBDpPFUiFwh_JC0cRI4VANdtI8">
+              Tecnofeminismo
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/SyImiTgQ#UAzy9EVPCxNNMl5kOpTExaqoaWX76JYuV-HCoafn87o">
+              Simbiose Homem-Máquina
+            </button>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </template>
 
   <script>
-  // Tabs
-  const tabs = document.querySelectorAll('.tab');
-  tabs.forEach(t => t.addEventListener('click', e => {
-    e.preventDefault();
-    tabs.forEach(x => x.classList.remove('active'));
-    t.classList.add('active');
-    const id = t.getAttribute('data-tab');
-    document.querySelectorAll('main.section, section.section, #videos').forEach(s => s.hidden = true);
-    document.getElementById(id).hidden = false;
-    if(id === 'videos') document.getElementById('hero').style.display = '';
-  }));
+    // Theme Toggle
+    const themeBtn = document.getElementById('theme-toggle');
+    const bodyEl = document.body;
 
-  // Busca
-  const q = document.getElementById('q');
-  const cards = [...document.querySelectorAll('#cards .card')];
-  const hero = document.getElementById('hero');
-  q.addEventListener('input', () => {
-    const term = q.value.trim().toLowerCase();
-    cards.forEach(c => {
-      const hay = (c.dataset.keywords + ' ' + c.textContent).toLowerCase();
-      const show = !term || hay.includes(term);
-      c.style.display = show ? '' : 'none';
+    function setTheme(theme) {
+      if (theme === 'light') {
+        bodyEl.classList.add('light-theme');
+        themeBtn.textContent = 'Tema Escuro';
+        themeBtn.title = 'Mudar para tema escuro';
+      } else {
+        bodyEl.classList.remove('light-theme');
+        themeBtn.textContent = 'Tema Claro';
+        themeBtn.title = 'Mudar para tema claro';
+      }
+    }
+
+    themeBtn.addEventListener('click', () => {
+      const currentTheme = bodyEl.classList.contains('light-theme') ? 'light' : 'dark';
+      const newTheme = (currentTheme === 'dark') ? 'light' : 'dark';
+      localStorage.setItem('theme', newTheme);
+      setTheme(newTheme);
     });
-    hero.style.display = term ? 'none' : '';
-  });
 
-  // Modal
-  const overlay = document.getElementById('overlay');
-  const closeBtn = document.getElementById('close');
-  const modalTitle = document.getElementById('modal-title');
-  const modalContent = document.getElementById('modal-content');
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
 
-  document.getElementById('cards').addEventListener('click', e => {
-    const card = e.target.closest('.card');
-    if(!card) return;
-    const tpl = document.getElementById(card.dataset.modal);
-    if(!tpl) return;
-    modalTitle.textContent = card.querySelector('h3').textContent;
-    modalContent.replaceChildren(tpl.content.cloneNode(true));
-    overlay.classList.add('active');
-    overlay.setAttribute('aria-hidden','false');
-  });
-  closeBtn.addEventListener('click', () => {
-    overlay.classList.remove('active');
-    overlay.setAttribute('aria-hidden','true');
-  });
-  overlay.addEventListener('click', e => { if(e.target === overlay) closeBtn.click(); });
-  document.addEventListener('keydown', e => { if(e.key === 'Escape' && overlay.classList.contains('active')) closeBtn.click(); });
+    // Tabs
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(t => {
+      t.addEventListener('click', e => {
+        e.preventDefault();
+        tabs.forEach(x => x.classList.remove('active'));
+        t.classList.add('active');
+        const id = t.getAttribute('data-tab');
+        document.querySelectorAll('main.section, section.section').forEach(s => s.hidden = true);
+        document.getElementById(id).hidden = false;
+        document.getElementById('hero').style.display = (id === 'inicio') ? '' : 'none';
+      });
+    });
+
+    // Busca – considera todos os cards dentro de #videos
+    const q = document.getElementById('q');
+    const cardsEls = [...document.querySelectorAll('#videos .card')];
+    const hero = document.getElementById('hero');
+    q.addEventListener('input', () => {
+      const term = q.value.trim().toLowerCase();
+      cardsEls.forEach(c => {
+        const hay = (c.dataset.keywords + ' ' + c.textContent).toLowerCase();
+        const show = !term || hay.includes(term);
+        c.style.display = show ? '' : 'none';
+      });
+
+      hero.style.display = term ? 'none' : (document.querySelector('.tab.active')?.dataset.tab === 'inicio' ? '' : 'none');
+
+      const learningPath = document.querySelector('#videos .learning-path');
+      if (learningPath) {
+        learningPath.style.display = term ? 'none' : '';
+      }
+
+      document.querySelectorAll('#videos .stage').forEach(stage => {
+        const hasVisibleCard = [...stage.querySelectorAll('.card')]
+          .some(c => c.style.display !== 'none');
+        stage.style.display = (!term || hasVisibleCard) ? '' : 'none';
+      });
+    });
+
+    // Inicializa comportamento de vídeo dentro do modal
+    function initModalVideo(container) {
+      const frame = container.querySelector('.video-frame');
+      const items = [...container.querySelectorAll('.video-item')];
+      if (!frame || items.length === 0) return;
+
+      items.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const src = btn.dataset.src;
+          if (!src) return;
+          frame.src = src;
+          items.forEach(i => i.classList.remove('active'));
+          btn.classList.add('active');
+        });
+      });
+
+      // Define vídeo inicial
+      const initial = items.find(i => i.classList.contains('active')) || items[0];
+      if (initial && initial.dataset.src) {
+        frame.src = initial.dataset.src;
+        initial.classList.add('active');
+      }
+    }
+
+    // Modal
+    const overlay = document.getElementById('overlay');
+    const closeBtn = document.getElementById('close');
+    const modalTitle = document.getElementById('modal-title');
+    const modalContent = document.getElementById('modal-content');
+
+    document.getElementById('videos').addEventListener('click', e => {
+      const card = e.target.closest('.card');
+      if (!card) return;
+      const tpl = document.getElementById(card.dataset.modal);
+      if (!tpl) return;
+      modalTitle.textContent = card.querySelector('h3').textContent;
+      modalContent.replaceChildren(tpl.content.cloneNode(true));
+      overlay.classList.add('active');
+      overlay.setAttribute('aria-hidden', 'false');
+
+      initModalVideo(modalContent);
+    });
+
+    function closeModal() {
+      const frame = modalContent.querySelector('.video-frame');
+      if (frame) frame.src = '';
+      overlay.classList.remove('active');
+      overlay.setAttribute('aria-hidden', 'true');
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) closeModal();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && overlay.classList.contains('active')) closeModal();
+    });
+
+    // TRILHA: clique na etapa leva à seção correspondente + borda vermelha brilhante
+    const stepPills = document.querySelectorAll('.step-pill');
+    stepPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        const stageNumber = pill.dataset.stage;
+        const stageEl = document.querySelector(`.stage[data-stage="${stageNumber}"]`);
+        if (!stageEl) return;
+
+        stageEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        document.querySelectorAll('.stage-highlight').forEach(s => s.classList.remove('stage-highlight'));
+
+        stageEl.classList.add('stage-highlight');
+        setTimeout(() => {
+          stageEl.classList.remove('stage-highlight');
+        }, 1800);
+      });
+    });
   </script>
 </body>
 </html>
