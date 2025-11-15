@@ -6,32 +6,11 @@
   <title>Área do Aluno</title>
   <style>
     :root {
-      --bg: #141414;
-      --surface: #181818;
-      --muted: #b3b3b3;
-      --text: #ffffff;
-      --accent: #e50914;
-      --border: #2a2a2a;
-      /* Variáveis adicionadas para cores fixas */
-      --bg-deep: #0f0f0f;
-      --surface-hover: #1f1f1f;
-      --border-hover: #3a3a3a;
-      --button-bg: #232323;
-      --button-bg-hover: #2b2b2b;
-      --badge-bg: #00000080;
-      --thumb-gradient: linear-gradient(135deg, rgba(229, 9, 20, .10), rgba(255, 255, 255, .03));
-      --board-card-bg: #121212;
-      --board-card-border: #272727;
-      --board-pill-bg: #0e0e0e;
-      --board-pill-border: #2f2f2f;
-      --board-pill-text: #d8d8d8;
-    }
-
-    body.light-theme {
       --bg: #f4f4f4;
       --surface: #ffffff;
       --muted: #5a5a5a;
       --text: #111111;
+      --accent: #e50914;
       --border: #e0e0e0;
       --bg-deep: #ffffff;
       --surface-hover: #f0f0f0;
@@ -45,6 +24,33 @@
       --board-pill-bg: #f0f0f0;
       --board-pill-border: #e0e0e0;
       --board-pill-text: #5a5a5a;
+      --scrollbar-bg: #f0f0f0;
+      --scrollbar-thumb: #c0c0c0;
+      --scrollbar-thumb-hover: #a0a0a0;
+    }
+
+    body.dark-theme {
+      --bg: #141414;
+      --surface: #181818;
+      --muted: #b3b3b3;
+      --text: #ffffff;
+      --accent: #e50914;
+      --border: #2a2a2a;
+      --bg-deep: #0f0f0f;
+      --surface-hover: #1f1f1f;
+      --border-hover: #3a3a3a;
+      --button-bg: #232323;
+      --button-bg-hover: #2b2b2b;
+      --badge-bg: #00000080;
+      --thumb-gradient: linear-gradient(135deg, rgba(229, 9, 20, .10), rgba(255, 255, 255, .03));
+      --board-card-bg: #121212;
+      --board-card-border: #272727;
+      --board-pill-bg: #0e0e0e;
+      --board-pill-border: #2f2f2f;
+      --board-pill-text: #d8d8d8;
+      --scrollbar-bg: #1a1a1a;
+      --scrollbar-thumb: #404040;
+      --scrollbar-thumb-hover: #505050;
     }
 
     * {
@@ -60,7 +66,58 @@
     body {
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
       background: var(--bg);
-      color: var(--text)
+      color: var(--text);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* Estilização da barra de rolagem para desktop */
+    @media (min-width: 769px) {
+      ::-webkit-scrollbar {
+        width: 12px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--scrollbar-bg);
+        border-radius: 6px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-thumb);
+        border-radius: 6px;
+        border: 2px solid var(--scrollbar-bg);
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--scrollbar-thumb-hover);
+      }
+      
+      /* Firefox */
+      * {
+        scrollbar-width: thin;
+        scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-bg);
+      }
+    }
+
+    /* Estilização da barra de rolagem para mobile */
+    @media (max-width: 768px) {
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--scrollbar-bg);
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--accent);
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #c5080f;
+      }
     }
 
     .navbar {
@@ -73,7 +130,8 @@
       justify-content: space-between;
       padding: 1rem 2rem;
       background: var(--bg-deep);
-      border-bottom: 1px solid var(--border)
+      border-bottom: 1px solid var(--border);
+      transition: background-color 0.3s, border-color 0.3s;
     }
 
     .brand {
@@ -94,7 +152,8 @@
       text-decoration: none;
       font-weight: 600;
       padding: .4rem .7rem;
-      border-radius: .5rem
+      border-radius: .5rem;
+      transition: color 0.2s, background 0.2s;
     }
 
     .tab.active,
@@ -116,7 +175,8 @@
       background: var(--surface-hover);
       border: 1px solid var(--border);
       padding: .4rem .6rem;
-      border-radius: .5rem
+      border-radius: .5rem;
+      transition: background-color 0.2s, border-color 0.2s;
     }
 
     .search input {
@@ -249,12 +309,20 @@
 
     .modal {
       width: min(880px, 92vw);
-      max-height: 88vh;
+      max-height: 80vh;
       overflow: auto;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, .6)
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .6);
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    /* Ajuste para telas menores */
+    @media (max-width: 768px) {
+      .modal {
+        max-height: 90vh;
+      }
     }
 
     .modal header {
@@ -280,7 +348,8 @@
       font-weight: 700;
       border-radius: 6px;
       padding: .4rem .6rem;
-      cursor: pointer
+      cursor: pointer;
+      transition: background-color 0.2s;
     }
 
     .modal header button:hover {
@@ -351,6 +420,7 @@
       padding: .4rem .6rem;
       cursor: pointer;
       font-size: .9rem;
+      transition: background-color 0.2s, border-color 0.2s;
     }
 
     .video-item:hover {
@@ -539,6 +609,7 @@
       white-space: nowrap;
       cursor: pointer;
       outline: none;
+      transition: background-color 0.2s, border-color 0.2s;
     }
 
     .step-pill:focus-visible {
@@ -647,7 +718,7 @@
     }
   </style>
 </head>
-<body>
+<body class="light-theme">
   <nav class="navbar">
     <a class="brand" href="#">Prof. Ravell</a>
     <div class="tabs">
@@ -661,7 +732,7 @@
         <span>🔍</span>
         <input id="q" placeholder="Buscar por tema (ex.: IoT, Blockchain, Wi-Fi)" />
       </label>
-      <button id="theme-toggle" class="theme-btn"></button>
+      <button id="theme-toggle" class="theme-btn">Tema Escuro</button>
     </div>
   </nav>
 
@@ -1732,7 +1803,7 @@
   <template id="card-10">
     <p class="desc">
       Trilha sobre navegadores, infraestrutura global de redes digitais, HTTP/HTTPS e DNS, explicando o que acontece
-      “por trás do clique” ao acessar sites e serviços online.
+      "por trás do clique" ao acessar sites e serviços online.
     </p>
 
     <div class="video-layout">
@@ -2943,30 +3014,33 @@
   </template>
 
   <script>
-    // Theme Toggle
+    // Theme Toggle - Modificado para iniciar sempre no tema claro
     const themeBtn = document.getElementById('theme-toggle');
     const bodyEl = document.body;
 
     function setTheme(theme) {
-      if (theme === 'light') {
-        bodyEl.classList.add('light-theme');
-        themeBtn.textContent = 'Tema Escuro';
-        themeBtn.title = 'Mudar para tema escuro';
-      } else {
+      if (theme === 'dark') {
+        bodyEl.classList.add('dark-theme');
         bodyEl.classList.remove('light-theme');
         themeBtn.textContent = 'Tema Claro';
         themeBtn.title = 'Mudar para tema claro';
+      } else {
+        bodyEl.classList.remove('dark-theme');
+        bodyEl.classList.add('light-theme');
+        themeBtn.textContent = 'Tema Escuro';
+        themeBtn.title = 'Mudar para tema escuro';
       }
     }
 
     themeBtn.addEventListener('click', () => {
-      const currentTheme = bodyEl.classList.contains('light-theme') ? 'light' : 'dark';
+      const currentTheme = bodyEl.classList.contains('dark-theme') ? 'dark' : 'light';
       const newTheme = (currentTheme === 'dark') ? 'light' : 'dark';
       localStorage.setItem('theme', newTheme);
       setTheme(newTheme);
     });
 
-    const savedTheme = localStorage.getItem('theme') || 'dark';
+    // Inicia sempre com o tema claro
+    const savedTheme = localStorage.getItem('theme') || 'light';
     setTheme(savedTheme);
 
     // Tabs
