@@ -205,6 +205,41 @@
       background: var(--surface);
     }
 
+    /* Menu Hamburger - Mobile */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: space-around;
+      width: 30px;
+      height: 25px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      z-index: 10;
+    }
+
+    .hamburger span {
+      width: 100%;
+      height: 3px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+      transform-origin: center;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(7px, 7px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -7px);
+    }
+
     .hero {
       display: flex;
       flex-direction: column;
@@ -476,23 +511,73 @@
       gap: .25rem;
     }
 
-    @media (max-width:768px) {
+    /* Menu Mobile - Estilos */
+    @media (max-width: 768px) {
       .navbar {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: .75rem
+        flex-wrap: wrap;
+        padding: 1rem;
       }
-      .nav-right {
+
+      .tabs {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
         width: 100%;
-        justify-content: space-between;
-        gap: .5rem
+        background: var(--bg-deep);
+        border-bottom: 1px solid var(--border);
+        flex-direction: column;
+        padding: 1rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        z-index: 999;
       }
+
+      .tabs.active {
+        display: flex;
+      }
+
+      .tab {
+        width: 100%;
+        text-align: left;
+        padding: 0.8rem 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .nav-right {
+        width: auto;
+        justify-content: flex-end;
+        gap: .5rem;
+        order: 2;
+      }
+
       .search {
         flex: 1;
+        min-width: 150px;
       }
+
       .search input {
         min-width: 0;
         width: 100%;
+      }
+
+      .brand {
+        order: 1;
+        flex: 1;
+      }
+
+      .hamburger {
+        order: 3;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .tabs {
+        display: flex !important;
       }
     }
 
@@ -721,18 +806,23 @@
 <body class="light-theme">
   <nav class="navbar">
     <a class="brand" href="#">Prof. Ravell</a>
-    <div class="tabs">
-      <a class="tab active" data-tab="inicio" href="#inicio">Início</a>
-      <a class="tab" data-tab="videos" href="#videos">Aulas</a>
-      <a class="tab" data-tab="midias" href="#midias">Central de Mídias</a>
-      <a class="tab" data-tab="ferramentas" href="#ferramentas">Ferramentas</a>
-    </div>
     <div class="nav-right">
       <label class="search">
         <span>🔍</span>
         <input id="q" placeholder="Buscar por tema (ex.: IoT, Blockchain, Wi-Fi)" />
       </label>
       <button id="theme-toggle" class="theme-btn">Tema Escuro</button>
+    </div>
+    <button class="hamburger" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="tabs">
+      <a class="tab active" data-tab="inicio" href="#inicio">Início</a>
+      <a class="tab" data-tab="videos" href="#videos">Aulas</a>
+      <a class="tab" data-tab="midias" href="#midias">Central de Mídias</a>
+      <a class="tab" data-tab="ferramentas" href="#ferramentas">Ferramentas</a>
     </div>
   </nav>
 
@@ -3020,6 +3110,25 @@
   </template>
 
   <script>
+    // Menu Hamburger - Mobile
+    const hamburger = document.querySelector('.hamburger');
+    const tabs = document.querySelector('.tabs');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      tabs.classList.toggle('active');
+    });
+
+    // Fechar menu ao clicar em um link (mobile)
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+          hamburger.classList.remove('active');
+          tabs.classList.remove('active');
+        }
+      });
+    });
+
     // Theme Toggle - Modificado para iniciar sempre no tema claro
     const themeBtn = document.getElementById('theme-toggle');
     const bodyEl = document.body;
@@ -3050,11 +3159,11 @@
     setTheme(savedTheme);
 
     // Tabs
-    const tabs = document.querySelectorAll('.tab');
-    tabs.forEach(t => {
+    const tabLinks = document.querySelectorAll('.tab');
+    tabLinks.forEach(t => {
       t.addEventListener('click', e => {
         e.preventDefault();
-        tabs.forEach(x => x.classList.remove('active'));
+        tabLinks.forEach(x => x.classList.remove('active'));
         t.classList.add('active');
         const id = t.getAttribute('data-tab');
         document.querySelectorAll('main.section, section.section').forEach(s => s.hidden = true);
