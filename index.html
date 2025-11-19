@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Área do Aluno</title>
+  <title>Área do Aluno - Prof. Ravell</title>
   <style>
     :root {
       --bg: #f4f4f4;
@@ -11,6 +11,7 @@
       --muted: #5a5a5a;
       --text: #111111;
       --accent: #e50914;
+      --accent-hover: #c5080f; /* Nova variável para hover consistente */
       --border: #e0e0e0;
       --bg-deep: #ffffff;
       --surface-hover: #f0f0f0;
@@ -35,6 +36,7 @@
       --muted: #b3b3b3;
       --text: #ffffff;
       --accent: #e50914;
+      --accent-hover: #ff1f2a;
       --border: #2a2a2a;
       --bg-deep: #0f0f0f;
       --surface-hover: #1f1f1f;
@@ -90,7 +92,7 @@
       ::-webkit-scrollbar-thumb:hover {
         background: var(--scrollbar-thumb-hover);
       }
-      
+
       /* Firefox */
       * {
         scrollbar-width: thin;
@@ -116,14 +118,14 @@
       }
 
       ::-webkit-scrollbar-thumb:hover {
-        background: #c5080f;
+        background: var(--accent-hover);
       }
     }
 
     .navbar {
       position: sticky;
       top: 0;
-      z-index: 1000;
+      z-index: 100; /* Normalizado z-index */
       display: flex;
       gap: 1.25rem;
       align-items: center;
@@ -216,7 +218,7 @@
       border: none;
       cursor: pointer;
       padding: 0;
-      z-index: 10;
+      z-index: 110;
     }
 
     .hamburger span {
@@ -335,7 +337,7 @@
       justify-content: center;
       background: rgba(0, 0, 0, .7);
       backdrop-filter: blur(2px);
-      z-index: 2000
+      z-index: 200; /* Normalizado z-index */
     }
 
     .overlay.active {
@@ -368,7 +370,8 @@
       padding: .8rem 1rem;
       display: flex;
       align-items: center;
-      justify-content: space-between
+      justify-content: space-between;
+      z-index: 10;
     }
 
     .modal header h3 {
@@ -529,7 +532,7 @@
         flex-direction: column;
         padding: 1rem;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        z-index: 999;
+        z-index: 99;
       }
 
       .tabs.active {
@@ -772,7 +775,8 @@
       gap: .75rem;
       overflow-x: auto;
       padding: .2rem 0 .3rem;
-      scroll-snap-type: x mandatory;
+      /* Alterado para proximity para melhor experiência mobile */
+      scroll-snap-type: x proximity;
       -webkit-overflow-scrolling: touch;
     }
 
@@ -809,7 +813,7 @@
     <div class="nav-right">
       <label class="search">
         <span>🔍</span>
-        <input id="q" placeholder="Buscar por tema (ex.: IoT, Blockchain, Wi-Fi)" />
+        <input id="q" placeholder="Buscar por tema (ex.: IoT, Blockchain, Wi-Fi)" aria-label="Buscar conteúdo" />
       </label>
       <button id="theme-toggle" class="theme-btn">Tema Escuro</button>
     </div>
@@ -831,7 +835,6 @@
     <p>Todo o conteúdo foi organizado em grupos pedagógicos e trilhas de aprendizado.</p>
   </header>
 
-  <!-- ABA INÍCIO (PÁGINA INICIAL) -->
   <section id="inicio" class="section">
     <h2>Início</h2>
     <div class="highlight-section notice-board">
@@ -848,11 +851,9 @@
     </div>
   </section>
 
-  <!-- ABA AULAS (TRILHAS EM ETAPAS) -->
   <main id="videos" class="section" hidden>
     <h2>Aulas Disponíveis</h2>
 
-    <!-- TRILHA DE APRENDIZAGEM -->
     <section class="learning-path" aria-label="Trilha de Aprendizagem em Tecnologia">
       <div class="learning-path-title">Trilha de Aprendizagem em Tecnologia</div>
       <p class="learning-path-text">
@@ -896,7 +897,6 @@
       </div>
     </section>
 
-    <!-- ETAPA 1 -->
     <section class="stage" data-stage="1">
       <div class="stage-header">
         <div class="stage-header-left">
@@ -928,7 +928,6 @@
       </div>
     </section>
 
-    <!-- ETAPA 2 -->
     <section class="stage" data-stage="2">
       <div class="stage-header">
         <div class="stage-header-left">
@@ -970,7 +969,6 @@
       </div>
     </section>
 
-    <!-- ETAPA 3 -->
     <section class="stage" data-stage="3">
       <div class="stage-header">
         <div class="stage-header-left">
@@ -1038,7 +1036,6 @@
       </div>
     </section>
 
-    <!-- ETAPA 4 -->
     <section class="stage" data-stage="4">
       <div class="stage-header">
         <div class="stage-header-left">
@@ -1098,7 +1095,6 @@
       </div>
     </section>
 
-    <!-- ETAPA 5 -->
     <section class="stage" data-stage="5">
       <div class="stage-header">
         <div class="stage-header-left">
@@ -1140,7 +1136,6 @@
       </div>
     </section>
 
-    <!-- ETAPA 6 -->
     <section class="stage" data-stage="6">
       <div class="stage-header">
         <div class="stage-header-left">
@@ -1200,7 +1195,6 @@
       </div>
     </section>
 
-    <!-- MÓDULO ESPECIAL – ECONOMIA DIGITAL -->
     <section class="stage" data-stage="7">
       <div class="stage-header">
         <div class="stage-header-left">
@@ -1243,7 +1237,6 @@
       </div>
     </section>
 
-    <!-- NOVA SEÇÃO: TECNOLOGIA, SOCIEDADE, FILOSOFIAS TECH E MOVIMENTOS CULTURAIS -->
     <section class="stage" data-stage="8">
       <div class="stage-header">
         <div class="stage-header-left">
@@ -1309,7 +1302,6 @@
           <h3>Dúvidas em Vídeo</h3><span class="pill">FAQ</span>
         </div>
       </a>
-      <!-- NOVO CARD ADICIONADO: CURIOSIDADES TECH -->
       <a class="card" href="https://ravellsl.github.io/curiosidades-tech/" target="_blank" rel="noopener">
         <div class="thumb"><span class="ico">🤔</span>
           <h3>Curiosidades Tech</h3><span class="pill">curiosidades</span>
@@ -1364,7 +1356,6 @@
     </div>
   </div>
 
-  <!-- CARD 1: Revoluções Industriais -->
   <template id="card-1">
     <p class="desc">
       Série de aulas que apresenta a 1ª, 2ª, 3ª e 4ª Revolução Industrial, conectando contexto histórico,
@@ -1373,39 +1364,31 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
       <div class="video-list">
         <h4>Aulas desta trilha</h4>
         <ul>
           <li>
-            <button
-              type="button"
-              class="video-item active"
+            <button type="button" class="video-item active"
               data-src="https://mega.nz/embed/a7hmETTb#1q7x_mvDsHq5FJ8SniGY8mAJUG8u-ZomIFuCpswFkBg">
               1ª Revolução Industrial
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/DuxlFAab#1rdVy2E29gYbu_MvuWeir-MfFNMlUSyWccIZCENv4k8">
               2ª Revolução Industrial
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/K7ZAURZK#eMUb5IC1GdxJJBWmbF2LdqSFnLjyxDYgQjcxggKRvAo">
               3ª Revolução Industrial
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/njwlTBxI#YLSn7yyMOzfppRJPBDIm03kXqOMftYLR_xy9FGOEVBM">
               4ª Revolução Industrial
             </button>
@@ -1415,7 +1398,6 @@
     </div>
   </template>
 
-  <!-- CARD 2: Evolução da Computação e da Informática -->
   <template id="card-2">
     <p class="desc">
       Sequência de aulas que introduz a informática, apresenta a evolução da computação, diferencia tipos de
@@ -1424,39 +1406,31 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
       <div class="video-list">
         <h4>Aulas desta trilha</h4>
         <ul>
           <li>
-            <button
-              type="button"
-              class="video-item active"
+            <button type="button" class="video-item active"
               data-src="https://mega.nz/embed/u2wSFIzS#BLFXOunW3e5khzavtQ7vG3gedSIcvHR2Bw19C5w2PP4">
               Introdução à Informática
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/brRxHCxL#iQaRnRna9WRiZfiozFGmivQZTxL0NbJElzJqDOWIpJc">
               Evolução da Computação
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/XnwnWbQD#pTtcxFcd49aQCNvTI09ftI5lFrg1TErKz-Ag9CM_czU">
               Tipos de Computadores
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/zu5Txarb#p2Y1E58_hGSGVXvkiFB507Qne7Z3SAyZjKte_zFtQzc">
               Sistemas Operacionais
             </button>
@@ -1466,7 +1440,6 @@
     </div>
   </template>
 
-  <!-- CARD 3: 1 - Arquitetura de Computadores -->
   <template id="card-3">
     <p class="desc">
       Trilha focada na Arquitetura de Computadores, apresentando a estrutura interna,
@@ -1475,39 +1448,31 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
       <div class="video-list">
         <h4>Aulas desta trilha</h4>
         <ul>
           <li>
-            <button
-              type="button"
-              class="video-item active"
+            <button type="button" class="video-item active"
               data-src="https://mega.nz/embed/LuJw0SQB#aUNV7dd4E4Hn9oBSSNFRwe7wt-SJl0Yohh3-l_Dhwxo">
               Estrutura e Componentes Internos do Computador
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/i2hX3ayZ#etIM1FYKa63rYY-oq4nDeSsKqeYsI28bmbcsluTZATE">
               Os múltiplos dos bits
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/LnQ1gQqL#gRp0ntHbrOWeLFsf1OXxxNNOjanuubj4PX_hfNBXbuE">
               Como é o Processamento de Dados na CPU
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/qr5iSI5b#FdFTxKsDtr3GCSkMP0U-Dh3QbaObO0l3YY_7GriiqQA">
               Algoritmos
             </button>
@@ -1517,7 +1482,6 @@
     </div>
   </template>
 
-  <!-- CARD 4: 2 - Serviços e Ambientes Tecnológicos -->
   <template id="card-4">
     <p class="desc">
       Conjunto de aulas sobre Serviços e Ambientes Tecnológicos, explorando servidores, data centers
@@ -1526,39 +1490,31 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
       <div class="video-list">
         <h4>Aulas desta trilha</h4>
         <ul>
           <li>
-            <button
-              type="button"
-              class="video-item active"
+            <button type="button" class="video-item active"
               data-src="https://mega.nz/embed/TjpTRA4S#NaSVBP0i73xp6apK3wJYCEeoOI8izjUlSQgpEsVuYrw">
               Servidores e Data Centers
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/Hy5EFQBa#-pi36Fj2NRBRljjtOLH_9eq1x9zuWbMv6wwPUyCtuAg">
               Cloud Computing
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/KmAkQagI#l6-6eXdjufTiW_La9XZPAfwqJxTJ46QKZ68oUmwiXlM">
               Fog Computing
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/riAlTB7D#20YaCJj09vb2zHlOqg_WZBzxt9nXYYxbTTfcnvU0aEA">
               Edge Computing
             </button>
@@ -1568,7 +1524,6 @@
     </div>
   </template>
 
-  <!-- CARD 5: 3 - Ciência, Tecnologia, Engenharia e Matemática (STEM) -->
   <template id="card-5">
     <p class="desc">
       Trilha interdisciplinar de STEM que conecta matemática, física, química e biologia à tecnologia,
@@ -1577,63 +1532,49 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
       <div class="video-list">
         <h4>Aulas desta trilha</h4>
         <ul>
           <li>
-            <button
-              type="button"
-              class="video-item active"
+            <button type="button" class="video-item active"
               data-src="https://mega.nz/embed/iv4RmCRC#6bfRkZbFhBRKHz-xOfmRDLEVLdavSFZwse8PCoMMSVo">
               STEM
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/rmAynDgT#WJXsQf0PKj2jbVyMYIMdOLGZKpQCJN_Vg49N0GBw7Nw">
               Matemática Essencial da Era Digital
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/LyIgGD5A#fbIG7oM6w1fmI8wjwwalks24-a40nOlVkrfkS4rX_Bk">
               A Transformada de Fourier na Era Digital
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/j7RjkSrL#kLsKN3V09r7kkDAcZntahHx-3RpGvqWr1Rvc1XnxsY8">
               Diferenças entre Física Clássica e Quântica
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/f2whlb6C#6Y5fHCBlWiZkZIUQXBBaVO7j_f2-EXCM-_0g_s2M4bE">
               Física Quântica
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/f7I33YwL#IJGGpINI3N6B8TbO1XVxoU4qhfWyrZA1hHyyHnSR76o">
               A Relação Entre a Química e a Tecnologia
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/2yolALhI#b4A1q4MhN2vY1OYVd40Mt1716vLgx3JwHXHnZALEhWU">
               A Relação Entre a Biologia e a Tecnologia
             </button>
@@ -1643,7 +1584,6 @@
     </div>
   </template>
 
-  <!-- CARD 6: 1 - História e Gerações de Redes -->
   <template id="card-6">
     <p class="desc">
       Introdução à história das redes de comunicação, das primeiras conexões cabeadas às gerações móveis (1G, 2G, 3G, 4G e 5G),
@@ -1652,63 +1592,49 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
       <div class="video-list">
         <h4>Aulas desta trilha</h4>
         <ul>
           <li>
-            <button
-              type="button"
-              class="video-item active"
+            <button type="button" class="video-item active"
               data-src="https://mega.nz/embed/vjonQYja#aJNe3Yo3fQIUbMCvA7JTiR4_yGGHEXNeILsTUSKPm-0">
               Criação e Evolução das Redes de Internet
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/2jRQQRhZ#qETYZyRvo_-vVTS-Pcc4nP-_0_gQADsqeSPw5ipLCQA">
               Rede 1G
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/2nomzIJQ#32uqcO-EJjOYNmQhFv9dUmvD77XHVXo14ytAzha1_es">
               Rede 2G
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/O7pnUKzJ#841egxqQON1217_8aUCvRnzQ-ZcG_gcKqTLXLG_W_x0">
               Rede 3G
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/CjxnjB7K#5Lt2eyJGEQ1R68ysZcBy08pVZiz2mldbMxaeGZObTks">
               Rede 4G
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/OrYnnBKS#rBM0NHvBjoYUaA103sGM1pJz4mj5KdyGyHL2ctW3avI">
               Rede 5G
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/DqJizDrD#GNDwqFh16SXZOWG6VhG06D1uhXvvuJQGBT7TZeXV00o">
               Conectividade Global por Satélites
             </button>
@@ -1718,7 +1644,6 @@
     </div>
   </template>
 
-  <!-- CARD 7: 2 - Padrões de Conexão Sem Fio -->
   <template id="card-7">
     <p class="desc">
       Visão geral sobre padrões de conexão sem fio, como Wi-Fi, Bluetooth e outras tecnologias wireless, explorando frequências,
@@ -1727,63 +1652,49 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
       <div class="video-list">
         <h4>Aulas desta trilha</h4>
         <ul>
           <li>
-            <button
-              type="button"
-              class="video-item active"
+            <button type="button" class="video-item active"
               data-src="https://mega.nz/embed/T3ZEwTYK#i6YhtAoZHlYALXPTe6FaHegxjJ-xPqnwjrXd7-ATWmU">
               Wi-Fi
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/PuAEnIwa#lnttHHck-_4YRbqNEHnVnlcNl8y5WNhLagiTlvY5xWg">
               Bluetooth
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/XnYw3RST#XTCz_Ew5NMd_uZ09XDKpyyhp3TR-K8V-gdqlYSkxnaE">
               Bluetooth Low Energy (BLE)
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/HjJF1RpT#tdvBgJKuKH8zYpREMoBohFXkwVzfY0kDJ2QDIXzUjXY">
               Li-Fi
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/6rBVXZaD#ppm6-RwBMG5LvfZS2uVvQEFiSLvRNe8sVxSjRIIJSKo">
               Thread
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/X2xUhYjK#Rg69BDpUk3XH4kC_oczmEgVBPtT-WJ8BqO_doV7UhD0">
               Ultra Wideband (UWB)
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/ejok2bgB#H0TfrHzR88JQ7qKYEKrSgmYU1t2E4Ne6g7fRYmR1Si8">
               Zigbee
             </button>
@@ -1793,7 +1704,6 @@
     </div>
   </template>
 
-  <!-- CARD 8: 3 - Padrões de Comunicação por Proximidade -->
   <template id="card-8">
     <p class="desc">
       Panorama de padrões de comunicação por proximidade, como infravermelho, GPS, NFC e RFID, destacando uso em localização,
@@ -1802,39 +1712,31 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
       <div class="video-list">
         <h4>Aulas desta trilha</h4>
         <ul>
           <li>
-            <button
-              type="button"
-              class="video-item active"
+            <button type="button" class="video-item active"
               data-src="https://mega.nz/embed/vzxU3QaQ#Tsduf73KCZlliCYBtC60pASlcXjJe9m1MyqF6YPCQMo">
               Infravermelho (IrDA)
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/um4B2JCC#Aqegw4wftruEleS2qpGfWyNyZ8SmzORYa7cwQnbateQ">
               GPS
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/Oi5HBQwS#_K3CWTnaXTaec35g5ZERYk2RpyoEs3ny78vMWmRKe7c">
               NFC
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/KjQ3hRwB#Xm9HDpn8q169TlwvUCp8eMRRwshNJwousRCeNvk8RCM">
               RFID
             </button>
@@ -1844,7 +1746,6 @@
     </div>
   </template>
 
-  <!-- CARD 9: 4 - Padrões Visuais de Dados -->
   <template id="card-9">
     <p class="desc">
       Estudo dos principais padrões visuais de dados como códigos de barras e códigos bidimensionais, analisando usos,
@@ -1853,39 +1754,31 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
       <div class="video-list">
         <h4>Aulas desta trilha</h4>
         <ul>
           <li>
-            <button
-              type="button"
-              class="video-item active"
+            <button type="button" class="video-item active"
               data-src="https://mega.nz/embed/qnJkyRQb#QRJSaUzL56quGTWAgHYukmEitUfCRMSgVX8OQ4rMAAg">
               Código de Barras
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/ujoD3STI#vGHp-oGsyHm3SRBKh-dlEKmC6IMJKj6sLcrsfNXx8PM">
               QR Code
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/ProhyayY#gChqsR3XOdT0FKi1vjLAenpDZlpTbSuLirOLmBighlI">
               PDF417
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/3roiBTRR#xnwAoDNypD-3Npi8aKsXHp0CTTfblJZQOSYferIm5yQ">
               Data Matrix
             </button>
@@ -1895,7 +1788,6 @@
     </div>
   </template>
 
-  <!-- CARD 10: 5 - Ferramentas de Navegação e Protocolos -->
   <template id="card-10">
     <p class="desc">
       Trilha sobre navegadores, infraestrutura global de redes digitais, HTTP/HTTPS e DNS, explicando o que acontece
@@ -1904,39 +1796,31 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
       <div class="video-list">
         <h4>Aulas desta trilha</h4>
         <ul>
           <li>
-            <button
-              type="button"
-              class="video-item active"
+            <button type="button" class="video-item active"
               data-src="https://mega.nz/embed/LqBlkQSb#UEQb5QdkSyBVFr5HsYA3CLj6daPoj4eWvVQ_rbVkJyw">
               Infraestrutura Global e Tipos de Redes Digitais
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/nzBTQTrT#mOm2PlUhPEou4Jz8bkcy_V61UNy1pP7-ID1ixmgLND4">
               Navegadores de Internet (browsers)
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/GuwUjA7L#rWn93Mhp2CYqroIpta3sVBCuQoY5D15BP18BUSApzQc">
               HTTP e HTTPS
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/LmJTHYYI#LtwYZMwMSXXWkzbmjURWVqPYe4kUZRMe1M5ztHw-17c">
               DNS
             </button>
@@ -1946,7 +1830,6 @@
     </div>
   </template>
 
-  <!-- CARD 11: 6 - Automação Residencial -->
   <template id="card-11">
     <p class="desc">
       Introdução à automação residencial e casas inteligentes, abordando dispositivos conectados, assistentes virtuais,
@@ -1955,31 +1838,25 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
       <div class="video-list">
         <h4>Aulas desta trilha</h4>
         <ul>
           <li>
-            <button
-              type="button"
-              class="video-item active"
+            <button type="button" class="video-item active"
               data-src="https://mega.nz/embed/XiZmDAYJ#E01DrTrlLBeubXTpxo8pGioCFeB727-M7mtv8sPsNFw">
               Automação Residencial - Nível 1
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/C3oXkSLD#7Ux26Ellh8dy9x1u7VYjyypMmLOgsnI5ANcydrkRKrs">
               Automação Residencial - Nível 2
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/2z4SmazT#zkHllU7czVfJy65elX6n_3Zert6qRNz7v_pfxYvRTsM">
               Automação Residencial - Nível 3
             </button>
@@ -1989,7 +1866,6 @@
     </div>
   </template>
 
-  <!-- CARD 12: 1 - Armazenamento de Dados -->
   <template id="card-12">
     <p class="desc">
       Trilha focada em meios de armazenamento de dados, abordando HDs, SSDs, pen drives, cartões de memória
@@ -1998,31 +1874,25 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
       <div class="video-list">
         <h4>Aulas desta trilha</h4>
         <ul>
           <li>
-            <button
-              type="button"
-              class="video-item active"
+            <button type="button" class="video-item active"
               data-src="https://mega.nz/embed/m2ZHATha#kTjnkIaEm2nolDJUAIbFXRQsq6lQgcwi_MWh3Ac7hGY">
               Cartões SD-MicroSD
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/7roHgDAR#WLe4B7m5XMHQJa5xjPCoyCOaZTFwT6shjvU0jyeD_wQ">
               HD Externo
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/234hwDCT#T4XNCYpnQ1aj7UujwzUDArAG62kX0DrIsx13xwUTHow">
               Pen Drives
             </button>
@@ -2032,7 +1902,6 @@
     </div>
   </template>
 
-  <!-- CARD 13: 2 - Dispositivos de Rede -->
   <template id="card-13">
     <p class="desc">
       Trilha dedicada aos principais dispositivos de rede, como modems, roteadores, switches, access points
@@ -2041,23 +1910,19 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
       <div class="video-list">
         <h4>Aulas desta trilha</h4>
         <ul>
           <li>
-            <button
-              type="button"
-              class="video-item active"
+            <button type="button" class="video-item active"
               data-src="https://mega.nz/embed/K3wTEIiD#1WX16slzTErWlq5PH4oVoNqTJAjwG4k95lBxWT-wGLE">
               Roteadores Wi-Fi
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/Tio3wRzA#PIU22merctcdS0vB4HJI6hu7iSdGsc0R8BH2w5CieBk">
               Roteador Mesh
             </button>
@@ -2067,7 +1932,6 @@
     </div>
   </template>
 
-  <!-- CARD 14: 3 - Dispositivos Home Office -->
   <template id="card-14">
     <p class="desc">
       Trilha que apresenta o conjunto de equipamentos usados em ambientes de home office, incluindo computadores,
@@ -2076,55 +1940,43 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
       <div class="video-list">
         <h4>Aulas desta trilha</h4>
         <ul>
           <li>
-            <button
-              type="button"
-              class="video-item active"
+            <button type="button" class="video-item active"
               data-src="https://mega.nz/embed/LuBx2A6C#Z-scQotvly7arpwju9fP7EIimJCQ4plekZgNq7KD41E">
               Impressoras
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/mu5WSRaJ#TzOVpmiPl34wXenFcBNmjvHd0LTEP1t6Ka35mzxZoKI">
               Impressoras Multifuncionais
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/HyRx0ayZ#Ot_U-ZEPidltKOHyCPVKAHKxpenFiOpr-eORGFpHn-4">
               Projetores Domésticos
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/3ngiFAJC#8CluEUZu3V6_7rNVOUri4dp6T7V1Ki2opBmS2s5_uDs">
               Mesa Digitalizadora
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/rvAjlQxT#NQUzeVDjynL85xiOvsM97uQuuVB-iy6iqZv0t2BfYG0">
               Scanners
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/anRgzYqK#D0RlaqEz40D85zeSAqdJGwo_NAHGw0pm4AyBU7-82qQ">
               Webcam
             </button>
@@ -2134,7 +1986,6 @@
     </div>
   </template>
 
-  <!-- CARD 15: 4 - Dispositivos Smart -->
   <template id="card-15">
     <p class="desc">
       Trilha voltada para o universo dos dispositivos smart, como Smart TVs, smartglasses, smartphones
@@ -2143,39 +1994,31 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
       <div class="video-list">
         <h4>Aulas desta trilha</h4>
         <ul>
           <li>
-            <button
-              type="button"
-              class="video-item active"
+            <button type="button" class="video-item active"
               data-src="https://mega.nz/embed/ProDVQhA#LoBTqzvk_hoJ7xoTaowVsxItS0tOBmvYPUn7cV5zvP8">
               Smart TV
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/OzpU0CQA#gPCE4sYUuh9-GcF8LIiypN8xuTfV4FS_RCHq2BSSLm4">
               Smartglasses
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/uuRADK6K#Ru9mUwRpup7ImlD2QAefb4sciA3ZAHC8oouZy_F-luQ">
               Smartphones
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/K2pCEJqB#Y5K1Pj6fh-MsQnzzFeJYXhpDqYqItqtNR45rjLLknVU">
               Smartwatches
             </button>
@@ -2185,7 +2028,6 @@
     </div>
   </template>
 
-  <!-- CARD 16: 5 - Gadgets -->
   <template id="card-16">
     <p class="desc">
       Trilha voltada para gadgets e acessórios tecnológicos, como controladores hápticos, drones, leitores digitais
@@ -2194,39 +2036,31 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
       <div class="video-list">
         <h4>Aulas desta trilha</h4>
         <ul>
           <li>
-            <button
-              type="button"
-              class="video-item active"
+            <button type="button" class="video-item active"
               data-src="https://mega.nz/embed/q2JDkZgY#oFo0X49Q0H8QSipNfgmutSxh6sDtjyOppwmvT16yE70">
               Controladores Hápticos
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/q25U0SYD#Z4jiZqxvqwQoNSexgTBbjJFnsKv9dShwvMGTgRodazk">
               Drones
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/OvJRkbqD#6qeoGm0lb73DW0356MIa7J3xeTmAija0HmxBqpUuCqQ">
               Kindle
             </button>
           </li>
           <li>
-            <button
-              type="button"
-              class="video-item"
+            <button type="button" class="video-item"
               data-src="https://mega.nz/embed/biYmjKiQ#D9AYfVvaXq-C0GPeKNvAw9rRrgpH1FgCgwMRlhTt2vQ">
               Óculos de Realidade Virtual
             </button>
@@ -2236,7 +2070,6 @@
     </div>
   </template>
 
-  <!-- CARD 17: 1 - Classificações Computacionais -->
   <template id="card-17">
     <p class="desc">
       Trilha que explora diferentes paradigmas e escalas de computação: da computação clássica e supercomputadores
@@ -2246,7 +2079,7 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
 
       <div class="video-list">
@@ -2299,7 +2132,6 @@
     </div>
   </template>
 
-  <!-- CARD 18: 2 - Web e Internet -->
   <template id="card-18">
     <p class="desc">
       Trilha que apresenta a evolução da Web e da Internet, passando pelas fases Web 1.0, 2.0 e 3.0,
@@ -2309,7 +2141,7 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
 
       <div class="video-list">
@@ -2350,18 +2182,17 @@
     </div>
   </template>
 
-  <!-- CARD 19: 3 - Inteligência Artificial -->
   <template id="card-19">
     <p class="desc">
       Trilha dedicada ao estudo da Inteligência Artificial contemporânea em suas diferentes manifestações:
-      fundamentos técnicos, estruturas, empatia simulada, computação preditiva, riscos reais, IA generativa 
-      e o novo paradigma da IA Agêntica. Uma visão ampla e moderna da tecnologia que está redefinindo 
+      fundamentos técnicos, estruturas, empatia simulada, computação preditiva, riscos reais, IA generativa
+      e o novo paradigma da IA Agêntica. Uma visão ampla e moderna da tecnologia que está redefinindo
       o futuro da computação.
     </p>
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
 
       <div class="video-list">
@@ -2420,7 +2251,6 @@
     </div>
   </template>
 
-  <!-- CARD 20: 1 - Tecnologias Emergentes -->
   <template id="card-20">
     <p class="desc">
       Visão panorâmica das tecnologias emergentes que estão ganhando espaço na economia digital, como novas arquiteturas
@@ -2430,7 +2260,7 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
 
       <div class="video-list">
@@ -2483,7 +2313,6 @@
     </div>
   </template>
 
-  <!-- CARD 21: 2 - Tecnologias Imersivas -->
   <template id="card-21">
     <p class="desc">
       Introdução às tecnologias imersivas, como Realidade Virtual (VR), Realidade Aumentada (AR), Realidade Háptica e Realidade Mista (MR),
@@ -2492,7 +2321,7 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
 
       <div class="video-list">
@@ -2533,7 +2362,6 @@
     </div>
   </template>
 
-  <!-- CARD 22: 3 - Tendências -->
   <template id="card-22">
     <p class="desc">
       Trilha voltada para o estudo de tendências tecnológicas e socioculturais: futuro do trabalho, automação,
@@ -2543,7 +2371,7 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
 
       <div class="video-list">
@@ -2578,7 +2406,6 @@
     </div>
   </template>
 
-  <!-- CARD 23: Robótica e Sistemas Autônomos -->
   <template id="card-23">
     <p class="desc">
       Trilha dedicada à Robótica e aos Sistemas Autônomos, explorando desde conceitos fundamentais, tipos de robôs e sensores
@@ -2588,7 +2415,7 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
 
       <div class="video-list">
@@ -2656,7 +2483,6 @@
     </div>
   </template>
 
-  <!-- CARD 24: Economia Digital - Fundamentos -->
   <template id="card-24">
     <p class="desc">
       Trilha que introduz os fundamentos da Economia Digital, abordando a desmaterialização econômica, o PIB Digital,
@@ -2666,7 +2492,7 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
 
       <div class="video-list">
@@ -2732,7 +2558,6 @@
     </div>
   </template>
 
-  <!-- CARD 25: Finanças, Serviços, Mercados e Modelos Econômicos Emergentes -->
   <template id="card-25">
     <p class="desc">
       Trilha focada nas novas formas de finanças e serviços digitais: fintechs, bancos digitais,
@@ -2742,7 +2567,7 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
 
       <div class="video-list">
@@ -2794,7 +2619,6 @@
     </div>
   </template>
 
-  <!-- CARD 26: Trabalho, Sociedade, Transformação, Educação e Qualificação -->
   <template id="card-26">
     <p class="desc">
       Trilha que discute os impactos da Economia Digital e da automação no mercado de trabalho, na sociedade
@@ -2804,7 +2628,7 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
 
       <div class="video-list">
@@ -2863,7 +2687,6 @@
     </div>
   </template>
 
-  <!-- CARD 27: Fabricação Aditiva -->
   <template id="card-27">
     <p class="desc">
       Trilha dedicada à Fabricação Aditiva, explorando os princípios da impressão 3D, suas aplicações na construção civil
@@ -2872,7 +2695,7 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
 
       <div class="video-list">
@@ -2905,7 +2728,6 @@
     </div>
   </template>
 
-  <!-- CARD 28: Tecnologia e Sociedade -->
   <template id="card-28">
     <p class="desc">
       Trilha que discute o impacto da tecnologia nas formas de perceber o tempo, nas estruturas sociais,
@@ -2914,7 +2736,7 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
 
       <div class="video-list">
@@ -2968,7 +2790,6 @@
     </div>
   </template>
 
-  <!-- CARD 29: Correntes Filosóficas da Tecnologia -->
   <template id="card-29">
     <p class="desc">
       Trilha que apresenta diferentes correntes filosóficas e político-culturais relacionadas à tecnologia,
@@ -2978,7 +2799,7 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
 
       <div class="video-list">
@@ -3060,7 +2881,6 @@
     </div>
   </template>
 
-  <!-- CARD 30: Movimentos Culturais da Tecnologia -->
   <template id="card-30">
     <p class="desc">
       Trilha sobre movimentos culturais que emergem na interseção entre tecnologia, corpo, jogos, gênero e performance:
@@ -3069,7 +2889,7 @@
 
     <div class="video-layout">
       <div class="video-player">
-        <iframe class="video-frame" src="" allowfullscreen referrerpolicy="no-referrer"></iframe>
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
       </div>
 
       <div class="video-list">
@@ -3129,7 +2949,7 @@
       });
     });
 
-    // Theme Toggle - Modificado para iniciar sempre no tema claro
+    // Theme Toggle
     const themeBtn = document.getElementById('theme-toggle');
     const bodyEl = document.body;
 
@@ -3154,39 +2974,64 @@
       setTheme(newTheme);
     });
 
-    // Inicia sempre com o tema claro
+    // Inicia conforme preferência salva ou padrão
     const savedTheme = localStorage.getItem('theme') || 'light';
     setTheme(savedTheme);
 
     // Tabs
     const tabLinks = document.querySelectorAll('.tab');
+    const mainSections = document.querySelectorAll('main.section, section.section');
+    const hero = document.getElementById('hero');
+
     tabLinks.forEach(t => {
       t.addEventListener('click', e => {
         e.preventDefault();
         tabLinks.forEach(x => x.classList.remove('active'));
         t.classList.add('active');
         const id = t.getAttribute('data-tab');
-        document.querySelectorAll('main.section, section.section').forEach(s => s.hidden = true);
+        mainSections.forEach(s => s.hidden = true);
         document.getElementById(id).hidden = false;
-        document.getElementById('hero').style.display = (id === 'inicio') ? '' : 'none';
+        hero.style.display = (id === 'inicio') ? '' : 'none';
       });
     });
 
     // Busca – considera todos os cards dentro de #videos
+    // CORREÇÃO: Força a exibição da aba Aulas ao buscar
     const q = document.getElementById('q');
     const cardsEls = [...document.querySelectorAll('#videos .card')];
-    const hero = document.getElementById('hero');
+    const learningPath = document.querySelector('#videos .learning-path');
+
     q.addEventListener('input', () => {
       const term = q.value.trim().toLowerCase();
+
+      if (term) {
+        // Se estiver buscando, esconde todas as abas e mostra somente #videos
+        mainSections.forEach(s => s.hidden = true);
+        document.getElementById('videos').hidden = false;
+        hero.style.display = 'none';
+
+        // Atualiza visualmente a aba ativa para 'Aulas' (opcional, mas bom para UX)
+        tabLinks.forEach(t => t.classList.remove('active'));
+        const videoTab = document.querySelector('.tab[data-tab="videos"]');
+        if (videoTab) videoTab.classList.add('active');
+      } else {
+        // Se limpar a busca, restaura a aba que estava ativa (padrão 'inicio' se falhar)
+        // Simplificação: se limpar a busca, mantemos onde está ou voltamos pro início?
+        // Comportamento atual: limpa o filtro, mas mantém na aba de vídeos pois o usuário já está nela visualmente
+        // Se desejar voltar ao inicio, descomente a lógica abaixo:
+        /*
+        const activeTab = document.querySelector('.tab.active');
+        const targetId = activeTab ? activeTab.dataset.tab : 'inicio';
+        if(targetId === 'inicio') hero.style.display = '';
+        */
+      }
+
       cardsEls.forEach(c => {
         const hay = (c.dataset.keywords + ' ' + c.textContent).toLowerCase();
         const show = !term || hay.includes(term);
         c.style.display = show ? '' : 'none';
       });
 
-      hero.style.display = term ? 'none' : (document.querySelector('.tab.active')?.dataset.tab === 'inicio' ? '' : 'none');
-
-      const learningPath = document.querySelector('#videos .learning-path');
       if (learningPath) {
         learningPath.style.display = term ? 'none' : '';
       }
@@ -3243,7 +3088,9 @@
 
     function closeModal() {
       const frame = modalContent.querySelector('.video-frame');
-      if (frame) frame.src = '';
+      if (frame) {
+        frame.src = ''; // Para o vídeo
+      }
       overlay.classList.remove('active');
       overlay.setAttribute('aria-hidden', 'true');
     }
@@ -3256,7 +3103,7 @@
       if (e.key === 'Escape' && overlay.classList.contains('active')) closeModal();
     });
 
-    // TRILHA: clique na etapa leva à seção correspondente + borda vermelha brilhante
+    // TRILHA: clique na etapa leva à seção correspondente + efeito visual
     const stepPills = document.querySelectorAll('.step-pill');
     stepPills.forEach(pill => {
       pill.addEventListener('click', () => {
@@ -3264,7 +3111,10 @@
         const stageEl = document.querySelector(`.stage[data-stage="${stageNumber}"]`);
         if (!stageEl) return;
 
-        stageEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        stageEl.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
 
         document.querySelectorAll('.stage-highlight').forEach(s => s.classList.remove('stage-highlight'));
 
