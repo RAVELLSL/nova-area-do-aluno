@@ -799,10 +799,26 @@
       scroll-snap-align: start;
     }
 
+    /* =========================================================
+       AJUSTE PRINCIPAL PARA MOBILE (Telas pequenas)
+       - Cards empilhados verticalmente
+       - Sem rolagem lateral dentro das etapas
+       ========================================================= */
     @media (max-width: 768px) {
+      .stage-scroller {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        overflow-x: visible;
+        scroll-snap-type: none;
+        padding: 0;
+      }
+
       .stage-scroller .card {
-        flex: 0 0 82vw;
-        max-width: 82vw;
+        flex: initial;
+        width: 100%;
+        max-width: 100%;
+        scroll-snap-align: unset;
       }
     }
   </style>
@@ -923,6 +939,16 @@
             <span class="badge">02</span>
             <h3>Evolução da Computação e da Informática</h3>
             <span class="pill">Fundamentos Tecnológicos</span>
+          </div>
+        </article>
+
+        <!-- NOVO CARD INSERIDO CONFORME SOLICITAÇÃO -->
+        <article class="card" data-modal="card-31"
+          data-keywords="sistemas de informação dados organização representação armazenamento técnicas de organização de dados fundamentos históricos tecnológicos">
+          <div class="thumb">
+            <span class="badge">03</span>
+            <h3>Introdução aos Sistemas de Informação e Dados</h3>
+            <span class="pill">Sistemas & Dados</span>
           </div>
         </article>
       </div>
@@ -1361,6 +1387,10 @@
     </div>
   </div>
 
+  <!-- ============================
+       TEMPLATES (SEM OMISSÕES)
+       ============================ -->
+
   <template id="card-1">
     <p class="desc">
       Série de aulas que apresenta a 1ª, 2ª, 3ª e 4ª Revolução Industrial, conectando contexto histórico,
@@ -1438,6 +1468,43 @@
             <button type="button" class="video-item"
               data-src="https://mega.nz/embed/zu5Txarb#p2Y1E58_hGSGVXvkiFB507Qne7Z3SAyZjKte_zFtQzc">
               Sistemas Operacionais
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </template>
+
+  <!-- NOVO TEMPLATE DO CARD 31 -->
+  <template id="card-31">
+    <p class="desc">
+      Trilha introdutória sobre Sistemas de Informação e Dados, apresentando conceitos essenciais de como
+      dados são organizados, representados e armazenados, além de técnicas práticas de organização no dia a dia.
+    </p>
+
+    <div class="video-layout">
+      <div class="video-player">
+        <iframe class="video-frame" src="" title="Reprodutor de Vídeo" loading="lazy" allowfullscreen referrerpolicy="no-referrer"></iframe>
+      </div>
+      <div class="video-list">
+        <h4>Aulas desta trilha</h4>
+        <ul>
+          <li>
+            <button type="button" class="video-item active"
+              data-src="https://mega.nz/embed/zr5zHKwT#pmchhfY9YI7uxHvTv35kd1kxej7-w9r4dJeedEhcPr8">
+              Sistemas de Informação
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/HywiFaqT#3RjJaz2G08GGZ-O8DxiNawgVqBccr9ucR4QH2S_pMh8">
+              Fundamentos da Organização, Representação e Armazenamento de Dados
+            </button>
+          </li>
+          <li>
+            <button type="button" class="video-item"
+              data-src="https://mega.nz/embed/yiY0RaBY#siXPeNC_LPCUS5_kXsZES3RDkdMtY8IKHxVd-53xKPM">
+              Ténicas de Organização de Dados
             </button>
           </li>
         </ul>
@@ -3015,20 +3082,10 @@
         document.getElementById('videos').hidden = false;
         hero.style.display = 'none';
 
-        // Atualiza visualmente a aba ativa para 'Aulas' (opcional, mas bom para UX)
+        // Atualiza visualmente a aba ativa para 'Aulas'
         tabLinks.forEach(t => t.classList.remove('active'));
         const videoTab = document.querySelector('.tab[data-tab="videos"]');
         if (videoTab) videoTab.classList.add('active');
-      } else {
-        // Se limpar a busca, restaura a aba que estava ativa (padrão 'inicio' se falhar)
-        // Simplificação: se limpar a busca, mantemos onde está ou voltamos pro início?
-        // Comportamento atual: limpa o filtro, mas mantém na aba de vídeos pois o usuário já está nela visualmente
-        // Se desejar voltar ao inicio, descomente a lógica abaixo:
-        /*
-        const activeTab = document.querySelector('.tab.active');
-        const targetId = activeTab ? activeTab.dataset.tab : 'inicio';
-        if(targetId === 'inicio') hero.style.display = '';
-        */
       }
 
       cardsEls.forEach(c => {
