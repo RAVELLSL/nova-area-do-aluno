@@ -799,26 +799,68 @@
       scroll-snap-align: start;
     }
 
-    /* =========================================================
-       AJUSTE PRINCIPAL PARA MOBILE (Telas pequenas)
-       - Cards empilhados verticalmente
-       - Sem rolagem lateral dentro das etapas
-       ========================================================= */
+    /* AJUSTES PARA TELAS PEQUENAS - CARDS EMPILHADOS VERTICALMENTE */
     @media (max-width: 768px) {
-      .stage-scroller {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 12px;
-        overflow-x: visible;
-        scroll-snap-type: none;
-        padding: 0;
+      .section {
+        padding: 1rem 1rem 2rem 1rem;
       }
-
+      
+      .hero {
+        padding: 1.2rem 1rem 0 1rem;
+      }
+      
+      /* Ajuste para os cards das etapas - empilhar verticalmente */
+      .stage-scroller {
+        flex-direction: column;
+        overflow-x: visible;
+        gap: 1rem;
+      }
+      
       .stage-scroller .card {
-        flex: initial;
+        flex: 1 1 auto;
+        max-width: none;
         width: 100%;
-        max-width: 100%;
-        scroll-snap-align: unset;
+        aspect-ratio: 16/9;
+      }
+      
+      /* Ajuste para os grids da Central de Mídias e Ferramentas */
+      .board .grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+      
+      .board .card {
+        min-height: 140px;
+      }
+      
+      .board .thumb {
+        gap: 12px;
+        padding: 20px 15px;
+      }
+      
+      .board .ico {
+        font-size: 36px;
+      }
+      
+      .board h3 {
+        font-size: 1rem;
+      }
+      
+      /* Ajuste do layout do modal em telas pequenas */
+      .video-layout {
+        flex-direction: column;
+      }
+      
+      .video-player, .video-list {
+        flex: 1 1 auto;
+        min-width: 100%;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .stage-scroller .card {
+        flex: 0 0 260px;
+        max-width: 260px;
       }
     }
   </style>
@@ -1386,10 +1428,6 @@
       <div class="content" id="modal-content"></div>
     </div>
   </div>
-
-  <!-- ============================
-       TEMPLATES (SEM OMISSÕES)
-       ============================ -->
 
   <template id="card-1">
     <p class="desc">
@@ -3082,10 +3120,20 @@
         document.getElementById('videos').hidden = false;
         hero.style.display = 'none';
 
-        // Atualiza visualmente a aba ativa para 'Aulas'
+        // Atualiza visualmente a aba ativa para 'Aulas' (opcional, mas bom para UX)
         tabLinks.forEach(t => t.classList.remove('active'));
         const videoTab = document.querySelector('.tab[data-tab="videos"]');
         if (videoTab) videoTab.classList.add('active');
+      } else {
+        // Se limpar a busca, restaura a aba que estava ativa (padrão 'inicio' se falhar)
+        // Simplificação: se limpar a busca, mantemos onde está ou voltamos pro início?
+        // Comportamento atual: limpa o filtro, mas mantém na aba de vídeos pois o usuário já está nela visualmente
+        // Se desejar voltar ao inicio, descomente a lógica abaixo:
+        /*
+        const activeTab = document.querySelector('.tab.active');
+        const targetId = activeTab ? activeTab.dataset.tab : 'inicio';
+        if(targetId === 'inicio') hero.style.display = '';
+        */
       }
 
       cardsEls.forEach(c => {
