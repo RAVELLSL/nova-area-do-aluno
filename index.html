@@ -275,58 +275,152 @@
       gap: 12px
     }
 
-    .card {
-      aspect-ratio: 16/9;
-      position: relative;
-      border-radius: 8px;
-      overflow: hidden;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
-      transition: transform .18s ease, box-shadow .18s ease
+    /* NOVO LAYOUT PARA AULAS EM TELAS GRANDES */
+    @media (min-width: 769px) {
+      .stages-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+      }
+      
+      .stage {
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        border-radius: 12px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+      }
+      
+      .stage-list {
+        list-style: none;
+        margin-top: 1rem;
+      }
+      
+      .stage-item {
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+        padding: .8rem 1rem;
+        margin-bottom: .5rem;
+        background: var(--button-bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s, border-color 0.2s;
+      }
+      
+      .stage-item:hover {
+        background: var(--button-bg-hover);
+        border-color: var(--border-hover);
+      }
+      
+      .stage-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        background: var(--accent);
+        color: white;
+        font-size: .8rem;
+        font-weight: bold;
+        flex-shrink: 0;
+      }
+      
+      .stage-item-content {
+        flex: 1;
+      }
+      
+      .stage-item-title {
+        font-weight: 600;
+        margin-bottom: .25rem;
+      }
+      
+      .stage-item-subtitle {
+        font-size: .85rem;
+        color: var(--muted);
+      }
     }
 
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, .25)
-    }
+    /* ESTILOS EXISTENTES PARA TELAS PEQUENAS */
+    @media (max-width: 768px) {
+      .stage {
+        margin-bottom: 2.2rem;
+        position: relative;
+        padding: .3rem .2rem;
+        transition: box-shadow .25s ease, outline .25s ease, background .25s ease;
+      }
+      
+      .stage-scroller {
+        display: flex;
+        gap: .75rem;
+        overflow-x: auto;
+        padding: .2rem 0 .3rem;
+        scroll-snap-type: x proximity;
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      .stage-scroller .card {
+        flex: 0 0 260px;
+        max-width: 260px;
+        scroll-snap-align: start;
+      }
+      
+      .card {
+        aspect-ratio: 16/9;
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+        transition: transform .18s ease, box-shadow .18s ease
+      }
 
-    .card .thumb {
-      position: absolute;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      background: var(--thumb-gradient);
-    }
+      .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, .25)
+      }
 
-    .card .thumb h3 {
-      font-size: 1.02rem;
-      text-align: center;
-      padding: 0 1rem
-    }
+      .card .thumb {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: var(--thumb-gradient);
+      }
 
-    .badge {
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      font-size: .72rem;
-      background: var(--badge-bg);
-      border: 1px solid var(--border);
-      padding: .12rem .4rem;
-      border-radius: .25rem
-    }
+      .card .thumb h3 {
+        font-size: 1.02rem;
+        text-align: center;
+        padding: 0 1rem
+      }
 
-    .pill {
-      position: absolute;
-      bottom: 8px;
-      left: 8px;
-      font-size: .7rem;
-      background: var(--bg-deep);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      padding: .12rem .4rem;
-      border-radius: .25rem
+      .badge {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        font-size: .72rem;
+        background: var(--badge-bg);
+        border: 1px solid var(--border);
+        padding: .12rem .4rem;
+        border-radius: .25rem
+      }
+
+      .pill {
+        position: absolute;
+        bottom: 8px;
+        left: 8px;
+        font-size: .7rem;
+        background: var(--bg-deep);
+        border: 1px solid var(--border);
+        color: var(--muted);
+        padding: .12rem .4rem;
+        border-radius: .25rem
+      }
     }
 
     .overlay {
@@ -576,11 +670,37 @@
       .hamburger {
         order: 3;
       }
+      
+      .section {
+        padding: 1rem 1rem 2rem 1rem;
+      }
+      
+      .hero {
+        padding: 1.2rem 1rem 0 1rem;
+      }
+      
+      /* Ajuste para os cards das etapas - empilhar verticalmente */
+      .stage-scroller {
+        flex-direction: column;
+        overflow-x: visible;
+        gap: 1rem;
+      }
+      
+      .stage-scroller .card {
+        flex: 1 1 auto;
+        max-width: none;
+        width: 100%;
+        aspect-ratio: 16/9;
+      }
     }
 
     @media (min-width: 769px) {
       .tabs {
         display: flex !important;
+      }
+      
+      .stage-scroller {
+        display: none;
       }
     }
 
@@ -717,13 +837,6 @@
       font-weight: 700;
     }
 
-    .stage {
-      margin-bottom: 2.2rem;
-      position: relative;
-      padding: .3rem .2rem;
-      transition: box-shadow .25s ease, outline .25s ease, background .25s ease;
-    }
-
     /* Destaque ao clicar na trilha */
     .stage-highlight {
       outline: 2px solid var(--accent);
@@ -770,15 +883,6 @@
       text-align: left;
     }
 
-    .stage-scroller {
-      display: flex;
-      gap: .75rem;
-      overflow-x: auto;
-      padding: .2rem 0 .3rem;
-      scroll-snap-type: x proximity;
-      -webkit-overflow-scrolling: touch;
-    }
-
     .stage-scroller::-webkit-scrollbar {
       height: 6px;
     }
@@ -792,36 +896,8 @@
       border-radius: 999px;
     }
 
-    .stage-scroller .card {
-      flex: 0 0 260px;
-      max-width: 260px;
-      scroll-snap-align: start;
-    }
-
     /* AJUSTES PARA TELAS PEQUENAS - CARDS EMPILHADOS VERTICALMENTE */
     @media (max-width: 768px) {
-      .section {
-        padding: 1rem 1rem 2rem 1rem;
-      }
-      
-      .hero {
-        padding: 1.2rem 1rem 0 1rem;
-      }
-      
-      /* Ajuste para os cards das etapas - empilhar verticalmente */
-      .stage-scroller {
-        flex-direction: column;
-        overflow-x: visible;
-        gap: 1rem;
-      }
-      
-      .stage-scroller .card {
-        flex: 1 1 auto;
-        max-width: none;
-        width: 100%;
-        aspect-ratio: 16/9;
-      }
-      
       /* Ajuste para os grids da Central de Mídias e Ferramentas */
       .board .grid {
         grid-template-columns: 1fr;
@@ -853,13 +929,6 @@
       .video-player, .video-list {
         flex: 1 1 auto;
         min-width: 100%;
-      }
-    }
-
-    @media (min-width: 769px) {
-      .stage-scroller .card {
-        flex: 0 0 260px;
-        max-width: 260px;
       }
     }
   </style>
@@ -954,7 +1023,347 @@
       </div>
     </section>
 
-    <section class="stage" data-stage="1">
+    <!-- NOVO LAYOUT PARA TELAS GRANDES -->
+    <div class="stages-grid">
+      <section class="stage" data-stage="1">
+        <div class="stage-header">
+          <div class="stage-header-left">
+            <span class="stage-kicker">Etapa 1 · Base conceitual</span>
+            <h3 class="stage-title">Fundamentos Históricos e Tecnológicos</h3>
+          </div>
+          <p class="stage-subtitle">
+            Trilha introdutória que conecta história, sociedade e evolução tecnológica, preparando o terreno para a inclusão digital.
+          </p>
+        </div>
+        <ul class="stage-list">
+          <li class="stage-item" data-modal="card-1">
+            <span class="stage-badge">01</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">Revoluções Industriais</div>
+              <div class="stage-item-subtitle">História & Sociedade</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-2">
+            <span class="stage-badge">02</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">Evolução da Computação e da Informática</div>
+              <div class="stage-item-subtitle">Fundamentos Tecnológicos</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-31">
+            <span class="stage-badge">03</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">Introdução aos Sistemas de Informação e Dados</div>
+              <div class="stage-item-subtitle">Sistemas & Dados</div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="stage" data-stage="2">
+        <div class="stage-header">
+          <div class="stage-header-left">
+            <span class="stage-kicker">Etapa 2 · Infraestrutura</span>
+            <h3 class="stage-title">Infraestrutura Computacional</h3>
+          </div>
+          <p class="stage-subtitle">
+            Base física e lógica da computação: arquitetura de computadores, servidores, data centers, nuvem
+            e o papel das ciências exatas na era digital.
+          </p>
+        </div>
+        <ul class="stage-list">
+          <li class="stage-item" data-modal="card-3">
+            <span class="stage-badge">03</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">1 - Arquitetura de Computadores</div>
+              <div class="stage-item-subtitle">Infraestrutura</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-4">
+            <span class="stage-badge">04</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">2 - Serviços e Ambientes Tecnológicos</div>
+              <div class="stage-item-subtitle">Infraestrutura</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-5">
+            <span class="stage-badge">05</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">3 - Ciência, Tecnologia, Engenharia e Matemática (STEM)</div>
+              <div class="stage-item-subtitle">Fundamentos STEM</div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="stage" data-stage="3">
+        <div class="stage-header">
+          <div class="stage-header-left">
+            <span class="stage-kicker">Etapa 3 · Conectividade</span>
+            <h3 class="stage-title">Redes e Comunicação Digital</h3>
+          </div>
+          <p class="stage-subtitle">
+            Trilhas focadas em conectividade, padrões de comunicação, navegação na web e integração de dispositivos conectados.
+          </p>
+        </div>
+        <ul class="stage-list">
+          <li class="stage-item" data-modal="card-6">
+            <span class="stage-badge">06</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">1 - História e Gerações de Redes</div>
+              <div class="stage-item-subtitle">Redes & Evolução</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-7">
+            <span class="stage-badge">07</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">2 - Padrões de Conexão Sem Fio</div>
+              <div class="stage-item-subtitle">Wi-Fi & Wireless</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-8">
+            <span class="stage-badge">08</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">3 - Padrões de Comunicação por Proximidade</div>
+              <div class="stage-item-subtitle">Bluetooth & NFC</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-9">
+            <span class="stage-badge">09</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">4 - Padrões Visuais de Dados</div>
+              <div class="stage-item-subtitle">Visualização</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-10">
+            <span class="stage-badge">10</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">5 - Ferramentas de Navegação e Protocolos</div>
+              <div class="stage-item-subtitle">Web & Protocolos</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-11">
+            <span class="stage-badge">11</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">6 - Automação Residencial</div>
+              <div class="stage-item-subtitle">Casa Conectada</div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="stage" data-stage="4">
+        <div class="stage-header">
+          <div class="stage-header-left">
+            <span class="stage-kicker">Etapa 4 · Ecossistema de dispositivos</span>
+            <h3 class="stage-title">Dispositivos e Equipamentos Digitais</h3>
+          </div>
+          <p class="stage-subtitle">
+            Meios de armazenamento, equipamentos de rede, soluções para home office, dispositivos smart
+            e uma variedade de gadgets contemporâneos.
+          </p>
+        </div>
+        <ul class="stage-list">
+          <li class="stage-item" data-modal="card-12">
+            <span class="stage-badge">12</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">1 - Armazenamento de Dados</div>
+              <div class="stage-item-subtitle">Memória & Backup</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-13">
+            <span class="stage-badge">13</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">2 - Dispositivos de Rede</div>
+              <div class="stage-item-subtitle">Conectividade</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-14">
+            <span class="stage-badge">14</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">3 - Dispositivos Home Office</div>
+              <div class="stage-item-subtitle">Trabalho Remoto</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-15">
+            <span class="stage-badge">15</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">4 - Dispositivos Smart</div>
+              <div class="stage-item-subtitle">Smart Devices</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-16">
+            <span class="stage-badge">16</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">5 - Gadgets</div>
+              <div class="stage-item-subtitle">Gadgets & Acessórios</div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="stage" data-stage="5">
+        <div class="stage-header">
+          <div class="stage-header-left">
+            <span class="stage-kicker">Etapa 5 · Computação contemporânea</span>
+            <h3 class="stage-title">Computação Contemporânea</h3>
+          </div>
+          <p class="stage-subtitle">
+            Conceitos modernos de computação: classificações computacionais, evolução da web e da internet,
+            e uma visão ampla da Inteligência Artificial.
+          </p>
+        </div>
+        <ul class="stage-list">
+          <li class="stage-item" data-modal="card-17">
+            <span class="stage-badge">17</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">1 - Classificações Computacionais</div>
+              <div class="stage-item-subtitle">Computação</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-18">
+            <span class="stage-badge">18</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">2 - Web e Internet</div>
+              <div class="stage-item-subtitle">Web & Redes</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-19">
+            <span class="stage-badge">19</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">3 - Inteligência Artificial</div>
+              <div class="stage-item-subtitle">IA & Futuro</div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="stage" data-stage="6">
+        <div class="stage-header">
+          <div class="stage-header-left">
+            <span class="stage-kicker">Etapa 6 · Fronteiras emergentes</span>
+            <h3 class="stage-title">Tecnologias Emergentes</h3>
+          </div>
+          <p class="stage-subtitle">
+            Inovações em fase de consolidação: experiências imersivas, novas arquiteturas, biotecnologia,
+            cidades inteligentes e tendências que redesenham o futuro.
+          </p>
+        </div>
+        <ul class="stage-list">
+          <li class="stage-item" data-modal="card-20">
+            <span class="stage-badge">20</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">1 - Tecnologias Emergentes</div>
+              <div class="stage-item-subtitle">Inovação</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-21">
+            <span class="stage-badge">21</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">2 - Tecnologias Imersivas</div>
+              <div class="stage-item-subtitle">XR & Imersão</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-22">
+            <span class="stage-badge">22</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">3 - Tendências</div>
+              <div class="stage-item-subtitle">Futuro & Sociedade</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-23">
+            <span class="stage-badge">23</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">4 - Robótica e Sistemas Autônomos</div>
+              <div class="stage-item-subtitle">Robótica</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-27">
+            <span class="stage-badge">24</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">5 - Fabricação Aditiva</div>
+              <div class="stage-item-subtitle">Manufatura 3D</div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="stage" data-stage="7">
+        <div class="stage-header">
+          <div class="stage-header-left">
+            <span class="stage-kicker">Módulo Especial · Economia Digital</span>
+            <h3 class="stage-title">Economia Digital e Sistemas Financeiros Tecnológicos</h3>
+          </div>
+          <p class="stage-subtitle">
+            Trilha dedicada à transformação econômica impulsionada pela digitalização, criptografia,
+            novos sistemas financeiros, modelos de negócio emergentes e os impactos no trabalho,
+            na sociedade e na qualificação profissional.
+          </p>
+        </div>
+        <ul class="stage-list">
+          <li class="stage-item" data-modal="card-24">
+            <span class="stage-badge">25</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">1 - Introdução, Contexto e Fundamentos da Economia Digital</div>
+              <div class="stage-item-subtitle">Fundamentos</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-25">
+            <span class="stage-badge">26</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">2 - Finanças, Serviços, Mercados e Modelos Econômicos Emergentes</div>
+              <div class="stage-item-subtitle">Mercados</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-26">
+            <span class="stage-badge">27</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">3 - Trabalho, Sociedade, Transformação, Educação e Qualificação</div>
+              <div class="stage-item-subtitle">Trabalho & Sociedade</div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="stage" data-stage="8">
+        <div class="stage-header">
+          <div class="stage-header-left">
+            <span class="stage-kicker">Módulo Especial · Sociedade e Cultura Tech</span>
+            <h3 class="stage-title">Tecnologia, Sociedade, Filosofias Tech e Movimentos Culturais</h3>
+          </div>
+          <p class="stage-subtitle">
+            Um mergulho nas dimensões sociais, filosóficas e culturais da tecnologia: como ela reconfigura tempo,
+            poder, subjetividades, movimentos sociais e imaginários sobre o futuro.
+          </p>
+        </div>
+        <ul class="stage-list">
+          <li class="stage-item" data-modal="card-28">
+            <span class="stage-badge">28</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">1 - Tecnologia e Sociedade</div>
+              <div class="stage-item-subtitle">Sociedade & Poder</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-29">
+            <span class="stage-badge">29</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">2 - Correntes Filosóficas da Tecnologia</div>
+              <div class="stage-item-subtitle">Filosofias Tech</div>
+            </div>
+          </li>
+          <li class="stage-item" data-modal="card-30">
+            <span class="stage-badge">30</span>
+            <div class="stage-item-content">
+              <div class="stage-item-title">3 - Movimentos Culturais da Tecnologia</div>
+              <div class="stage-item-subtitle">Cultura Digital</div>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </div>
+
+    <!-- LAYOUT ORIGINAL PARA MOBILE (mantido para compatibilidade) -->
+    <section class="stage" data-stage="1" data-mobile-only>
       <div class="stage-header">
         <div class="stage-header-left">
           <span class="stage-kicker">Etapa 1 · Base conceitual</span>
@@ -995,7 +1404,7 @@
       </div>
     </section>
 
-    <section class="stage" data-stage="2">
+    <section class="stage" data-stage="2" data-mobile-only>
       <div class="stage-header">
         <div class="stage-header-left">
           <span class="stage-kicker">Etapa 2 · Infraestrutura</span>
@@ -1036,7 +1445,7 @@
       </div>
     </section>
 
-    <section class="stage" data-stage="3">
+    <section class="stage" data-stage="3" data-mobile-only>
       <div class="stage-header">
         <div class="stage-header-left">
           <span class="stage-kicker">Etapa 3 · Conectividade</span>
@@ -1103,7 +1512,7 @@
       </div>
     </section>
 
-    <section class="stage" data-stage="4">
+    <section class="stage" data-stage="4" data-mobile-only>
       <div class="stage-header">
         <div class="stage-header-left">
           <span class="stage-kicker">Etapa 4 · Ecossistema de dispositivos</span>
@@ -1162,7 +1571,7 @@
       </div>
     </section>
 
-    <section class="stage" data-stage="5">
+    <section class="stage" data-stage="5" data-mobile-only>
       <div class="stage-header">
         <div class="stage-header-left">
           <span class="stage-kicker">Etapa 5 · Computação contemporânea</span>
@@ -1203,7 +1612,7 @@
       </div>
     </section>
 
-    <section class="stage" data-stage="6">
+    <section class="stage" data-stage="6" data-mobile-only>
       <div class="stage-header">
         <div class="stage-header-left">
           <span class="stage-kicker">Etapa 6 · Fronteiras emergentes</span>
@@ -1262,7 +1671,7 @@
       </div>
     </section>
 
-    <section class="stage" data-stage="7">
+    <section class="stage" data-stage="7" data-mobile-only>
       <div class="stage-header">
         <div class="stage-header-left">
           <span class="stage-kicker">Módulo Especial · Economia Digital</span>
@@ -1304,7 +1713,7 @@
       </div>
     </section>
 
-    <section class="stage" data-stage="8">
+    <section class="stage" data-stage="8" data-mobile-only>
       <div class="stage-header">
         <div class="stage-header-left">
           <span class="stage-kicker">Módulo Especial · Sociedade e Cultura Tech</span>
@@ -1428,6 +1837,7 @@
     </div>
   </div>
 
+  <!-- TODOS OS TEMPLATES PERMANECEM EXATAMENTE IGUAIS -->
   <template id="card-1">
     <p class="desc">
       Série de aulas que apresenta a 1ª, 2ª, 3ª e 4ª Revolução Industrial, conectando contexto histórico,
@@ -3037,7 +3447,6 @@
       </div>
     </div>
   </template>
-
   <script>
     // Menu Hamburger - Mobile
     const hamburger = document.querySelector('.hamburger');
@@ -3108,6 +3517,7 @@
     // CORREÇÃO: Força a exibição da aba Aulas ao buscar
     const q = document.getElementById('q');
     const cardsEls = [...document.querySelectorAll('#videos .card')];
+    const stageItems = [...document.querySelectorAll('#videos .stage-item')];
     const learningPath = document.querySelector('#videos .learning-path');
 
     q.addEventListener('input', () => {
@@ -3123,32 +3533,38 @@
         tabLinks.forEach(t => t.classList.remove('active'));
         const videoTab = document.querySelector('.tab[data-tab="videos"]');
         if (videoTab) videoTab.classList.add('active');
-      } else {
-        // Se limpar a busca, restaura a aba que estava ativa (padrão 'inicio' se falhar)
-        // Simplificação: se limpar a busca, mantemos onde está ou voltamos pro início?
-        // Comportamento atual: limpa o filtro, mas mantém na aba de vídeos pois o usuário já está nela visualmente
-        // Se desejar voltar ao inicio, descomente a lógica abaixo:
-        /*
-        const activeTab = document.querySelector('.tab.active');
-        const targetId = activeTab ? activeTab.dataset.tab : 'inicio';
-        if(targetId === 'inicio') hero.style.display = '';
-        */
       }
 
+      // Busca nos cards (mobile)
       cardsEls.forEach(c => {
         const hay = (c.dataset.keywords + ' ' + c.textContent).toLowerCase();
         const show = !term || hay.includes(term);
         c.style.display = show ? '' : 'none';
       });
 
+      // Busca nos itens de lista (desktop)
+      stageItems.forEach(item => {
+        const hay = item.textContent.toLowerCase();
+        const show = !term || hay.includes(term);
+        item.style.display = show ? '' : 'none';
+      });
+
       if (learningPath) {
         learningPath.style.display = term ? 'none' : '';
       }
 
-      document.querySelectorAll('#videos .stage').forEach(stage => {
+      // Oculta seções vazias (mobile)
+      document.querySelectorAll('#videos .stage[data-mobile-only]').forEach(stage => {
         const hasVisibleCard = [...stage.querySelectorAll('.card')]
           .some(c => c.style.display !== 'none');
         stage.style.display = (!term || hasVisibleCard) ? '' : 'none';
+      });
+
+      // Oculta seções vazias (desktop)
+      document.querySelectorAll('#videos .stage:not([data-mobile-only])').forEach(stage => {
+        const hasVisibleItem = [...stage.querySelectorAll('.stage-item')]
+          .some(i => i.style.display !== 'none');
+        stage.style.display = (!term || hasVisibleItem) ? '' : 'none';
       });
     });
 
@@ -3182,23 +3598,40 @@
     const modalTitle = document.getElementById('modal-title');
     const modalContent = document.getElementById('modal-content');
 
-    document.getElementById('videos').addEventListener('click', e => {
-      const card = e.target.closest('.card');
-      if (!card) return;
-      const tpl = document.getElementById(card.dataset.modal);
+    // Função para abrir modal (compatível com cards e itens de lista)
+    function openModal(modalId, title) {
+      const tpl = document.getElementById(modalId);
       if (!tpl) return;
-      modalTitle.textContent = card.querySelector('h3').textContent;
+      modalTitle.textContent = title;
       modalContent.replaceChildren(tpl.content.cloneNode(true));
       overlay.classList.add('active');
       overlay.setAttribute('aria-hidden', 'false');
 
       initModalVideo(modalContent);
+    }
+
+    // Event listeners para cards (mobile)
+    document.getElementById('videos').addEventListener('click', e => {
+      const card = e.target.closest('.card');
+      if (!card) return;
+      const title = card.querySelector('h3').textContent;
+      openModal(card.dataset.modal, title);
     });
 
+    // Event listeners para itens de lista (desktop)
+    document.getElementById('videos').addEventListener('click', e => {
+      const item = e.target.closest('.stage-item');
+      if (!item) return;
+      const title = item.querySelector('.stage-item-title').textContent;
+      openModal(item.dataset.modal, title);
+    });
+
+    // CORREÇÃO: Pausar vídeo ao fechar modal
     function closeModal() {
       const frame = modalContent.querySelector('.video-frame');
       if (frame) {
-        frame.src = ''; // Para o vídeo
+        // CORREÇÃO: Pausar o vídeo ao fechar o modal
+        frame.src = ''; // Remove o src para parar o vídeo completamente
       }
       overlay.classList.remove('active');
       overlay.setAttribute('aria-hidden', 'true');
@@ -3233,6 +3666,19 @@
         }, 1800);
       });
     });
+
+    // Mostrar/ocultar layout apropriado baseado no tamanho da tela
+    function toggleLayout() {
+      const isMobile = window.innerWidth <= 768;
+      document.querySelectorAll('.stage[data-mobile-only]').forEach(el => {
+        el.style.display = isMobile ? 'block' : 'none';
+      });
+      document.querySelector('.stages-grid').style.display = isMobile ? 'none' : 'grid';
+    }
+
+    // Inicializar layout
+    toggleLayout();
+    window.addEventListener('resize', toggleLayout);
   </script>
 </body>
 </html>
