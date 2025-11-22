@@ -6,20 +6,20 @@
   <title>Área do Aluno - Prof. Ravell</title>
   <style>
     :root {
-      --bg: #f4f4f4;
+      --bg: #f8f9fa;
       --surface: #ffffff;
       --muted: #5a5a5a;
       --text: #111111;
-      --accent: #e50914;
-      --accent-hover: #c5080f; /* Nova variável para hover consistente */
+      --accent: #424242;
+      --accent-hover: #212121;
       --border: #e0e0e0;
       --bg-deep: #ffffff;
-      --surface-hover: #f0f0f0;
+      --surface-hover: #f5f5f5;
       --border-hover: #cccccc;
       --button-bg: #e5e5e5;
       --button-bg-hover: #dcdcdc;
       --badge-bg: #ffffffc0;
-      --thumb-gradient: linear-gradient(135deg, rgba(229, 9, 20, 0.08), rgba(0, 0, 0, 0.02));
+      --thumb-gradient: linear-gradient(135deg, rgba(66, 66, 66, 0.08), rgba(0, 0, 0, 0.02));
       --board-card-bg: #ffffff;
       --board-card-border: #e0e0e0;
       --board-pill-bg: #f0f0f0;
@@ -31,20 +31,20 @@
     }
 
     body.dark-theme {
-      --bg: #141414;
-      --surface: #181818;
+      --bg: #121212;
+      --surface: #1e1e1e;
       --muted: #b3b3b3;
       --text: #ffffff;
-      --accent: #e50914;
-      --accent-hover: #ff1f2a;
+      --accent: #bdbdbd;
+      --accent-hover: #e0e0e0;
       --border: #2a2a2a;
       --bg-deep: #0f0f0f;
-      --surface-hover: #1f1f1f;
+      --surface-hover: #2a2a2a;
       --border-hover: #3a3a3a;
       --button-bg: #232323;
       --button-bg-hover: #2b2b2b;
       --badge-bg: #00000080;
-      --thumb-gradient: linear-gradient(135deg, rgba(229, 9, 20, .10), rgba(255, 255, 255, .03));
+      --thumb-gradient: linear-gradient(135deg, rgba(189, 189, 189, .10), rgba(255, 255, 255, .03));
       --board-card-bg: #121212;
       --board-card-border: #272727;
       --board-pill-bg: #0e0e0e;
@@ -66,7 +66,7 @@
     }
 
     body {
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
       transition: background-color 0.3s, color 0.3s;
@@ -125,7 +125,7 @@
     .navbar {
       position: sticky;
       top: 0;
-      z-index: 100; /* Normalizado z-index */
+      z-index: 100;
       display: flex;
       gap: 1.25rem;
       align-items: center;
@@ -138,9 +138,9 @@
 
     .brand {
       color: var(--accent);
-      font-weight: 800;
+      font-weight: 700;
       text-decoration: none;
-      font-size: 1.25rem
+      font-size: 1.25rem;
     }
 
     .tabs {
@@ -278,18 +278,18 @@
     .card {
       aspect-ratio: 16/9;
       position: relative;
-      border-radius: 6px;
+      border-radius: 8px;
       overflow: hidden;
       background: var(--surface);
       border: 1px solid var(--border);
       cursor: pointer;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, .25);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
       transition: transform .18s ease, box-shadow .18s ease
     }
 
     .card:hover {
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 10px 24px rgba(0, 0, 0, .35)
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .25)
     }
 
     .card .thumb {
@@ -337,7 +337,7 @@
       justify-content: center;
       background: rgba(0, 0, 0, .7);
       backdrop-filter: blur(2px);
-      z-index: 200; /* Normalizado z-index */
+      z-index: 200;
     }
 
     .overlay.active {
@@ -474,9 +474,9 @@
     .highlight-section {
       border-radius: 12px;
       padding: 1.2rem 1.4rem 1.4rem;
-      background: linear-gradient(135deg, rgba(229, 9, 20, 0.14), rgba(0, 0, 0, 0.4));
-      border: 1px solid rgba(229, 9, 20, 0.35);
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+      background: linear-gradient(135deg, rgba(66, 66, 66, 0.1), rgba(0, 0, 0, 0.4));
+      border: 1px solid rgba(66, 66, 66, 0.3);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
       margin-bottom: 1.8rem;
     }
 
@@ -597,14 +597,14 @@
       border-radius: 12px;
       background: var(--board-card-bg);
       border: 1px solid var(--board-card-border);
-      box-shadow: 0 8px 22px rgba(0, 0, 0, .35);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, .2);
       transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
       overflow: hidden
     }
 
     .board .card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, .45);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, .3);
       border-color: var(--border-hover)
     }
 
@@ -624,7 +624,7 @@
     .board .ico {
       font-size: 44px;
       line-height: 1;
-      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, .35))
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, .25))
     }
 
     .board h3 {
@@ -649,8 +649,8 @@
     }
 
     .board .card.featured {
-      box-shadow: inset 0 0 0 2px var(--accent), 0 10px 26px rgba(0, 0, 0, .5);
-      border-color: rgba(229, 9, 20, .35)
+      box-shadow: inset 0 0 0 2px var(--accent), 0 8px 22px rgba(0, 0, 0, .4);
+      border-color: rgba(66, 66, 66, .3)
     }
 
     /* TRILHA DE APRENDIZAGEM E ETAPAS (ABA AULAS) */
@@ -658,9 +658,9 @@
       margin: 1rem 0 2rem;
       padding: 1rem 1.2rem 1.2rem;
       border-radius: 12px;
-      background: linear-gradient(135deg, rgba(229, 9, 20, 0.16), rgba(0, 0, 0, 0.5));
-      border: 1px solid rgba(229, 9, 20, 0.45);
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+      background: linear-gradient(135deg, rgba(66, 66, 66, 0.12), rgba(0, 0, 0, 0.5));
+      border: 1px solid rgba(66, 66, 66, 0.4);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
       display: flex;
       flex-direction: column;
       gap: .6rem;
@@ -701,7 +701,7 @@
     }
 
     .step-pill:focus-visible {
-      box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.8);
+      box-shadow: 0 0 0 2px rgba(66, 66, 66, 0.8);
     }
 
     .step-index {
@@ -724,15 +724,15 @@
       transition: box-shadow .25s ease, outline .25s ease, background .25s ease;
     }
 
-    /* Destaque Netflix-like ao clicar na trilha */
+    /* Destaque ao clicar na trilha */
     .stage-highlight {
       outline: 2px solid var(--accent);
       box-shadow:
-        0 0 0 1px rgba(229, 9, 20, 0.9),
-        0 0 26px rgba(229, 9, 20, 0.85);
+        0 0 0 1px rgba(66, 66, 66, 0.9),
+        0 0 26px rgba(66, 66, 66, 0.7);
       border-radius: 16px;
       background: radial-gradient(circle at top left,
-        rgba(229, 9, 20, 0.16),
+        rgba(66, 66, 66, 0.12),
         transparent 55%);
     }
 
@@ -775,7 +775,6 @@
       gap: .75rem;
       overflow-x: auto;
       padding: .2rem 0 .3rem;
-      /* Alterado para proximity para melhor experiência mobile */
       scroll-snap-type: x proximity;
       -webkit-overflow-scrolling: touch;
     }
