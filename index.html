@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Área do Aluno - Prof. Ravell</title>
   <style>
+    /* ===== VARIÁVEIS E RESET ===== */
     :root {
       --bg: #f8f9fa;
       --surface: #ffffff;
@@ -53,16 +54,28 @@
       --scrollbar-thumb: #404040;
       --scrollbar-thumb-hover: #505050;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0 }
-    html { scroll-behavior: smooth }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
     body {
       font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
       transition: background-color 0.3s, color 0.3s;
+      line-height: 1.5;
     }
-    
-    /* Scrollbars */
+    /* Foco visível para acessibilidade */
+    :focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* ===== SCROLLBAR ===== */
     @media (min-width: 769px) {
       ::-webkit-scrollbar { width: 12px; }
       ::-webkit-scrollbar-track { background: var(--scrollbar-bg); border-radius: 6px; }
@@ -77,59 +90,154 @@
       ::-webkit-scrollbar-thumb:hover { background: var(--accent-hover); }
     }
 
-    /* Navbar */
+    /* ===== NAVBAR ===== */
     .navbar {
-      position: sticky; top: 0; z-index: 100;
-      display: flex; gap: 1.25rem; align-items: center; justify-content: space-between;
-      padding: 1rem 2rem; background: var(--bg-deep); border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: var(--bg-deep);
+      border-bottom: 1px solid var(--border);
       transition: background-color 0.3s, border-color 0.3s;
     }
-    .brand { color: var(--accent); font-weight: 700; text-decoration: none; font-size: 1.25rem; }
-    .tabs { display: flex; gap: .75rem; flex-wrap: wrap }
-    .tab {
-      color: var(--muted); text-decoration: none; font-weight: 600; padding: .4rem .7rem;
-      border-radius: .5rem; transition: color 0.2s, background 0.2s; cursor: pointer;
+    .brand {
+      color: var(--accent);
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 1.25rem;
+      white-space: nowrap;
     }
-    .tab.active, .tab:hover { color: var(--text); background: var(--surface-hover) }
-    .nav-right { display: flex; align-items: center; gap: .75rem }
-    
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
     .search {
-      display: flex; align-items: center; gap: .5rem; background: var(--surface-hover);
-      border: 1px solid var(--border); padding: .4rem .6rem; border-radius: .5rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      background: var(--surface-hover);
+      border: 1px solid var(--border);
+      padding: .4rem .6rem;
+      border-radius: .5rem;
       transition: background-color 0.2s, border-color 0.2s;
     }
-    .search input { background: transparent; border: 0; outline: none; color: var(--text); min-width: 220px }
-    
-    .theme-btn {
-      appearance: none; border: 1px solid var(--border); background: var(--surface-hover);
-      color: var(--text); font-size: .85rem; font-weight: 600; padding: .4rem .7rem;
-      border-radius: .5rem; cursor: pointer; white-space: nowrap; transition: background .2s ease;
+    .search:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(66,66,66,0.2);
     }
-    .theme-btn:hover { background: var(--surface); }
+    .search input {
+      background: transparent;
+      border: 0;
+      outline: none;
+      color: var(--text);
+      min-width: 220px;
+    }
+    .theme-btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--surface-hover);
+      color: var(--text);
+      font-size: .85rem;
+      font-weight: 600;
+      padding: .4rem .7rem;
+      border-radius: .5rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background .2s ease;
+    }
+    .theme-btn:hover {
+      background: var(--surface);
+    }
 
-    /* Menu Hamburger */
+    /* ===== TABS ===== */
+    .tabs {
+      display: flex;
+      gap: .75rem;
+      flex-wrap: wrap;
+    }
+    .tab {
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 600;
+      padding: .4rem .7rem;
+      border-radius: .5rem;
+      transition: color 0.2s, background 0.2s;
+      cursor: pointer;
+    }
+    .tab.active,
+    .tab:hover {
+      color: var(--text);
+      background: var(--surface-hover);
+    }
+    .tab[aria-current="page"] {
+      background: var(--accent);
+      color: white;
+    }
+
+    /* ===== HAMBURGER ===== */
     .hamburger {
-      display: none; flex-direction: column; justify-content: space-around;
-      width: 30px; height: 25px; background: transparent; border: none;
-      cursor: pointer; padding: 0; z-index: 110;
+      display: none;
+      flex-direction: column;
+      justify-content: space-around;
+      width: 30px;
+      height: 25px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      z-index: 110;
     }
     .hamburger span {
-      width: 100%; height: 3px; background: var(--text); border-radius: 2px;
-      transition: all 0.3s ease; transform-origin: center;
+      width: 100%;
+      height: 3px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+      transform-origin: center;
     }
-    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(7px, 7px); }
-    .hamburger.active span:nth-child(2) { opacity: 0; }
-    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(7px, 7px);
+    }
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -7px);
+    }
 
-    .hero { display: flex; flex-direction: column; gap: .75rem; padding: 1.2rem 2rem 0 2rem }
-    .hero h1 { font-size: clamp(1.6rem, 3.5vw, 2.2rem) }
-    .hero p { color: var(--muted) }
+    /* ===== HERO ===== */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+      padding: 1.2rem 2rem 0 2rem;
+    }
+    .hero h1 {
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    }
+    .hero p {
+      color: var(--muted);
+    }
 
-    .section { padding: 1rem 2rem 2rem 2rem }
-    .section h2 { font-size: 1.05rem; color: var(--text); opacity: .9; margin: .75rem 0 1rem 0; letter-spacing: .2px }
+    /* ===== SEÇÕES ===== */
+    .section {
+      padding: 1rem 2rem 2rem 2rem;
+    }
+    .section h2 {
+      font-size: 1.05rem;
+      color: var(--text);
+      opacity: .9;
+      margin: .75rem 0 1rem 0;
+      letter-spacing: .2px;
+    }
 
-    /* ESTILOS DE GRADE E CARDS - OTIMIZADOS */
-    .board .grid, .grid {
+    /* ===== GRADE DE CARDS ===== */
+    .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 24px;
@@ -137,9 +245,9 @@
       margin: 0 auto;
     }
 
-    .board .card, .card-simple {
+    .card {
       aspect-ratio: auto;
-      min-height: clamp(180px, 25vh, 260px); 
+      min-height: clamp(180px, 25vh, 260px);
       border-radius: 16px;
       background: var(--board-card-bg);
       border: 1px solid var(--board-card-border);
@@ -151,24 +259,21 @@
       flex-direction: column;
       justify-content: center;
     }
-
-    .board .card:hover, .card-simple:hover {
+    .card:hover:not(.card-disabled) {
       transform: translateY(-4px);
       box-shadow: 0 12px 30px rgba(0, 0, 0, .15);
       border-color: var(--border-hover);
     }
-
     .card-disabled {
-      opacity: 0.65;
-      cursor: not-allowed !important;
-      filter: grayscale(0.6);
+      opacity: 0.7;
+      cursor: pointer; /* muda para indicar que é clicável (abre modal) */
+      filter: grayscale(0.5);
     }
     .card-disabled:hover {
-      transform: none !important;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, .08) !important;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .1);
     }
-
-    .board .thumb, .card-simple .thumb {
+    .thumb {
       position: relative;
       width: 100%;
       height: 100%;
@@ -180,13 +285,11 @@
       background: transparent;
       padding: clamp(1.5rem, 3vw, 2.5rem);
     }
-    
-    .board .ico {
+    .ico {
       font-size: clamp(2.5rem, 5vw, 3.5rem);
       line-height: 1;
       filter: drop-shadow(0 4px 8px rgba(0, 0, 0, .15));
     }
-    
     .svg-icon {
       width: clamp(56px, 10vw, 84px);
       height: clamp(56px, 10vw, 84px);
@@ -195,8 +298,7 @@
       filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .1));
       transition: fill 0.3s;
     }
-
-    .board h3, .card-simple h3 {
+    .card h3 {
       font-size: clamp(1rem, 1.8vw, 1.35rem);
       font-weight: 700;
       letter-spacing: .3px;
@@ -205,8 +307,7 @@
       opacity: .95;
       margin: 0;
     }
-
-    .board .pill, .card-simple .pill {
+    .pill {
       position: static;
       align-self: center;
       font-size: clamp(0.7rem, 1.2vw, 0.85rem);
@@ -218,59 +319,167 @@
       font-weight: 500;
     }
 
-    /* Quadro de Avisos */
+    /* ===== QUADRO DE AVISOS ===== */
     .highlight-section {
-      border-radius: 12px; padding: 1.2rem 1.4rem 1.4rem;
+      border-radius: 12px;
+      padding: 1.2rem 1.4rem 1.4rem;
       background: linear-gradient(135deg, rgba(66, 66, 66, 0.1), rgba(0, 0, 0, 0.4));
-      border: 1px solid rgba(66, 66, 66, 0.3); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(66, 66, 66, 0.3);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
       margin-bottom: 1.8rem;
     }
-    .notice-board { display: flex; flex-direction: column; gap: .6rem; }
-    .notice-title { font-size: 1.05rem; font-weight: 700; margin-bottom: .2rem; }
-    .notice-text { font-size: .92rem; color: var(--muted); }
-    .notice-list { list-style: disc; margin-left: 1.2rem; font-size: .9rem; display: flex; flex-direction: column; gap: .25rem; }
-
-    /* Modal Generico */
-    .overlay {
-      position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
-      background: rgba(0, 0, 0, .7); backdrop-filter: blur(2px); z-index: 200;
+    .notice-board {
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
     }
-    .overlay.active { display: flex }
+    .notice-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: .2rem;
+    }
+    .notice-text {
+      font-size: .92rem;
+      color: var(--muted);
+    }
+    .notice-list {
+      list-style: disc;
+      margin-left: 1.2rem;
+      font-size: .9rem;
+      display: flex;
+      flex-direction: column;
+      gap: .25rem;
+    }
+
+    /* ===== MENSAGEM DE BUSCA ===== */
+    .search-message {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+      font-size: 1.1rem;
+      grid-column: 1 / -1;
+    }
+
+    /* ===== MODAL ===== */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, .7);
+      backdrop-filter: blur(2px);
+      z-index: 200;
+    }
+    .overlay.active {
+      display: flex;
+    }
     .modal {
-      width: min(880px, 92vw); max-height: 80vh; overflow: auto;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 8px; box-shadow: 0 20px 60px rgba(0, 0, 0, .6);
+      width: min(500px, 92vw);
+      max-height: 80vh;
+      overflow: auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .6);
       transition: background-color 0.3s, border-color 0.3s;
     }
     .modal header {
-      position: sticky; top: 0; background: var(--bg-deep); border-bottom: 1px solid var(--border);
-      padding: .8rem 1rem; display: flex; align-items: center; justify-content: space-between; z-index: 10;
+      position: sticky;
+      top: 0;
+      background: var(--bg-deep);
+      border-bottom: 1px solid var(--border);
+      padding: .8rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10;
     }
-    .modal .content { padding: 1rem; }
+    .modal header h3 {
+      margin: 0;
+    }
+    .modal .content {
+      padding: 1.5rem;
+      text-align: center;
+    }
+    #close {
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text);
+      padding: 0 .5rem;
+    }
+    #close:hover {
+      opacity: 0.7;
+    }
 
-    /* Mobile Media Queries */
+    /* ===== RESPONSIVO ===== */
     @media (max-width: 768px) {
-      .navbar { flex-wrap: wrap; padding: 1rem; }
-      .tabs {
-        display: none; position: absolute; top: 100%; right: 0; width: 100%;
-        background: var(--bg-deep); border-bottom: 1px solid var(--border);
-        flex-direction: column; padding: 1rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); z-index: 99;
+      .navbar {
+        flex-wrap: wrap;
+        padding: 1rem;
       }
-      .tabs.active { display: flex; }
-      .tab { width: 100%; text-align: left; padding: 0.8rem 1rem; margin-bottom: 0.25rem; }
-      .hamburger { display: flex; }
-      .nav-right { width: auto; justify-content: flex-end; gap: .5rem; order: 2; }
-      .search { flex: 1; min-width: 150px; }
-      .search input { min-width: 0; width: 100%; }
-      .brand { order: 1; flex: 1; }
-      .hamburger { order: 3; }
-      .section { padding: 1rem 1rem 2rem 1rem; }
-      .hero { padding: 1.2rem 1rem 0 1rem; }
-      
-      .board .grid { gap: 16px; }
+      .tabs {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 100%;
+        background: var(--bg-deep);
+        border-bottom: 1px solid var(--border);
+        flex-direction: column;
+        padding: 1rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        z-index: 99;
+      }
+      .tabs.active {
+        display: flex;
+      }
+      .tab {
+        width: 100%;
+        text-align: left;
+        padding: 0.8rem 1rem;
+        margin-bottom: 0.25rem;
+      }
+      .hamburger {
+        display: flex;
+      }
+      .nav-right {
+        width: auto;
+        justify-content: flex-end;
+        gap: .5rem;
+        order: 2;
+      }
+      .search {
+        flex: 1;
+        min-width: 150px;
+      }
+      .search input {
+        min-width: 0;
+        width: 100%;
+      }
+      .brand {
+        order: 1;
+        flex: 1;
+      }
+      .hamburger {
+        order: 3;
+      }
+      .section {
+        padding: 1rem 1rem 2rem 1rem;
+      }
+      .hero {
+        padding: 1.2rem 1rem 0 1rem;
+      }
+      .grid {
+        gap: 16px;
+      }
     }
     @media (min-width: 769px) {
-      .tabs { display: flex !important; }
+      .tabs {
+        display: flex !important;
+      }
     }
   </style>
 </head>
@@ -284,16 +493,16 @@
       </label>
       <button id="theme-toggle" class="theme-btn">Tema Escuro</button>
     </div>
-    <button class="hamburger" aria-label="Menu">
+    <button class="hamburger" aria-label="Menu" aria-expanded="false">
       <span></span>
       <span></span>
       <span></span>
     </button>
-    <div class="tabs">
-      <a class="tab active" data-tab="inicio" href="#inicio">Início</a>
-      <a class="tab" data-tab="videos" href="#videos">Aulas</a>
-      <a class="tab" data-tab="midias" href="#midias">Central de Mídias</a>
-      <a class="tab" data-tab="ferramentas" href="#ferramentas">Ferramentas</a>
+    <div class="tabs" role="tablist">
+      <a class="tab active" data-tab="inicio" href="#inicio" role="tab" aria-selected="true">Início</a>
+      <a class="tab" data-tab="videos" href="#videos" role="tab" aria-selected="false">Aulas</a>
+      <a class="tab" data-tab="midias" href="#midias" role="tab" aria-selected="false">Central de Mídias</a>
+      <a class="tab" data-tab="ferramentas" href="#ferramentas" role="tab" aria-selected="false">Ferramentas</a>
     </div>
   </nav>
 
@@ -302,7 +511,7 @@
     <p>Selecione uma das opções abaixo para acessar o conteúdo programático.</p>
   </header>
 
-  <section id="inicio" class="section">
+  <section id="inicio" class="section" role="tabpanel">
     <h2>Início</h2>
     <div class="highlight-section notice-board">
       <h3 class="notice-title">Quadro de Avisos</h3>
@@ -317,13 +526,12 @@
     </div>
   </section>
 
-  <main id="videos" class="section board" hidden>
+  <main id="videos" class="section board" role="tabpanel" hidden>
     <h2>Aulas Disponíveis</h2>
     <div class="grid">
-      
-      <a class="card-simple" href="https://ravellsl.github.io/video-aula-teorica/" target="_blank" rel="noopener">
+      <a class="card" href="https://ravellsl.github.io/video-aula-teorica/" target="_blank" rel="noopener">
         <div class="thumb">
-          <svg class="svg-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <svg class="svg-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M12 3v18.5c0 .28-.22.5-.5.5-.28 0-.5-.22-.5-.5V3c0-.28.22-.5.5-.5.28 0 .5.22.5.5zm0 0c1.5-1.5 6-2 9-1v17c-3-1-7.5-.5-9 1m0-17c-1.5-1.5-6-2-9-1v17c3-1 7.5-.5 9 1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
           <h3>Aulas Teóricas</h3>
@@ -331,204 +539,285 @@
         </div>
       </a>
 
-      <div class="card-simple card-disabled">
+      <div class="card card-disabled" id="praticas-em-breve" role="button" tabindex="0" aria-label="Aulas práticas, em breve">
         <div class="thumb">
-          <svg class="svg-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <svg class="svg-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M4 17l6-6-6-6M12 19h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
           <h3>Aulas Práticas</h3>
           <span class="pill">Em breve</span>
         </div>
       </div>
-
     </div>
   </main>
 
-  <section id="midias" class="section board" hidden>
+  <section id="midias" class="section board" role="tabpanel" hidden>
     <h2>Central de Mídias</h2>
     <div class="grid">
       <a class="card" href="https://ravellsl.github.io/podcast/" target="_blank" rel="noopener">
-        <div class="thumb"><span class="ico">🎙️</span>
+        <div class="thumb"><span class="ico" aria-hidden="true">🎙️</span>
           <h3>Podcast</h3><span class="pill">áudio</span>
         </div>
       </a>
-      
       <a class="card" href="https://ravellsl.github.io/ferramenta-busca-noticias/" target="_blank" rel="noopener">
-        <div class="thumb"><span class="ico">🔍</span>
+        <div class="thumb"><span class="ico" aria-hidden="true">🔍</span>
           <h3>Diário de Notícias</h3><span class="pill">curadoria</span>
         </div>
       </a>
-
       <a class="card" href="https://ravellsl.github.io/rstech-artigos/" target="_blank" rel="noopener">
-        <div class="thumb"><span class="ico">📄</span>
+        <div class="thumb"><span class="ico" aria-hidden="true">📄</span>
           <h3>Artigos</h3><span class="pill">leituras</span>
         </div>
       </a>
       <a class="card" href="https://ravellsl.github.io/video-aulas/#home" target="_blank" rel="noopener">
-        <div class="thumb"><span class="ico">💬</span>
+        <div class="thumb"><span class="ico" aria-hidden="true">💬</span>
           <h3>Dúvidas em Vídeo</h3><span class="pill">FAQ</span>
         </div>
       </a>
       <a class="card" href="https://ravellsl.github.io/curiosidades-tech/" target="_blank" rel="noopener">
-        <div class="thumb"><span class="ico">🤔</span>
+        <div class="thumb"><span class="ico" aria-hidden="true">🤔</span>
           <h3>Curiosidades Tech</h3><span class="pill">curiosidades</span>
         </div>
       </a>
       <a class="card" href="https://ravellsl.github.io/central-arquivos/" target="_blank" rel="noopener">
-        <div class="thumb"><span class="ico">📂</span>
+        <div class="thumb"><span class="ico" aria-hidden="true">📂</span>
           <h3>Central de Arquivos</h3><span class="pill">materiais</span>
         </div>
       </a>
     </div>
   </section>
 
-  <section id="ferramentas" class="section board" hidden>
+  <section id="ferramentas" class="section board" role="tabpanel" hidden>
     <h2>Ferramentas Digitais</h2>
     <div class="grid">
       <a class="card" href="https://ravellsl.github.io/dicionario-tech/" target="_blank" rel="noopener">
-        <div class="thumb"><span class="ico">📖</span>
+        <div class="thumb"><span class="ico" aria-hidden="true">📖</span>
           <h3>Dicionário Tech</h3><span class="pill">conceitos</span>
         </div>
       </a>
       <a class="card" href="https://ravellsl.github.io/rstechaluno-agentes-IA/" target="_blank" rel="noopener">
-        <div class="thumb"><span class="ico">🤖</span>
+        <div class="thumb"><span class="ico" aria-hidden="true">🤖</span>
           <h3>Agentes de IA</h3><span class="pill">assistentes</span>
         </div>
       </a>
       <a class="card" href="https://ravellsl.github.io/IA-plataform/" target="_blank" rel="noopener">
-        <div class="thumb"><span class="ico">🧠</span>
+        <div class="thumb"><span class="ico" aria-hidden="true">🧠</span>
           <h3>Inteligência Artificial</h3><span class="pill">recursos</span>
         </div>
       </a>
       <a class="card" href="https://ravellsl.github.io/SynTHub-IA/" target="_blank" rel="noopener">
-        <div class="thumb"><span class="ico">💡</span>
+        <div class="thumb"><span class="ico" aria-hidden="true">💡</span>
           <h3>Hub de IA</h3><span class="pill">catálogo</span>
         </div>
       </a>
       <a class="card" href="https://ravellsl.github.io/bloco-de-notas/" target="_blank" rel="noopener">
-        <div class="thumb"><span class="ico">📝</span>
+        <div class="thumb"><span class="ico" aria-hidden="true">📝</span>
           <h3>Bloco de Notas</h3><span class="pill">organização</span>
         </div>
       </a>
     </div>
   </section>
 
+  <!-- Modal para "Em breve" -->
   <div class="overlay" id="overlay" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
       <header>
-        <h3 id="modal-title">Título</h3>
-        <button id="close">✕</button>
+        <h3 id="modal-title">Em breve</h3>
+        <button id="close" aria-label="Fechar">✕</button>
       </header>
-      <div class="content" id="modal-content"></div>
+      <div class="content" id="modal-content">
+        <p>As aulas práticas estão sendo preparadas. Em breve você poderá acessar esse conteúdo!</p>
+      </div>
     </div>
   </div>
 
   <script>
-    // Menu Hamburger
-    const hamburger = document.querySelector('.hamburger');
-    const tabs = document.querySelector('.tabs');
+    (function() {
+      // Elementos
+      const hamburger = document.querySelector('.hamburger');
+      const tabsMenu = document.querySelector('.tabs');
+      const tabLinks = document.querySelectorAll('.tab');
+      const sections = document.querySelectorAll('section.section, main.section');
+      const hero = document.getElementById('hero');
+      const searchInput = document.getElementById('q');
+      const themeBtn = document.getElementById('theme-toggle');
+      const body = document.body;
+      const overlay = document.getElementById('overlay');
+      const closeModalBtn = document.getElementById('close');
+      const praticasCard = document.getElementById('praticas-em-breve');
 
-    hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('active');
-      tabs.classList.toggle('active');
-    });
-
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        if (window.innerWidth <= 768) {
-          hamburger.classList.remove('active');
-          tabs.classList.remove('active');
-        }
+      // ===== HAMBURGER MENU =====
+      hamburger.addEventListener('click', () => {
+        const expanded = hamburger.classList.toggle('active');
+        tabsMenu.classList.toggle('active');
+        hamburger.setAttribute('aria-expanded', expanded);
       });
-    });
 
-    // Theme Toggle
-    const themeBtn = document.getElementById('theme-toggle');
-    const bodyEl = document.body;
-
-    function setTheme(theme) {
-      if (theme === 'dark') {
-        bodyEl.classList.add('dark-theme');
-        bodyEl.classList.remove('light-theme');
-        themeBtn.textContent = 'Tema Claro';
-        themeBtn.title = 'Mudar para tema claro';
-      } else {
-        bodyEl.classList.remove('dark-theme');
-        bodyEl.classList.add('light-theme');
-        themeBtn.textContent = 'Tema Escuro';
-        themeBtn.title = 'Mudar para tema escuro';
-      }
-    }
-
-    themeBtn.addEventListener('click', () => {
-      const currentTheme = bodyEl.classList.contains('dark-theme') ? 'dark' : 'light';
-      const newTheme = (currentTheme === 'dark') ? 'light' : 'dark';
-      localStorage.setItem('theme', newTheme);
-      setTheme(newTheme);
-    });
-
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    setTheme(savedTheme);
-
-    // Tabs logic
-    const tabLinks = document.querySelectorAll('.tab');
-    const mainSections = document.querySelectorAll('main.section, section.section');
-    const hero = document.getElementById('hero');
-
-    tabLinks.forEach(t => {
-      t.addEventListener('click', e => {
-        e.preventDefault();
-        tabLinks.forEach(x => x.classList.remove('active'));
-        t.classList.add('active');
-        const id = t.getAttribute('data-tab');
-        mainSections.forEach(s => s.hidden = true);
-        document.getElementById(id).hidden = false;
-        
-        hero.style.display = (id === 'inicio') ? '' : 'none';
+      // Fechar menu ao clicar em um link
+      tabLinks.forEach(tab => {
+        tab.addEventListener('click', () => {
+          if (window.innerWidth <= 768) {
+            hamburger.classList.remove('active');
+            tabsMenu.classList.remove('active');
+            hamburger.setAttribute('aria-expanded', 'false');
+          }
+        });
       });
-    });
 
-    // Busca Simplificada
-    const q = document.getElementById('q');
-    
-    q.addEventListener('input', () => {
-      const term = q.value.trim().toLowerCase();
-      const allCards = document.querySelectorAll('.card, .card-simple');
-
-      if (term) {
-        hero.style.display = 'none';
-      } else {
-        const activeTab = document.querySelector('.tab.active');
-        if (activeTab && activeTab.dataset.tab === 'inicio') {
-            hero.style.display = '';
+      // ===== TEMA =====
+      function setTheme(theme) {
+        if (theme === 'dark') {
+          body.classList.add('dark-theme');
+          body.classList.remove('light-theme');
+          themeBtn.textContent = 'Tema Claro';
+          themeBtn.title = 'Mudar para tema claro';
+        } else {
+          body.classList.remove('dark-theme');
+          body.classList.add('light-theme');
+          themeBtn.textContent = 'Tema Escuro';
+          themeBtn.title = 'Mudar para tema escuro';
         }
       }
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      setTheme(savedTheme);
 
-      allCards.forEach(c => {
-        const text = c.textContent.toLowerCase();
-        const show = !term || text.includes(term);
-        c.style.display = show ? '' : 'none';
+      themeBtn.addEventListener('click', () => {
+        const currentTheme = body.classList.contains('dark-theme') ? 'dark' : 'light';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('theme', newTheme);
+        setTheme(newTheme);
       });
-    });
 
-    // Modal Logic
-    const overlay = document.getElementById('overlay');
-    const closeBtn = document.getElementById('close');
-    const modalContent = document.getElementById('modal-content');
+      // ===== NAVEGAÇÃO POR ABAS COM HASH =====
+      function activateTab(tabId) {
+        // Atualiza classes e atributos ARIA
+        tabLinks.forEach(link => {
+          const isActive = link.dataset.tab === tabId;
+          link.classList.toggle('active', isActive);
+          link.setAttribute('aria-selected', isActive);
+          if (isActive) link.setAttribute('aria-current', 'page');
+          else link.removeAttribute('aria-current');
+        });
 
-    function closeModal() {
-      modalContent.innerHTML = ''; 
-      overlay.classList.remove('active');
-      overlay.setAttribute('aria-hidden', 'true');
-    }
+        // Mostra seção correspondente
+        sections.forEach(section => {
+          section.hidden = section.id !== tabId;
+        });
 
-    closeBtn.addEventListener('click', closeModal);
-    overlay.addEventListener('click', e => {
-      if (e.target === overlay) closeModal();
-    });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && overlay.classList.contains('active')) closeModal();
-    });
+        // Mostra hero apenas na aba início (se busca não estiver ativa)
+        hero.style.display = (tabId === 'inicio' && !searchInput.value.trim()) ? '' : 'none';
+      }
+
+      // Escuta cliques nas abas
+      tabLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const tabId = link.dataset.tab;
+          // Atualiza hash sem rolar
+          history.pushState(null, '', `#${tabId}`);
+          activateTab(tabId);
+        });
+      });
+
+      // Ao carregar a página ou mudar hash, ativa aba correspondente
+      function handleHash() {
+        const hash = window.location.hash.substring(1) || 'inicio';
+        // Se a hash for válida
+        if (['inicio', 'videos', 'midias', 'ferramentas'].includes(hash)) {
+          activateTab(hash);
+        } else {
+          activateTab('inicio');
+        }
+      }
+      window.addEventListener('hashchange', handleHash);
+      handleHash(); // executa na carga
+
+      // ===== BUSCA =====
+      function filterCards() {
+        const term = searchInput.value.trim().toLowerCase();
+        const allCards = document.querySelectorAll('.card'); // todos os cards, inclusive desabilitados
+        let visibleCount = 0;
+
+        // Se busca vazia, mostra hero na aba início
+        if (!term) {
+          const activeTab = document.querySelector('.tab.active')?.dataset.tab;
+          hero.style.display = activeTab === 'inicio' ? '' : 'none';
+        } else {
+          hero.style.display = 'none'; // busca ativa sempre esconde hero
+        }
+
+        // Itera cards
+        allCards.forEach(card => {
+          const text = card.textContent.toLowerCase();
+          const matches = text.includes(term);
+          card.style.display = matches ? '' : 'none';
+          if (matches) visibleCount++;
+        });
+
+        // Remove mensagem anterior (se houver)
+        const existingMsg = document.querySelector('.search-message');
+        if (existingMsg) existingMsg.remove();
+
+        // Se não houver resultados, exibe mensagem em cada seção visível
+        if (term && visibleCount === 0) {
+          const visibleSections = Array.from(sections).filter(s => !s.hidden);
+          visibleSections.forEach(section => {
+            const msg = document.createElement('p');
+            msg.className = 'search-message';
+            msg.textContent = `Nenhum card encontrado para "${term}".`;
+            section.querySelector('.grid')?.after(msg);
+          });
+        }
+      }
+
+      searchInput.addEventListener('input', filterCards);
+
+      // ===== MODAL PARA CARD "EM BREVE" =====
+      function openModal() {
+        overlay.classList.add('active');
+        overlay.setAttribute('aria-hidden', 'false');
+        closeModalBtn.focus();
+      }
+
+      function closeModal() {
+        overlay.classList.remove('active');
+        overlay.setAttribute('aria-hidden', 'true');
+        praticasCard.focus(); // retorna foco ao card
+      }
+
+      if (praticasCard) {
+        praticasCard.addEventListener('click', openModal);
+        praticasCard.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openModal();
+          }
+        });
+      }
+
+      closeModalBtn.addEventListener('click', closeModal);
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeModal();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay.classList.contains('active')) closeModal();
+      });
+
+      // ===== FECHAR MODAL COM BOTÃO VOLTAR (opcional) =====
+      window.addEventListener('popstate', () => {
+        if (overlay.classList.contains('active')) closeModal();
+      });
+
+      // ===== LIMPAR BUSCA AO MUDAR DE ABA (opcional) =====
+      tabLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          if (searchInput.value.trim()) {
+            searchInput.value = '';
+            filterCards();
+          }
+        });
+      });
+    })();
   </script>
 </body>
 </html>
