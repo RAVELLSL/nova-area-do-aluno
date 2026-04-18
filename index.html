@@ -320,6 +320,11 @@
       letter-spacing: 0.08em;
     }
 
+    .mobile-panel {
+      display: grid;
+      gap: 8px;
+    }
+
 
     .cards {
       display: grid;
@@ -688,8 +693,22 @@
         padding: 10px;
       }
 
-      .sidebar,
+      .app {
+        display: block;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
       .content {
+        padding: 12px;
+      }
+
+      .mobile-panel {
+        border: 1px solid var(--line);
+        border-radius: var(--radius-md);
+        background: var(--surface-strong);
         padding: 12px;
       }
 
@@ -829,7 +848,7 @@
 
       <button id="themeToggle" class="theme-btn" type="button">Ativar tema escuro</button>
 
-      <section>
+      <section id="navPanel" class="mobile-panel">
         <p class="menu-title">Navegação</p>
         <nav class="menu-links" aria-label="Links principais">
           <a href="#inicio">Início</a>
@@ -837,7 +856,7 @@
         </nav>
       </section>
 
-      <section>
+      <section id="foldersPanel" class="mobile-panel">
         <p class="menu-title">Pastas</p>
         <div class="folders">
           <article class="folder" data-folder data-display-target="aulas">
@@ -888,8 +907,11 @@
         <h2>Área do Aluno</h2>
       </section>
 
-      <input id="searchInput" class="search" type="search" placeholder="Buscar por conteúdo..." aria-label="Buscar por conteúdo" />
-      <p id="searchMeta" class="search-meta" aria-live="polite"></p>
+      <section class="section search-panel">
+        <h3>Busca</h3>
+        <input id="searchInput" class="search" type="search" placeholder="Buscar por conteúdo..." aria-label="Buscar por conteúdo" />
+        <p id="searchMeta" class="search-meta" aria-live="polite"></p>
+      </section>
 
       <section id="avisos" class="section notice">
         <h3>Avisos Principais</h3>
@@ -1138,6 +1160,10 @@
       const emptyState = document.getElementById("emptyState");
       const searchMeta = document.getElementById("searchMeta");
 
+      const sidebar = document.querySelector(".sidebar");
+      const content = document.querySelector(".content");
+      const navPanel = document.getElementById("navPanel");
+      const foldersPanel = document.getElementById("foldersPanel");
       const folders = Array.from(document.querySelectorAll("[data-folder]"));
       const folderToggles = Array.from(document.querySelectorAll(".folder-toggle"));
       const displaySections = Array.from(document.querySelectorAll("#aulas, #midias, #ferramentas"));
@@ -1345,10 +1371,28 @@
         setFolderHeight(folder);
       });
 
-      window.addEventListener("resize", function() {
+      function syncMobileLayout() {
+        if (!sidebar || !content || !navPanel || !foldersPanel || !noticesSection || !themeToggle) {
+          return;
+        }
+
+        if (window.innerWidth <= 700) {
+          noticesSection.insertAdjacentElement("afterend", navPanel);
+          navPanel.insertAdjacentElement("afterend", foldersPanel);
+        } else {
+          themeToggle.insertAdjacentElement("afterend", navPanel);
+          navPanel.insertAdjacentElement("afterend", foldersPanel);
+        }
+
         folders.forEach(function(folder) {
           setFolderHeight(folder);
         });
+      }
+
+      syncMobileLayout();
+
+      window.addEventListener("resize", function() {
+        syncMobileLayout();
       });
 
       searchInput.addEventListener("input", function() {
