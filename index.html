@@ -842,7 +842,7 @@
 <body>
   <div class="app">
     <aside class="sidebar" aria-label="Menu lateral">
-      <div class="brand">
+      <div id="brandPanel" class="brand mobile-panel">
         <h1>Prof. Ravell</h1>
       </div>
 
@@ -1162,6 +1162,7 @@
 
       const sidebar = document.querySelector(".sidebar");
       const content = document.querySelector(".content");
+      const brandPanel = document.getElementById("brandPanel");
       const navPanel = document.getElementById("navPanel");
       const foldersPanel = document.getElementById("foldersPanel");
       const folders = Array.from(document.querySelectorAll("[data-folder]"));
@@ -1372,14 +1373,22 @@
       });
 
       function syncMobileLayout() {
-        if (!sidebar || !content || !navPanel || !foldersPanel || !noticesSection || !themeToggle) {
+        if (!sidebar || !content || !brandPanel || !navPanel || !foldersPanel || !noticesSection || !themeToggle) {
           return;
         }
 
+        const heroSection = document.getElementById("inicio");
+
         if (window.innerWidth <= 700) {
+          if (heroSection) {
+            heroSection.insertAdjacentElement("afterend", brandPanel);
+            brandPanel.insertAdjacentElement("afterend", themeToggle);
+          }
           noticesSection.insertAdjacentElement("afterend", navPanel);
           navPanel.insertAdjacentElement("afterend", foldersPanel);
         } else {
+          sidebar.insertAdjacentElement("afterbegin", brandPanel);
+          brandPanel.insertAdjacentElement("afterend", themeToggle);
           themeToggle.insertAdjacentElement("afterend", navPanel);
           navPanel.insertAdjacentElement("afterend", foldersPanel);
         }
