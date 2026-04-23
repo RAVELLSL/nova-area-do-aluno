@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR" data-theme="light">
 <head>
@@ -144,7 +145,8 @@
       gap: 6px;
     }
 
-    .menu-links a {
+    .menu-links a,
+    .menu-links button {
       text-decoration: none;
       color: var(--text);
       border: 1px solid transparent;
@@ -157,9 +159,14 @@
       display: flex;
       align-items: center;
       transition: border-color 0.2s ease, color 0.2s ease;
+      font-family: inherit;
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
     }
 
-    .menu-links a:hover {
+    .menu-links a:hover,
+    .menu-links button:hover {
       border-color: var(--primary);
       color: var(--primary);
     }
@@ -852,7 +859,7 @@
         <p class="menu-title">Navegação</p>
         <nav class="menu-links" aria-label="Links principais">
           <a href="#inicio">Início</a>
-          <a href="mailto:ravell.lopes@gmail.com?subject=Contato%20%C3%81rea%20do%20Aluno&body=Ol%C3%A1%20Prof.%20Ravell%2C%0A%0AGostaria%20de%20falar%20sobre%3A%20">Contato</a>
+          <button id="contatoBtn" type="button" title="Opções de contato">Contato</button>
         </nav>
       </section>
 
@@ -1144,9 +1151,35 @@
   </div>
 
   <div class="overlay" id="overlay" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="soonTitle">
-      <h4 id="soonTitle">Aulas Práticas em Breve</h4>
-      <p>As aulas práticas estão em produção e serão liberadas em breve na plataforma.</p>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h4 id="modalTitle">Como você gostaria de se comunicar?</h4>
+      <div class="cards" style="grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0;">
+        <a class="card" href="mailto:ravell.lopes@gmail.com?subject=Contato%20%C3%81rea%20do%20Aluno&body=Ol%C3%A1%20Prof.%20Ravell%2C%0A%0AGostaria%20de%20falar%20sobre%3A%20" style="justify-items: center; text-align: center;">
+          <div class="card-head">
+            <span class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            </span>
+          </div>
+          <strong style="font-size: 0.9rem;">Enviar E-mail</strong>
+          <p style="font-size: 0.8rem;">Escrever uma mensagem</p>
+        </a>
+        <a class="card" href="https://meet.google.com/wqx-jcuk-rdw" target="_blank" rel="noopener noreferrer" style="justify-items: center; text-align: center;">
+          <div class="card-head">
+            <span class="card-icon tone-secondary" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <rect x="2" y="4" width="14" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"></rect>
+                <circle cx="18" cy="8" r="3" fill="currentColor"></circle>
+                <path d="M8 12l3-2 3 2" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </span>
+          </div>
+          <strong style="font-size: 0.9rem;">Sala Virtual</strong>
+          <p style="font-size: 0.8rem;">Google Meet</p>
+        </a>
+      </div>
       <button id="closeModal" type="button">Fechar</button>
     </div>
   </div>
@@ -1155,6 +1188,7 @@
     (function() {
       const html = document.documentElement;
       const themeToggle = document.getElementById("themeToggle");
+      const contatoBtn = document.getElementById("contatoBtn");
       const searchInput = document.getElementById("searchInput");
       const searchable = Array.from(document.querySelectorAll(".searchable"));
       const emptyState = document.getElementById("emptyState");
@@ -1483,6 +1517,7 @@
 
       openSoon.addEventListener("click", showModal);
       openSoonCard.addEventListener("click", showModal);
+      contatoBtn.addEventListener("click", showModal);
       closeModal.addEventListener("click", hideModal);
 
       overlay.addEventListener("click", function(event) {
