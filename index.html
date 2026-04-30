@@ -715,6 +715,10 @@
       display: grid;
     }
 
+    #contactOptions[hidden] {
+      display: none !important;
+    }
+
     .modal {
       width: min(410px, 100%);
       max-height: min(88vh, 88dvh);
@@ -1332,7 +1336,8 @@
   <div class="overlay" id="overlay" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <h4 id="modalTitle">Como você gostaria de se comunicar?</h4>
-      <div class="cards" style="grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0;">
+      <p id="modalMessage" hidden></p>
+      <div id="contactOptions" class="cards" style="grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0;">
         <a class="card" href="mailto:ravell.lopes@gmail.com?subject=Contato%20%C3%81rea%20do%20Aluno&body=Ol%C3%A1%20Prof.%20Ravell%2C%0A%0AGostaria%20de%20falar%20sobre%3A%20" style="justify-items: center; text-align: center;">
           <div class="card-head">
             <span class="card-icon" aria-hidden="true">
@@ -1386,6 +1391,9 @@
       let activeDisplayTarget = null;
 
       const overlay = document.getElementById("overlay");
+      const modalTitle = document.getElementById("modalTitle");
+      const modalMessage = document.getElementById("modalMessage");
+      const contactOptions = document.getElementById("contactOptions");
       const openSoon = document.getElementById("openSoon");
       const openSoonCard = document.getElementById("openSoonCard");
       const closeModal = document.getElementById("closeModal");
@@ -1770,14 +1778,30 @@
         closeModal.focus();
       }
 
+      function showContactModal() {
+        modalTitle.textContent = "Como você gostaria de se comunicar?";
+        modalMessage.hidden = true;
+        modalMessage.textContent = "";
+        contactOptions.hidden = false;
+        showModal();
+      }
+
+      function showSoonModal() {
+        modalTitle.textContent = "Aulas práticas em breve";
+        modalMessage.textContent = "Os vídeos com as aulas práticas serão postados em breve. Assim que o módulo estiver disponível, ele aparecerá nesta área para acesso direto dos alunos.";
+        modalMessage.hidden = false;
+        contactOptions.hidden = true;
+        showModal();
+      }
+
       function hideModal() {
         overlay.classList.remove("active");
         overlay.setAttribute("aria-hidden", "true");
       }
 
-      openSoon.addEventListener("click", showModal);
-      openSoonCard.addEventListener("click", showModal);
-      contatoBtn.addEventListener("click", showModal);
+      openSoon.addEventListener("click", showSoonModal);
+      openSoonCard.addEventListener("click", showSoonModal);
+      contatoBtn.addEventListener("click", showContactModal);
       closeModal.addEventListener("click", hideModal);
 
       overlay.addEventListener("click", function(event) {
